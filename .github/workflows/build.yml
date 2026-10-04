@@ -1,0 +1,51 @@
+name: build
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run tests
+        run: npm test
+
+      # A tag that disagrees with the manifest ships a mislabelled package.
+      - name: Check tag matches the manifest version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          manifest="$(node -p "require('./extension/manifest.json').version")"
+          if [ "$tag" != "$manifest" ]; then
+            echo "tag v$tag does not match manifest version $manifest" >&2
+            exit 1
+          fi
+
+      # The Chrome zip loads unpacked as-is. The Firefox/Zen XPI still needs
+      # AMO signing (unlisted / self-distribution) before a permanent install.
+      - name: Build the Chrome and Gecko packages
+        run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ambient-light-for-bilibili-chromium
+          path: outputs/*.zip
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ambient-light-for-bilibili-firefox-unsigned
+          path: outputs/*.xpi
+          if-no-files-found: error

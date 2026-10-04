@@ -5,6 +5,7 @@
   "description": "Local-only ambient light extension for Bilibili",
   "scripts": {
     "test": "node --test tests/*.test.cjs",
-    "demo": "python3 -m http.server 8765 --bind 127.0.0.1"
+    "demo": "python3 -m http.server 8765 --bind 127.0.0.1",
+    "build": "node tools/build.mjs"
   }
 }
