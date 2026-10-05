@@ -9,7 +9,14 @@
 - 检查中修正了圆角光效路径在光层 display:none 时读取零尺寸的问题；最终代码重新跑过直播和稍后再看/竖屏外观专项。
 - 本地包只包含 extension 文件；逐字节对照源码，版本 0.5.3.9，权限及注入域名不变。构包记录 qa/frame-package-verification.json。
 - 正式包仅删除公共简介里过时的「本地实验版」前缀；执行代码与已验证预览包一致。
-- 上述新外观视觉验收使用本地合成媒体与生产脚本。未将新版载入真实 B 站或验证 Windows F11/第三方扩展组合；未推送 GitHub 或提交商店。
+- 上述新外观视觉验收使用本地合成媒体与生产脚本。未将新版载入真实 B 站或验证 Windows F11/第三方扩展组合。发布操作与结果另记如下。
+
+0.5.3.9 发布记录（2026-10-05）
+
+- 用户授权更新 GitHub 和 Chrome/Edge 商店。提交 cac0588 已推送 main，标签 v0.5.3.9 为正式 Release 并设为 Latest。
+- GitHub、Chrome、Edge 使用同一份 241586 字节、19 文件的正式包；SHA-256 cfc0d819fb8f46f5e91b9c47b9d558761720042c5a2d1efcd0d1e20e1553a50a，GitHub 返回的 asset digest 一致。
+- 两家商店原公开版本均确认为 0.5.3.8。新版说明和审核步骤已保存，Chrome 状态 Pending review（审核通过后自动发布），Edge 状态 In review；不将提交审核写成已经上架。
+- 商店账户截图与完整提交记录保存在仓库之外的 outputs/store-update-0.5.3.9.json，以及 chrome-0.5.3.9-in-review.jpg、edge-0.5.3.9-in-review.jpg。
 
 直播固定颜色反馈调查（2026-10-05，待反馈者版本信息）
 

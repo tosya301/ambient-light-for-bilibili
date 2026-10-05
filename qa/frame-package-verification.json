@@ -6,5 +6,10 @@
   "bytes": 241586,
   "byteVerified": true,
   "difference_from_local_preview": "Remove obsolete 本地实验版 prefix from public description; executable code and permissions unchanged.",
-  "published": false
+  "published": true,
+  "githubRelease": "https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.9",
+  "githubAssetDigestVerified": true,
+  "chromeStatus": "Pending review",
+  "edgeStatus": "In review",
+  "submittedDate": "2026-10-05"
 }

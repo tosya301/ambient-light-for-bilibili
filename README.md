@@ -12,6 +12,8 @@
 
 启动本地服务器后，可打开 [直播预览](http://127.0.0.1:8768/demo/live.html) 或 [视频预览](http://127.0.0.1:8768/demo/index.html)，开启氛围光，在「画面」调整这两项。支持运行「圆角与阴影自检」。正式安装包见 [GitHub 0.5.3.9](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.9)，验证记录见 [QA.txt](QA.txt)。
 
+2026-10-05：0.5.3.9 已发布 GitHub；Chrome 与 Edge 商店均已提交审核，提交时的公开版本为 0.5.3.8。
+
 ## 0.5.3.8 正式版（历史）
 
 [GitHub 0.5.3.8](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.8) 修复普通视频、番剧与稍后再看网页全屏时，顶部头像与导航、标题和推荐等网页 UI 透入视频留白的问题。竖屏两侧仍有动态氛围光，画面保持完整比例；弹幕和播放器控件保留。
