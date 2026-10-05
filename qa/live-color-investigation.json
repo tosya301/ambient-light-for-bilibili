@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-05",
+  "outcome": "未复现反馈者的固定颜色问题；反馈者版本与浏览器待确认，未修改采样引擎。",
+  "legacy": {
+    "version": "0.5.2",
+    "contentScriptHosts": [
+      "www.bilibili.com"
+    ],
+    "liveSupported": false,
+    "evidence": "git show v0.5.2:extension/manifest.json"
+  },
+  "realRoomLoop": {
+    "version": "0.5.3.8",
+    "room": "25034104",
+    "broadcasting": false,
+    "playingLoop": true,
+    "first": {
+      "frames": 45205,
+      "time": 4473.559742
+    },
+    "second": {
+      "frames": 46356,
+      "time": 4521.539912
+    }
+  },
+  "realBroadcast": {
+    "version": "0.5.3.8",
+    "room": "1933931399",
+    "broadcasting": true,
+    "first": {
+      "frames": 225,
+      "time": 9.504416
+    },
+    "second": {
+      "root": {
+        "biliglowRoot": "",
+        "frames": "2774",
+        "mode": "normal",
+        "state": "直播透光 · 上限 24 fps",
+        "version": "0.5.3.8"
+      },
+      "videos": [
+        {
+          "height": 720,
+          "paused": false,
+          "ready": 4,
+          "time": 116.06779,
+          "width": 1280
+        }
+      ]
+    },
+    "visual": "直播为驾驶游戏及蓝绿色/粉色背景，外溢光与对应画面颜色相符；未通过浏览器只读工具读取该真实房间的 Canvas 像素。"
+  },
+  "controlledColorTests": [
+    {
+      "passed": true,
+      "label": "soft 预设下采样颜色跟随直播改变",
+      "detail": "粉紫 RGB 122/91/149 → 深蓝 RGB 56/99/147"
+    },
+    {
+      "passed": true,
+      "label": "cinema 预设下采样颜色跟随直播改变",
+      "detail": "粉紫 RGB 116/89/149 → 深蓝 RGB 49/96/147"
+    },
+    {
+      "passed": true,
+      "label": "vivid 预设下采样颜色跟随直播改变",
+      "detail": "粉紫 RGB 117/89/149 → 深蓝 RGB 47/96/147"
+    },
+    {
+      "passed": true,
+      "label": "播放器替换后采样仍跟随颜色",
+      "detail": "换片并切换两种色彩"
+    },
+    {
+      "passed": true,
+      "label": "停播不保留伪装成实时的旧光色",
+      "detail": "光层已隐藏"
+    },
+    {
+      "passed": true,
+      "label": "重连后恢复采样新颜色",
+      "detail": "粉紫与深蓝结果明显不同"
+    }
+  ],
+  "boundaries": [
+    "真实站点观察使用已安装的 0.5.3.8",
+    "直接读取 Canvas RGB 的六项检查使用本地合成直播与 0.5.3.9 生产脚本",
+    "未复现不代表所有浏览器、编码与第三方扩展组合没有问题"
+  ]
+}

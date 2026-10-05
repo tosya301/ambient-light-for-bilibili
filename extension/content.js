@@ -5,7 +5,7 @@
   let settings={...B.defaults},settingsReady=false,video=null,cleanVideo=()=>{},frameId=null,timerId=null,layoutId=null;
   let lastFrame=0,nextPaint=0,needsDraw=false,painted=false,visible=false,blocked=false,supported=false,layoutDirty=true,frames=0;
   let status={text:'等待播放器',error:false},ui=null,panel=null,panelHost=null,launcher=null,root=null,canvas=null,ctx=null;
-  let stage=null,backdrop=null,mode='normal',barEffect=null,barStatus='宽屏去边已关闭';
+  let stage=null,backdrop=null,mode='normal',barEffect=null,frameEffect=null,barStatus='宽屏去边已关闭';
   let launcherPosition=null,drag=null,suppressLauncherClick=false;
   const setBarStatus=text=>{barStatus=text;panel?.setBarStatus(text);};
   let kind=P.pageKind(location);
@@ -71,10 +71,11 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.8';
+    root.dataset.version='0.5.3.9';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);
+    frameEffect=P.createFrame(shadow);
     ctx=canvas.getContext('2d',{alpha:false});document.body.append(root);
     ui=document.createElement('div');ui.dataset.biliglowUi='';
     ui.style.cssText='position:fixed;right:24px;bottom:24px;z-index:2147483001;color-scheme:dark;pointer-events:none;';
@@ -197,7 +198,7 @@
       root.style.display='block';root.style.visibility='visible';updatePlaybackStatus();
     }catch(error){
       blocked=true;root.style.display='none';cancelFrames();
-      if(kind==='live'){setStage(null);document.documentElement.removeAttribute('data-biliglow-active');document.documentElement.removeAttribute('data-biliglow-dark');}
+      if(kind==='live'){setStage(null);frameEffect?.clear();document.documentElement.removeAttribute('data-biliglow-active');document.documentElement.removeAttribute('data-biliglow-dark');}
       setStatus('此视频暂时无法生成光效，播放不受影响',true);
       console.warn('[BiliGlow] Video frame unavailable:',error.name);
     }
@@ -250,6 +251,7 @@
     root.dataset.mode=mode;
     const parent=stage||document.body;
     if(root.parentNode!==parent)parent.append(root);
+    if(!active)frameEffect?.clear();
     const uiParent=ownFullscreen?fs:document.documentElement;
     if(ui.parentNode!==uiParent){cancelLauncherDrag();uiParent.append(ui);positionLauncher();}
     ui.style.display=supported&&(!fs||Boolean(ownFullscreen))?'block':'none';
@@ -265,9 +267,10 @@
     root.style.display='block';root.style.visibility=painted&&!blocked?'visible':'hidden';
     // Convert viewport coordinates to the layer's containing block (fullscreen can create one).
     const origin=root.getBoundingClientRect();
+    const frame=frameEffect?.update(video,{...settings,enabled:active},kind,mode,origin);
     const ox=origin.left,oy=origin.top;
     // Inverse rectangle: light never paints over the actual video image.
-    root.style.clipPath=`polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,${l-ox}px ${t-oy}px,${right-ox}px ${t-oy}px,${right-ox}px ${bottom-oy}px,${l-ox}px ${bottom-oy}px,${l-ox}px ${t-oy}px)`;
+    root.style.clipPath=P.roundedCutout(rect,frame,origin,{width:origin.width,height:origin.height})||`polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,${l-ox}px ${t-oy}px,${right-ox}px ${t-oy}px,${right-ox}px ${bottom-oy}px,${l-ox}px ${bottom-oy}px,${l-ox}px ${t-oy}px)`;
     const glow=B.glowGeometry(rect,{width:innerWidth,height:innerHeight},settings,mode);
     canvas.style.left=`${glow.left-ox}px`;canvas.style.top=`${glow.top-oy}px`;
     canvas.style.width=`${glow.width}px`;canvas.style.height=`${glow.height}px`;
@@ -281,7 +284,7 @@
   const modeObserver=new MutationObserver(()=>invalidate());
   function bind(next){
     if(next===video)return;
-    cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
+    cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;frameEffect?.clear();resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
     if(canvas){canvas.width=256;root.style.display='none';}
     if(!next){setStatus('等待播放器');return;}
     if(kind==='live')setBarStatus('直播保留完整画面 · 自动去边仅用于视频宽屏');

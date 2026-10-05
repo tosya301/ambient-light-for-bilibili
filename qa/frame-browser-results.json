@@ -1,0 +1,271 @@
+{
+  "video": [
+    {
+      "passed": true,
+      "label": "旧设置默认不增加圆角或阴影"
+    },
+    {
+      "passed": true,
+      "label": "设置开关使四个角均为 YouTube 的 12px 圆角"
+    },
+    {
+      "passed": true,
+      "label": "只开圆角不会自动添加阴影"
+    },
+    {
+      "passed": true,
+      "label": "阴影滑块即时更新强度、读数与本地设置"
+    },
+    {
+      "passed": true,
+      "label": "圆角与阴影不缩放、不淡化、不改色视频"
+    },
+    {
+      "passed": true,
+      "label": "阴影层不覆盖画面或拦截点击"
+    },
+    {
+      "passed": true,
+      "label": "播放器控件或弹幕输入框仍可命中"
+    },
+    {
+      "passed": true,
+      "label": "阴影准确贴合画面区，不包住聊天或发送栏"
+    },
+    {
+      "passed": true,
+      "label": "圆角光效遮罩是浏览器支持的有效路径"
+    },
+    {
+      "passed": true,
+      "label": "关闭圆角恢复原状，阴影仍独立保留"
+    },
+    {
+      "passed": true,
+      "label": "零光强仍可保留边框阴影"
+    },
+    {
+      "passed": true,
+      "label": "换片后继续生效，阴影不重复叠加"
+    },
+    {
+      "passed": true,
+      "label": "宽屏遵循 YouTube 直角规则，独立阴影可用"
+    },
+    {
+      "passed": true,
+      "label": "网页全屏自动撤去圆角和阴影"
+    },
+    {
+      "passed": true,
+      "label": "全屏遮挡底层页面的修复仍然保留"
+    },
+    {
+      "passed": true,
+      "label": "退出全屏自动恢复保存的外观"
+    },
+    {
+      "passed": true,
+      "label": "关闭氛围光清理圆角和阴影"
+    },
+    {
+      "passed": true,
+      "label": "撤回同意立即清理装饰"
+    },
+    {
+      "passed": true,
+      "label": "0% 阴影完全关闭，圆角继续保留"
+    }
+  ],
+  "live": [
+    {
+      "passed": true,
+      "label": "旧设置默认不增加圆角或阴影"
+    },
+    {
+      "passed": true,
+      "label": "设置开关使四个角均为 YouTube 的 12px 圆角"
+    },
+    {
+      "passed": true,
+      "label": "只开圆角不会自动添加阴影"
+    },
+    {
+      "passed": true,
+      "label": "阴影滑块即时更新强度、读数与本地设置"
+    },
+    {
+      "passed": true,
+      "label": "圆角与阴影不缩放、不淡化、不改色视频"
+    },
+    {
+      "passed": true,
+      "label": "阴影层不覆盖画面或拦截点击"
+    },
+    {
+      "passed": true,
+      "label": "播放器控件或弹幕输入框仍可命中"
+    },
+    {
+      "passed": true,
+      "label": "阴影准确贴合画面区，不包住聊天或发送栏"
+    },
+    {
+      "passed": true,
+      "label": "圆角光效遮罩是浏览器支持的有效路径"
+    },
+    {
+      "passed": true,
+      "label": "关闭圆角恢复原状，阴影仍独立保留"
+    },
+    {
+      "passed": true,
+      "label": "零光强仍可保留边框阴影"
+    },
+    {
+      "passed": true,
+      "label": "换片后继续生效，阴影不重复叠加"
+    },
+    {
+      "passed": true,
+      "label": "网页全屏自动撤去圆角和阴影"
+    },
+    {
+      "passed": true,
+      "label": "全屏遮挡底层页面的修复仍然保留"
+    },
+    {
+      "passed": true,
+      "label": "退出全屏自动恢复保存的外观"
+    },
+    {
+      "passed": true,
+      "label": "关闭氛围光清理圆角和阴影"
+    },
+    {
+      "passed": true,
+      "label": "撤回同意立即清理装饰"
+    },
+    {
+      "passed": true,
+      "label": "0% 阴影完全关闭，圆角继续保留"
+    }
+  ],
+  "liveWeb": {
+    "text": "浏览器自检\n15 / 15 项通过 · 网页模式专项\n✓ 保留 300px 聊天栏的网页模式正确识别\n✓ 不透明底板覆盖整个视口，填住视频外留白\n✓ 底板、氛围光、播放器按顺序绘制\n✓ 底板不拦截点击或进入无障碍内容\n✓ 右侧聊天仍是可交互的最上层\n✓ 网页模式仍持续绘制新帧\n✓ 暂停保留光色和底板且停止采样\n✓ 浅色页面与零光强仍遮挡底层页面\n✓ 替换播放器后恢复且不累积底板\n✓ 关闭光效立即移除底板并还原原生样式\n✓ 网页模式中重新开启恢复光效与遮挡\n✓ 退出网页模式后恢复普通直播透光\n✓ 全宽网页全屏和竖屏视频仍有底板与光效\n✓ 全屏停播/移除视频后移除底板\n✓ 重连直播后重新建立全屏背景"
+  },
+  "nativeFullscreen": {
+    "backdrop": true,
+    "mode": "fullscreen",
+    "radius": "0px",
+    "rounded": 0,
+    "shadow": "none",
+    "verified": true
+  },
+  "watchlaterPortrait": [
+    {
+      "passed": true,
+      "label": "旧设置默认不增加圆角或阴影"
+    },
+    {
+      "passed": true,
+      "label": "设置开关使四个角均为 YouTube 的 12px 圆角"
+    },
+    {
+      "passed": true,
+      "label": "只开圆角不会自动添加阴影"
+    },
+    {
+      "passed": true,
+      "label": "阴影滑块即时更新强度、读数与本地设置"
+    },
+    {
+      "passed": true,
+      "label": "圆角与阴影不缩放、不淡化、不改色视频"
+    },
+    {
+      "passed": true,
+      "label": "阴影层不覆盖画面或拦截点击"
+    },
+    {
+      "passed": true,
+      "label": "播放器控件或弹幕输入框仍可命中"
+    },
+    {
+      "passed": true,
+      "label": "阴影准确贴合画面区，不包住聊天或发送栏"
+    },
+    {
+      "passed": true,
+      "label": "圆角光效遮罩是浏览器支持的有效路径"
+    },
+    {
+      "passed": true,
+      "label": "关闭圆角恢复原状，阴影仍独立保留"
+    },
+    {
+      "passed": true,
+      "label": "零光强仍可保留边框阴影"
+    },
+    {
+      "passed": true,
+      "label": "换片后继续生效，阴影不重复叠加"
+    },
+    {
+      "passed": true,
+      "label": "宽屏遵循 YouTube 直角规则，独立阴影可用"
+    },
+    {
+      "passed": true,
+      "label": "网页全屏自动撤去圆角和阴影"
+    },
+    {
+      "passed": true,
+      "label": "全屏遮挡底层页面的修复仍然保留"
+    },
+    {
+      "passed": true,
+      "label": "退出全屏自动恢复保存的外观"
+    },
+    {
+      "passed": true,
+      "label": "关闭氛围光清理圆角和阴影"
+    },
+    {
+      "passed": true,
+      "label": "撤回同意立即清理装饰"
+    },
+    {
+      "passed": true,
+      "label": "0% 阴影完全关闭，圆角继续保留"
+    }
+  ],
+  "nativeExit": {
+    "mode": "normal",
+    "radius": "12px",
+    "shadow": "block"
+  },
+  "vodWeb": {
+    "text": "✓ 媒体源为真实 9:16 竖屏比例\n✓ 普通播放保持页面透光\n✓ 网页全屏光效与底板都挂在播放器内\n✓ 不透明底板覆盖视口两侧与上下留白\n✓ 固定顶部头像、用户名和导航位于全屏播放器后方\n✓ 底板在光效之下，播放器之上仍保留内容层\n✓ 底板不拦截点击且不进入无障碍内容\n✓ 弹幕输入区仍可命中\n✓ 画面保持完整比例且未增加缩放或裁切\n✓ 竖屏网页全屏继续绘制动态光色\n✓ 暂停保留光色与遮挡并停止采样\n✓ 浅色页面和零光强仍遮挡底层 UI\n✓ 换片/替换播放器不会叠加底板\n✓ 关闭氛围光立即释放全屏底板\n✓ 重新开启恢复遮挡和光效\n✓ 退出全屏恢复普通页面透光\n✓ 宽屏模式不添加全屏底板",
+    "passed": "true",
+    "total": "17"
+  },
+  "reference": {
+    "url": "https://www.youtube.com/watch?v=rFZHOHl-L8A",
+    "date": "2026-10-05",
+    "selector": "#ytd-player",
+    "normal": {
+      "borderRadius": "12px",
+      "overflow": "hidden"
+    },
+    "theater": {
+      "borderRadius": "0px",
+      "overflow": "visible"
+    }
+  },
+  "notes": [
+    "Actual DOM structures inspected on an existing Bilibili VOD and live room; browser assertions run on local fixtures with production scripts.",
+    "First automated background-tab fullscreen attempts were denied. Foreground native Chrome click entered fullscreen; screenshot and exit restoration verified.",
+    "Final origin measurement fix was rechecked in live and watchlater/portrait frame suites."
+  ]
+}

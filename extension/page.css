@@ -1,4 +1,8 @@
 /* Only layer backgrounds: never opacity/filter the page, cards, text, images or controls. */
+html[data-biliglow-active] [data-biliglow-rounded] {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
 /* Crop effects use owned variables so original player inline styles survive,
    including when the site clones a video element during source replacement. */
 html[data-biliglow-active] video[data-biliglow-bar-crop] {

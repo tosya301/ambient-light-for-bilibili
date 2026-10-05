@@ -1,0 +1,10 @@
+{
+  "file": "/Users/dperenn/Documents/Codex/2026-10-02/new-chat/outputs/Ambient-light-for-Bilibili-0.5.3.9.zip",
+  "version": "0.5.3.9",
+  "files": 19,
+  "sha256": "cfc0d819fb8f46f5e91b9c47b9d558761720042c5a2d1efcd0d1e20e1553a50a",
+  "bytes": 241586,
+  "byteVerified": true,
+  "difference_from_local_preview": "Remove obsolete 本地实验版 prefix from public description; executable code and permissions unchanged.",
+  "published": false
+}

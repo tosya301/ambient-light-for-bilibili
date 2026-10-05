@@ -133,3 +133,22 @@ test('MV3 package references real files and only requests storage',()=>{
   assert.equal(m.manifest_version,3);assert.deepEqual(m.permissions,['storage']);assert.deepEqual(m.content_scripts[0].matches,['https://www.bilibili.com/*','https://live.bilibili.com/*']);
   for(const path of [...Object.values(m.icons),...m.content_scripts[0].js,...m.content_scripts[0].css,m.action.default_popup,m.background.service_worker])assert.ok(fs.existsSync(base+path),path);
 });
+
+test('frame preferences upgrade without changing saved light settings and reject invalid input',()=>{
+  const old={privacyAccepted:true,strength:103,spread:310,hideLauncher:true};
+  const upgraded=B.sanitize(old);
+  assert.equal(upgraded.roundedCorners,false);assert.equal(upgraded.frameShadow,0);
+  for(const [key,value] of Object.entries(old))assert.equal(upgraded[key],value);
+  assert.equal(B.sanitize({roundedCorners:'true',frameShadow:NaN}).roundedCorners,false);
+  assert.equal(B.sanitize({frameShadow:Infinity}).frameShadow,0);
+  assert.equal(B.sanitize({frameShadow:-1}).frameShadow,0);
+  assert.equal(B.sanitize({frameShadow:999}).frameShadow,100);
+});
+test('frame preferences persist independently of light presets and enable/disable',async()=>{
+  try{
+    await B.storage.set({roundedCorners:true,frameShadow:65});
+    await B.storage.set(B.presets.soft);await B.storage.set({enabled:false});await B.storage.set({enabled:true});
+    let saved=await B.storage.get();assert.equal(saved.roundedCorners,true);assert.equal(saved.frameShadow,65);
+    await B.storage.set({frameShadow:0});saved=await B.storage.get();assert.equal(saved.roundedCorners,true);assert.equal(saved.frameShadow,0);
+  }finally{await B.storage.set(B.defaults);}
+});

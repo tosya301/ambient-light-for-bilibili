@@ -1,12 +1,20 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前正式版 **0.5.3.8**，Manifest V3，原生 JavaScript，无构建步骤或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前正式版 **0.5.3.9**，Manifest V3，原生 JavaScript，无构建步骤或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.3.8 正式版
+## 0.5.3.9 正式版：播放器圆角与阴影
 
-[GitHub 最新正式版 0.5.3.8](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.8) 修复普通视频、番剧与稍后再看网页全屏时，顶部头像与导航、标题和推荐等网页 UI 透入视频留白的问题。竖屏两侧仍有动态氛围光，画面保持完整比例；弹幕和播放器控件保留。
+「画面」页新增「播放器外观」：YouTube 同款圆角开关，以及 0–100% 的边框阴影滑块。两项默认关闭，保留已有外观；0% 完全关闭阴影，设置保存于本机，切换光效预设不会重置。
+
+2026-10-05 实测 YouTube 桌面直播页 `#ytd-player`：普通模式 `border-radius: 12px; overflow: hidden`，影院模式恢复 0px。B 站普通视频、稍后再看和直播使用相同的 12px 圆角；宽屏恢复直角，网页／原生全屏撤去圆角与阴影，退出后恢复。阴影只围绕画面区，不包含发送栏、主播顶栏或聊天框；不缩放、拉伸或淡化视频。
+
+启动本地服务器后，可打开 [直播预览](http://127.0.0.1:8768/demo/live.html) 或 [视频预览](http://127.0.0.1:8768/demo/index.html)，开启氛围光，在「画面」调整这两项。支持运行「圆角与阴影自检」。正式安装包见 [GitHub 0.5.3.9](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.9)，验证记录见 [QA.txt](QA.txt)。
+
+## 0.5.3.8 正式版（历史）
+
+[GitHub 0.5.3.8](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.8) 修复普通视频、番剧与稍后再看网页全屏时，顶部头像与导航、标题和推荐等网页 UI 透入视频留白的问题。竖屏两侧仍有动态氛围光，画面保持完整比例；弹幕和播放器控件保留。
 
 退出全屏恢复普通页面透光；零光强、关闭深色页面背景或暂停时仍保持全屏遮挡。保留 0.5.3.7 的直播修复和所有已有设置，权限不变。
 
@@ -75,7 +83,7 @@
 
 ## 安装与使用
 
-下载 [GitHub 0.5.3.7 正式版](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.7)的 `Ambient-light-for-Bilibili-0.5.3.7.zip`，解压后可本地加载。包含点播、稍后再看、普通与 `/blanc/` 直播间、透明界面和圆形拖动入口。Chrome Web Store 与 Microsoft Edge Add-ons 的 0.5.2 已于 2026-10-01 提交审核；本次只更新 GitHub，未重新提交商店。
+下载 [GitHub 0.5.3.9 正式版](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.9) 的 `Ambient-light-for-Bilibili-0.5.3.9.zip`，解压后可本地加载。包含点播、稍后再看、普通与 `/blanc/` 直播间、全屏背景修复、可隐藏的拖动入口，以及圆角与阴影选项。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
 
 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。
 
