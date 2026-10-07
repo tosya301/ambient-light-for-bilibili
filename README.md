@@ -4,6 +4,10 @@
 
 ![扩展图标](extension/icons/128.png)
 
+## Firefox 商店进展（2026-10-07）
+
+**0.5.3.10 已提交 Mozilla Add-ons，当前等待审核，尚未公开提供安装。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。Chrome / Edge 用户可继续使用现有商店版本或 GitHub 0.5.3.9 正式版。
+
 ## 0.5.3.10：Firefox 桌面版
 
 同一套功能源码分别生成 Chromium（Chrome/Edge）与 Firefox 发行包。Firefox 包使用 MV3 后台脚本、固定扩展 ID `ambient-light-for-bilibili@tosya301`，最低版本设为桌面 Firefox 140；不声明 Android 支持。权限仍为 `storage`，内容脚本站点仍限 `www.bilibili.com` 与 `live.bilibili.com`。Firefox 声明无数据传输，并附带可离线查看的内置隐私政策。
@@ -115,7 +119,7 @@ Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开�
 | --- | --- | --- | --- |
 | Chrome Web Store | Deperenn | txim301@gmail.com | [Chrome 版政策](https://tosya301.github.io/ambient-light-for-bilibili/privacy-chrome.html) |
 | Microsoft Edge Add-ons | TXIM301 | txim301@outlook.com | [Edge 版政策](https://tosya301.github.io/ambient-light-for-bilibili/privacy-edge.html) |
-| Firefox Add-ons（已提交审核） | Deperenn | txim301@gmail.com | [Firefox 版政策源码](docs/privacy-firefox.html)，发行包内可离线查看 |
+| [Firefox Add-ons（等待审核）](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) | Deperenn | txim301@gmail.com | [Firefox 版政策源码](docs/privacy-firefox.html)，发行包内可离线查看 |
 
 [项目与政策页面](https://tosya301.github.io/ambient-light-for-bilibili/)
 
