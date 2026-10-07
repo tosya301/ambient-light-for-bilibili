@@ -21,9 +21,10 @@
       :host([data-biliglow-comments-active]) #div { border-bottom-color:var(--line_regular)!important; }
     `,
     'bili-comments-header-renderer':`
-      :host([data-biliglow-comments-active]) :is(.bili-comments-bottom-fixed-wrapper,
-      .bili-comments-bottom-fixed-wrapper > div,
-      #disabled-commentbox #edit) { background:transparent!important;box-shadow:none!important;border-color:transparent!important; }
+      /* The site creates its bottom-fixed wrapper only while the composer is
+         pinned. Preserve that wrapper's native opaque base so comment pictures
+         cannot show through the avatar, editor, tools and send-button row. */
+      :host([data-biliglow-comments-active]) #disabled-commentbox #edit { background:transparent!important;box-shadow:none!important;border-color:transparent!important; }
     `,
     'bili-comment-box':`
       :host([data-biliglow-comments-active]),
@@ -77,7 +78,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.10';
+    root.dataset.version='0.5.3.11';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);

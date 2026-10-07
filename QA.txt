@@ -1,3 +1,23 @@
+0.5.3.11 sticky comment composer — local, not submitted (2026-10-07)
+
+Root cause and fix:
+Actual Chrome Elements inspection on BV1yiar6rEDB confirmed that Bilibili creates .bili-comments-bottom-fixed-wrapper only when the composer is pinned. Its direct child already supplies a complete var(--bg1) surface around avatar, editor, tools and publish button. The old CSS erased that surface. This patch removes only the two wrapper selectors from the transparency rule; normal inline comment editors remain transparent. No observer, position override, new overlay or permission was added.
+
+Verification:
+- 78 Node tests passed; git diff --check passed.
+- Chrome 154.0.8037.99: initial 33 component/watch-later checks passed; final targeted 15 composer checks passed after improving the fixture text color for light mode.
+- Firefox 157.0.1: final targeted 15 composer checks passed. Full-row opaque dark/light backgrounds over a high-contrast image were visually checked in Firefox. Prior combined-run UI also passed, but its shared JSON was overwritten by Chrome; only separately saved final Firefox results are used for the assertion count.
+- Exact final Chromium package loaded as extension jcolaifapphjoembbcpekjpjgaikcala; real BV1yiar6rEDB page confirms data-version=0.5.3.11. Expanded input/tools/publish row has an opaque dark surface rgb(16,20,29); switching to light gives rgb(255,255,255). Both screenshots inspected. No comment was posted.
+- Original local Chrome 0.5.3.9 (dmnppenljjphfjbjehmnghkghglfjado) retained and disabled during the .11 local trial; .11 enabled with dark mode restored.
+- Final ZIP CRC checks pass; matching source reproduces the Firefox archive byte-for-byte. Firefox lint: 0 errors / 0 notices / 3 existing warnings, documented in the .10 record.
+- Submitted .10 Firefox ZIP hash remains unchanged. .11 is local only: no GitHub Release and no store submission.
+
+Limits:
+.11 actual-site verification was in Chrome; Firefox .11 checks used production scripts with local synthetic media and observed Bilibili shadow structure. Signed Firefox .11 install/upgrade, Firefox 140, Windows/Linux, Android and third-party themes were not verified.
+
+GitHub Firefox announcement:
+Commit 1ac3c1b93c52efac4b025bb93d8953da445e7d19 pushed to main. README and GitHub Pages visibly state that Firefox .10 was submitted and is awaiting review; Pages build verified built. Latest GitHub release remains .9.
+
 Firefox 0.5.3.10 verification — 2026-10-07
 
 Environment: macOS, Firefox 157.0.1. Temporary add-on loaded from the exact final unpacked Firefox package in outputs/firefox-amo/release/firefox. Gecko ID ambient-light-for-bilibili@tosya301.

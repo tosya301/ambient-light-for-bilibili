@@ -17,7 +17,7 @@ customElements.define('bili-comment-thread-renderer',class extends HTMLElement{
   constructor(){super();this.attachShadow({mode:'open'}).innerHTML='<style>#div{padding:12px 0;font-size:12px;color:var(--text3,#666);border-bottom:1px solid #000}</style><div id="div">示例评论 · 分割线跟随页面主题</div>';}
 });
 customElements.define('bili-comments-header-renderer',class extends HTMLElement{
-  constructor(){super();this.attachShadow({mode:'open'}).innerHTML='<style>.bili-comments-bottom-fixed-wrapper>div{background:var(--bg1,#fff);padding:12px}</style><div class="bili-comments-bottom-fixed-wrapper"><div><bili-comment-box></bili-comment-box></div></div>';}
+  constructor(){super();this.attachShadow({mode:'open'}).innerHTML='<style>#commentbox{padding:12px}</style><div id="commentbox"><bili-comment-box></bili-comment-box></div>';}
 });
 customElements.define('bili-comments',class extends HTMLElement{
   constructor(){super();this.attachShadow({mode:'open'}).innerHTML='<bili-comments-header-renderer></bili-comments-header-renderer><bili-comment-thread-renderer></bili-comment-thread-renderer>';}

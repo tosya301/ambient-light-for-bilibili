@@ -1,8 +1,12 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码 **0.5.3.10**，Firefox 桌面版已提交 AMO 审核；现有 GitHub 正式版为 **0.5.3.9**。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前本地源码 **0.5.3.11**（尚未发布），Firefox **0.5.3.10** 已提交 AMO 审核；现有 GitHub 正式版为 **0.5.3.9**。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
+
+## 0.5.3.11：吸底评论栏修复（本地待发布）
+
+保留 B 站吸底评论栏的原生不透明底板，避免后方评论文字和配图透进头像、输入框及工具栏；普通内联评论继续透光。支持原生深浅色背景，不新增权限。已在真实 Chrome B 站页面检查展开输入框和深浅色底板；Firefox 与 Chrome 的本地组件回归通过，78 项 Node 测试通过。Firefox 商店仍在审核 0.5.3.10，本修复未替换该提交，详细边界见 [QA.txt](QA.txt)。
 
 ## Firefox 商店进展（2026-10-07）
 

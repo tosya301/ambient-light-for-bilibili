@@ -1,6 +1,6 @@
 {
   "name": "ambient-light-for-bilibili",
-  "version": "0.5.3+10",
+  "version": "0.5.3+11",
   "private": true,
   "description": "Local-only ambient light extension for Bilibili",
   "license": "MIT",

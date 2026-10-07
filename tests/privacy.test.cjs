@@ -158,7 +158,19 @@ function contentHarness(initial,delayed=false,live=false,options={}){
   const html=new Element('html'),body=new Element('body');
   const comments=[];
   const addComment=()=>{const host=new Element('bili-comment-box');host.attachShadow();comments.push(host);return host;};
+  const composers=[];
+  const addComposer=({wrapperPosition='static',bodyPosition='static'}={})=>{
+    const host=new Element('bili-comments-header-renderer'),shadow=host.attachShadow();
+    const wrapper=new Element('div'),body=new Element('div');
+    wrapper.style.position=wrapperPosition;body.style.position=bodyPosition;
+    body.style.backgroundColor='var(--bg1)';body.style.padding='15px 0px';
+    shadow.append(wrapper);wrapper.append(body);
+    const composer={host,wrapper,body};
+    shadow.querySelectorAll=selector=>selector.startsWith('.bili-comments-bottom-fixed-wrapper')?[composer.wrapper,composer.body]:[];
+    comments.push(host);composers.push(composer);return composer;
+  };
   if(options.comments)addComment();
+  if(options.composer)addComposer(options.composer);
   const document={documentElement:html,body,hidden:false,fullscreenElement:null,
     createElement:tag=>new Element(tag),querySelector(){return null;},addEventListener(type,fn){documentEvents.set(type,fn);},
     querySelectorAll(selector){if(selector==='video'||selector==='#live-player video'){counts.videoQueries++;return [currentVideo];}return comments.filter(host=>host.isConnected);}
@@ -179,7 +191,7 @@ function contentHarness(initial,delayed=false,live=false,options={}){
   });
   vm.runInContext(source('player.js'),context);
   vm.runInContext(source('content.js'),context);
-  return {counts,html,body,frames,video,container,context,barConfigurations,panelCalls,comments,addComment,
+  return {counts,html,body,frames,video,container,context,barConfigurations,panelCalls,comments,addComment,composers,addComposer,
     get ui(){return html.children.find(element=>'biliglowUi' in element.dataset);},
     get launcher(){return this.ui.shadowRoot.launcher;},get panelHost(){return this.ui.shadowRoot.holder;},
     pointer(type,values){return dispatch(this.launcher,type,values);},
@@ -607,4 +619,37 @@ test('rebuilt comment hosts are adopted and old hosts lose all extension state',
   assert.equal(next.hasAttribute('data-biliglow-comments-active'),true);assert.equal(next.shadowRoot.children.length,1);
   h.change({privacyAccepted:true,enabled:false});
   assert.equal(next.hasAttribute('data-biliglow-comments-active'),false);assert.equal(next.shadowRoot.children.length,0);
+});
+
+test('comment header styling leaves the native fixed and sticky composer base outside its override scope',async()=>{
+  const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{composer:{wrapperPosition:'fixed'}});await h.ready();
+  const {host,wrapper,body}=h.composers[0];
+  const nativeWrapper={...wrapper.style},nativeBody={...body.style};
+  const style=host.shadowRoot.children.find(child=>child.localName==='style');
+  assert.ok(style);
+  assert.doesNotMatch(style.textContent,/\.bili-comments-bottom-fixed-wrapper/,'the native full-row base must not be targeted by transparent background overrides');
+  assert.deepEqual({...wrapper.style},nativeWrapper);assert.deepEqual({...body.style},nativeBody);
+  wrapper.style.position='sticky';h.reconcile();
+  assert.equal(wrapper.style.position,'sticky');assert.deepEqual({...body.style},nativeBody);
+  h.change({privacyAccepted:true,enabled:true,dark:false});assert.deepEqual({...body.style},nativeBody,'theme is inherited through the native bg1 variable');
+  h.change({privacyAccepted:false,enabled:true});
+  assert.equal(host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.deepEqual({...body.style},nativeBody,'revocation preserves all native composer declarations');
+});
+
+test('native composer base survives header rebuild, position changes and extension disable',async()=>{
+  const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{composer:{wrapperPosition:'fixed'}});await h.ready();
+  const original=h.composers[0];original.host.isConnected=false;
+  const next=h.addComposer({wrapperPosition:'sticky'});h.reconcile();h.reconcile();
+  assert.equal(original.host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(original.host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
+  assert.equal(next.host.shadowRoot.children.filter(child=>child.localName==='style').length,1);
+  assert.equal(next.body.style.backgroundColor,'var(--bg1)');assert.equal(next.body.style.padding,'15px 0px');
+  next.wrapper.remove();h.reconcile();
+  assert.equal(next.wrapper.style.position,'sticky','leaving pinned mode does not overwrite detached native layout');
+  h.change({privacyAccepted:true,enabled:false});
+  assert.equal(next.host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(next.host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
+  assert.equal(next.body.style.backgroundColor,'var(--bg1)');
 });
