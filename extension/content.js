@@ -18,24 +18,29 @@
   const commentCSS={
     'bili-comment-thread-renderer':`
       /* Match the video tag/toolbar divider without changing other comment surfaces. */
-      :host-context(html[data-biliglow-active]) #div { border-bottom-color:var(--line_regular)!important; }
+      :host([data-biliglow-comments-active]) #div { border-bottom-color:var(--line_regular)!important; }
     `,
     'bili-comments-header-renderer':`
-      :host-context(html[data-biliglow-active]) :is(.bili-comments-bottom-fixed-wrapper,
+      :host([data-biliglow-comments-active]) :is(.bili-comments-bottom-fixed-wrapper,
       .bili-comments-bottom-fixed-wrapper > div,
       #disabled-commentbox #edit) { background:transparent!important;box-shadow:none!important;border-color:transparent!important; }
     `,
     'bili-comment-box':`
-      :host-context(html[data-biliglow-active]),
-      :host-context(html[data-biliglow-active]) :is(#comment-area, #body, #editor, #footer, .tool-btn) { background:transparent!important;box-shadow:none!important; }
-      :host-context(html[data-biliglow-active]) #editor { border-color:transparent!important; }
-      :host-context(html[data-biliglow-active]) #editor:focus-within { outline:1px solid var(--brand_blue,#00aeec);outline-offset:1px; }
+      :host([data-biliglow-comments-active]),
+      :host([data-biliglow-comments-active]) :is(#comment-area, #body, #editor, #footer, .tool-btn) { background:transparent!important;box-shadow:none!important; }
+      :host([data-biliglow-comments-active]) #editor { border-color:transparent!important; }
+      :host([data-biliglow-comments-active]) #editor:focus-within { outline:1px solid var(--brand_blue,#00aeec);outline-offset:1px; }
     `
   };
+  // Firefox does not implement :host-context(). Mirror only our own active
+  // state onto known hosts, including immediate fullscreen mode transitions.
+  function setCommentActivity(active){
+    for(const host of commentStyles.keys())host.toggleAttribute('data-biliglow-comments-active',active&&kind==='video');
+  }
   function syncCommentSurfaces(){
     const active=document.documentElement.hasAttribute('data-biliglow-active');
     for(const [host,style] of commentStyles){
-      if(!active||!host.isConnected){style.remove();commentStyles.delete(host);}
+      if(!active||kind==='live'||!host.isConnected){host.removeAttribute('data-biliglow-comments-active');style.remove();commentStyles.delete(host);}
     }
     if(!active||kind==='live')return;
     function visit(scope){
@@ -44,6 +49,7 @@
         if(!shadow)continue;
         const css=commentCSS[host.localName];
         if(css){
+          host.setAttribute('data-biliglow-comments-active','');
           let style=commentStyles.get(host);
           if(!style){
             style=document.createElement('style');style.dataset.biliglowComments='';
@@ -71,7 +77,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.9';
+    root.dataset.version='0.5.3.10';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);
@@ -241,6 +247,7 @@
     const ready=kind!=='live'||Boolean(video?.readyState>=2&&!video.ended&&!blocked);
     const active=supported&&B.isActive(settings)&&Boolean(video?.isConnected)&&ready&&(!fs||Boolean(ownFullscreen));
     document.documentElement.toggleAttribute('data-biliglow-active',active);
+    setCommentActivity(active);
     document.documentElement.toggleAttribute('data-biliglow-live',kind==='live'&&active);
     document.documentElement.toggleAttribute('data-biliglow-dark',active&&settings.dark);
     const nextStage=active?presentation.stage:null;

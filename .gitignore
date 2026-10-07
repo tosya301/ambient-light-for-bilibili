@@ -6,6 +6,7 @@
 *.pem
 *.key
 node_modules/
+dist/
 work/
 outputs/
 *.log

@@ -1,3 +1,28 @@
+Firefox 0.5.3.10 verification — 2026-10-07
+
+Environment: macOS, Firefox 157.0.1. Temporary add-on loaded from the exact final unpacked Firefox package in outputs/firefox-amo/release/firefox. Gecko ID ambient-light-for-bilibili@tosya301.
+
+Automated checks
+76 Node tests passed, including two comment-host lifecycle regressions and four packaging/reproduction checks.
+9 browser suites / 136 checks passed in the actual Firefox host using local synthetic media and production scripts: transparent comment surfaces, VOD crop, VOD/player framing, portrait watch-later framing/fullscreen, live playback lifecycle, live web fullscreen, live colors and live framing.
+First run failed only the final no-CORS crop case because the fixture referenced port 8765 while the QA server used 8769. The fixture now retains the active port and switches localhost/127.0.0.1 origins. The targeted rerun passed all 15 crop cases, including safe uncropped playback with continued light rendering when pixel reads are blocked. The original failed evidence and rerun are both retained.
+web-ext 10.7.0: 0 errors, 0 notices, 3 warnings. Two innerHTML warnings use only bundled constants/internal policy URL; the third concerns Android data-consent minimum versions. This distribution is desktop-only. Warnings are explained in the reviewer notes.
+Final Chromium, Firefox and source ZIPs pass ZIP CRC validation and match package-report.json hashes. Source reproduction is checked separately.
+
+Actual site and extension verification
+https://www.bilibili.com/video/BV1yiar6rEDB/ — content script injection, first-use gate, actual changing video and surrounding light observed; native container fullscreen and exit observed; toolbar popup reads enabled settings and renders controls; Alt+Shift+A toggles on/off through the background event page.
+The privacy link from the content-script first-use gate opened the bundled moz-extension privacy.html successfully, with the intended publisher/email and bilingual text.
+https://live.bilibili.com/25034104 — room broadcaster offline, loop video playing. Extension automatically used the same saved consent and produced light matching the loop video. This is a real live-site player test, not an actual live-broadcast test.
+
+Not yet verified
+Firefox 140 runtime, Windows/Linux, Android (not a submission target), signed permanent install, browser-restart persistence, upgrade from a signed Firefox release, actual live broadcast, all Bilibili skins and protected media. These are not claimed as passed.
+
+Submission state
+Submitted to AMO on 2026-10-07 19:29 EDT. Version 6553057 / file 5097196, version 0.5.3.10, status waiting review. Matching source uploaded and verified visible at /firefox/downloads/source/6553057. Publisher Deperenn, MIT, desktop Firefox 140+, Android not selected. Public availability and signed installation are not yet verified.
+
+========================================================================
+Historical QA records follow.
+
 0.5.3.9 播放器圆角与阴影，正式包验证（2026-10-05）
 
 - 参照浏览器实际呈现的 YouTube 桌面直播播放器 #ytd-player：普通 12px / overflow:hidden，影院 0px；已恢复参考页原来的普通模式并关闭参考标签。

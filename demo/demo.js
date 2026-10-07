@@ -129,7 +129,7 @@ document.querySelector('#cross-origin').addEventListener('click',async()=>{
   const v=document.querySelector('video');
   if(!v){out.textContent='请先恢复播放器';return;}
   try{
-    v.srcObject=null;v.removeAttribute('crossorigin');v.src='http://localhost:8765/demo/test-colors.mp4';v.loop=true;
+    v.srcObject=null;v.removeAttribute('crossorigin');v.src=new URL('/demo/test-colors.mp4',location.href.replace(location.hostname,location.hostname==='localhost'?'127.0.0.1':'localhost')).href;v.loop=true;
     await v.play();await wait(1400);const before=count();await wait(500);
     let tainted=false;
     try{document.querySelector('[data-biliglow-root]').shadowRoot.querySelector('canvas').getContext('2d').getImageData(0,0,1,1);}catch(e){tainted=e.name==='SecurityError';}

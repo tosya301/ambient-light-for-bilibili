@@ -41,7 +41,7 @@ testBarsButton.addEventListener('click',async()=>{
     const hostStyle=document.createElement('style');hostStyle.textContent='#demo-video { transform:scale(.98) }';document.head.append(hostStyle);
     sourceBars('horizontal');await settle();
     check(!cropped()&&getComputedStyle(v()).transform.startsWith('matrix(0.98'),'尊重播放器已有的 CSS 画面变换');hostStyle.remove();
-    const video=v();video.srcObject=null;video.removeAttribute('crossorigin');video.src='http://localhost:8765/demo/test-colors.mp4';video.loop=true;await video.play();await settle();
+    const video=v();video.srcObject=null;video.removeAttribute('crossorigin');video.src=new URL('/demo/test-colors.mp4',location.href.replace(location.hostname,location.hostname==='localhost'?'127.0.0.1':'localhost')).href;video.loop=true;await video.play();await settle();
     const before=count();await wait(500);
     check(!cropped()&&count()>before,'禁止像素读取时保留原画，氛围光仍继续绘制');
   }catch(error){check(false,error.message);}

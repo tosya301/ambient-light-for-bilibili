@@ -1,8 +1,16 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前正式版 **0.5.3.9**，Manifest V3，原生 JavaScript，无构建步骤或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码 **0.5.3.10**，Firefox 桌面版已提交 AMO 审核；现有 GitHub 正式版为 **0.5.3.9**。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
+
+## 0.5.3.10：Firefox 桌面版
+
+同一套功能源码分别生成 Chromium（Chrome/Edge）与 Firefox 发行包。Firefox 包使用 MV3 后台脚本、固定扩展 ID `ambient-light-for-bilibili@tosya301`，最低版本设为桌面 Firefox 140；不声明 Android 支持。权限仍为 `storage`，内容脚本站点仍限 `www.bilibili.com` 与 `live.bilibili.com`。Firefox 声明无数据传输，并附带可离线查看的内置隐私政策。
+
+Firefox 157.0.1 已通过 9 组本地合成场景、136 项检查，76 项 Node 测试通过；临时扩展已在真实 B 站视频页和直播间轮播验证。原生容器全屏、快捷键、工具栏入口与内置隐私政策已检查。2026-10-07 已提交 AMO（等待审核），签名安装与升级仍待验证，详情见 [QA.txt](QA.txt)。
+
+使用下方打包命令生成两个发行包；原始 `extension/manifest.json` 保持 Chromium 入口，不能直接作为 Firefox 包使用。Firefox 发行 ZIP 需经 Mozilla 签名后用于普通用户安装，本地开发可在 `about:debugging#/runtime/this-firefox` 临时加载生成目录中的 `firefox/manifest.json`，重启浏览器后临时扩展会移除。
 
 ## 0.5.3.9 正式版：播放器圆角与阴影
 
@@ -87,7 +95,7 @@
 
 下载 [GitHub 0.5.3.9 正式版](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.9) 的 `Ambient-light-for-Bilibili-0.5.3.9.zip`，解压后可本地加载。包含点播、稍后再看、普通与 `/blanc/` 直播间、全屏背景修复、可隐藏的拖动入口，以及圆角与阴影选项。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
 
-本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。
+Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 使用上方单独说明的生成包和临时加载方式。
 
 点击页面右下角的小电视按钮或工具栏扩展图标打开设置，阅读本地处理说明并明确同意后才会开启。可在“更多”撤回同意并停止处理。默认快捷键为 **Alt+Shift+A**；可在浏览器的扩展快捷键设置中调整。更新时替换同一目录内的文件，再重新加载扩展并刷新页面，以保留扩展 ID 和设置。
 
@@ -107,6 +115,7 @@
 | --- | --- | --- | --- |
 | Chrome Web Store | Deperenn | txim301@gmail.com | [Chrome 版政策](https://tosya301.github.io/ambient-light-for-bilibili/privacy-chrome.html) |
 | Microsoft Edge Add-ons | TXIM301 | txim301@outlook.com | [Edge 版政策](https://tosya301.github.io/ambient-light-for-bilibili/privacy-edge.html) |
+| Firefox Add-ons（已提交审核） | Deperenn | txim301@gmail.com | [Firefox 版政策源码](docs/privacy-firefox.html)，发行包内可离线查看 |
 
 [项目与政策页面](https://tosya301.github.io/ambient-light-for-bilibili/)
 
@@ -119,8 +128,21 @@ npm run demo
 
 运行后访问 `http://127.0.0.1:8765/demo/` 查看合成视频演示，访问 `/demo/settings.html` 查看设置界面。演示使用与扩展相同的代码，设置仅暂存内存，不代表浏览器宿主注入或商店安装验收。
 
+发行打包需要 Node.js 18 或更高版本，不需要 `npm install`：
+
+```sh
+npm run package
+# 或只生成 Firefox 包：
+npm run package:firefox -- --out-dir dist-firefox
+```
+
+默认在 `dist/chromium/` 和 `dist/firefox/` 写出加载目录，并生成带版本与浏览器名称的 ZIP，以及可重现的 `-source.zip`。打包只白名单复制运行文件、MIT 许可证和 Firefox 内置隐私政策，排除演示、测试、调查截图及未使用的图标；不会改写源码 manifest。脚本拒绝覆盖已有发行目录或 ZIP，重复打包应通过 `--out-dir` 选择新的输出目录。
+
+源码 ZIP 内的 `BUILDING.txt` 提供离线重现步骤。JavaScript、HTML 和 CSS 原样复制，仅生成 Firefox manifest；ZIP 使用固定时间、文件权限和顺序，因此相同源码得到相同归档内容。源码 ZIP 中保留隐私页来源和打包脚本，可作为 AMO 对应版本的审核材料。固定 Gecko ID 用于同一 AMO 条目的后续升级，版本号必须递增；不同浏览器的本地设置不会自动迁移。
+
 ```text
 extension/    可加载的扩展源码与图标
+scripts/      无依赖的多浏览器发行打包脚本
 demo/         本地合成视频演示、界面预览及浏览器检查
 tests/        Node 测试
 docs/         GitHub Pages 项目与隐私政策页面
@@ -133,4 +155,4 @@ branding/     图标原图
 
 灵感来自 [Ambient light for YouTube](https://chromewebstore.google.com/detail/ambient-light-for-youtube/paponcgjfojgemddooebbgniglhkajkj)。本项目独立实现，与 Bilibili 或原扩展作者无隶属或合作关系。
 
-源码已公开供查看，目前尚未指定开源许可证。图标原图保留 AI 生成来源凭证。
+本项目采用 [MIT 许可证](LICENSE)，Copyright (c) 2026 Deperenn。发行包包含许可与版权声明。图标原图保留 AI 生成来源凭证。

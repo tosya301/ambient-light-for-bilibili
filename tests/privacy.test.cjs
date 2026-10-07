@@ -111,7 +111,7 @@ function contentHarness(initial,delayed=false,live=false,options={}){
     return style;
   }
   class Element{
-    constructor(tag){this.tagName=tag.toUpperCase();this.dataset={};this.style=styleObject();this.attrs=new Map();this.children=[];this.events=new Map();this.isConnected=true;this.captured=new Set();}
+    constructor(tag){this.localName=tag;this.tagName=tag.toUpperCase();this.dataset={};this.style=styleObject();this.attrs=new Map();this.children=[];this.events=new Map();this.isConnected=true;this.captured=new Set();}
     append(child){if(child.parentNode)child.parentNode.children=child.parentNode.children.filter(item=>item!==child);child.parentNode=this;this.children.push(child);}
     remove(){if(this.parentNode)this.parentNode.children=this.parentNode.children.filter(item=>item!==this);this.parentNode=null;}
     contains(child){return child===this||this.children.some(item=>item.contains(child));}
@@ -130,6 +130,7 @@ function contentHarness(initial,delayed=false,live=false,options={}){
       this.launcher.getBoundingClientRect=()=>{const style=this.host.style,width=48,height=48,left=style.left&&style.left!=='auto'?Number.parseFloat(style.left):context.innerWidth-width-Number.parseFloat(style.right||24),top=style.top&&style.top!=='auto'?Number.parseFloat(style.top):context.innerHeight-height-Number.parseFloat(style.bottom||24);return {left,top,width,height,right:left+width,bottom:top+height};};
     }
     querySelector(selector){return selector==='.holder'?this.holder:selector==='.launcher'?this.launcher:null;}
+    querySelectorAll(){return [];}
     getContext(){return this.context2d??={drawImage(){counts.draws++;},globalAlpha:1};}
     setPointerCapture(id){this.captured.add(id);}
     hasPointerCapture(id){return this.captured.has(id);}
@@ -155,9 +156,12 @@ function contentHarness(initial,delayed=false,live=false,options={}){
   }
   const video=createVideo();let currentVideo=video;
   const html=new Element('html'),body=new Element('body');
+  const comments=[];
+  const addComment=()=>{const host=new Element('bili-comment-box');host.attachShadow();comments.push(host);return host;};
+  if(options.comments)addComment();
   const document={documentElement:html,body,hidden:false,fullscreenElement:null,
     createElement:tag=>new Element(tag),querySelector(){return null;},addEventListener(type,fn){documentEvents.set(type,fn);},
-    querySelectorAll(selector){if(selector==='video'||selector==='#live-player video'){counts.videoQueries++;return [currentVideo];}return [];}
+    querySelectorAll(selector){if(selector==='video'||selector==='#live-player video'){counts.videoQueries++;return [currentVideo];}return comments.filter(host=>host.isConnected);}
   };
   const initialPromise=delayed?new Promise((resolve,reject)=>{resolveInitial=resolve;rejectInitial=reject;}):Promise.resolve(B.sanitize(initial));
   const api={...B,storage:{get:()=>initialPromise,subscribe(fn){onSettings=fn;}},
@@ -175,7 +179,7 @@ function contentHarness(initial,delayed=false,live=false,options={}){
   });
   vm.runInContext(source('player.js'),context);
   vm.runInContext(source('content.js'),context);
-  return {counts,html,body,frames,video,container,context,barConfigurations,panelCalls,
+  return {counts,html,body,frames,video,container,context,barConfigurations,panelCalls,comments,addComment,
     get ui(){return html.children.find(element=>'biliglowUi' in element.dataset);},
     get launcher(){return this.ui.shadowRoot.launcher;},get panelHost(){return this.ui.shadowRoot.holder;},
     pointer(type,values){return dispatch(this.launcher,type,values);},
@@ -578,4 +582,29 @@ test('hidden launcher preference remains effective across light off/on and prese
   h.change({...active,...B.presets.soft});h.flush();assertLauncherHidden(h);assert.equal(h.frames.size,1);
   const draws=h.counts.draws;h.frame(1200);assert.ok(h.counts.draws>draws);
   h.change({...active,hideLauncher:false});h.flush();assertLauncherVisible(h);assert.equal(h.frames.size,1);
+});
+
+
+test('comment surface state follows native fullscreen immediately and never accumulates styles',async()=>{
+  const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{comments:true});await h.ready();
+  const host=h.comments[0];
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),true);
+  assert.equal(host.shadowRoot.children.length,1);
+  h.context.document.fullscreenElement=h.video;h.documentEvent('fullscreenchange');h.flush();
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),false,'video-only native fullscreen restores surfaces before discovery interval');
+  h.context.document.fullscreenElement=null;h.documentEvent('fullscreenchange');h.flush();
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),true);
+  h.reconcile();h.reconcile();assert.equal(host.shadowRoot.children.length,1);
+  h.change({privacyAccepted:false,enabled:true});
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(host.shadowRoot.children.length,0,'revocation removes owned styles synchronously');
+});
+
+test('rebuilt comment hosts are adopted and old hosts lose all extension state',async()=>{
+  const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{comments:true});await h.ready();
+  const old=h.comments[0];old.isConnected=false;const next=h.addComment();h.reconcile();
+  assert.equal(old.hasAttribute('data-biliglow-comments-active'),false);assert.equal(old.shadowRoot.children.length,0);
+  assert.equal(next.hasAttribute('data-biliglow-comments-active'),true);assert.equal(next.shadowRoot.children.length,1);
+  h.change({privacyAccepted:true,enabled:false});
+  assert.equal(next.hasAttribute('data-biliglow-comments-active'),false);assert.equal(next.shadowRoot.children.length,0);
 });
