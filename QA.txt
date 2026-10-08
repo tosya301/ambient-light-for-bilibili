@@ -1,6 +1,6 @@
 0.5.3.15 — 2026-10-08
 
-Scope: user authorized GitHub formal release and all three store updates after local verification. Publication/submission results will be recorded separately below. Preserve Mac 1670:1080/16:10 enlargement and toolbar displacement; keep square, 4:3, 3:4 and portrait videos at their native contained size. Round the actual picture by 12px while surrounding empty player areas remain transparent.
+Scope: user authorized GitHub formal release and all three store updates after local verification. Publication/submission results are recorded below. Preserve Mac 1670:1080/16:10 enlargement and toolbar displacement; keep square, 4:3, 3:4 and portrait videos at their native contained size. Round the actual picture by 12px while surrounding empty player areas remain transparent.
 
 Root causes and fixes:
 - reserveSpace compared fixed mini-player viewport coordinates with a scrolling page wrapper, adding the scroll distance to page height. Before repair, actual scrollY 2632.5 had 2409px extra padding; the next wheel movement produced scrollY 4450.5 and 3318px extra. Freeze the established in-flow footprint while mini/fixed/sticky, then recalculate on return.
@@ -20,6 +20,27 @@ Installed directory: /Users/dperenn/Documents/Codex/2026-10-07/ambient-bilibili-
 The directory keeps its old name to preserve extension ID/settings, but its manifest and runtime are0.5.3.15. Original0.5.3.14 backup: /Users/dperenn/Documents/Codex/2026-10-08/bug/work/installed-chromium-0.5.3.14-backup.
 Evidence and final local packages: /Users/dperenn/Documents/Codex/2026-10-08/bug/outputs/scroll-fix-0.5.3.15
 Firefox checks use local production scripts; no Firefox installed/signed real-site injection, Edge or system-native fullscreen is claimed for this repair.
+
+0.5.3.15 publication — 2026-10-08
+
+GitHub: release v0.5.3.15 is published as Latest, draft=false and prerelease=false. Code/tag commit 950cd00ab74064e87d8a53ed108a950eb74b3df4. All three anonymous public downloads returned HTTP 200; GitHub asset sizes/digests and downloaded SHA-256 match the verified published-release archives. Downloaded ZIP CRCs passed.
+
+Published archive SHA-256:
+- Ambient-light-for-Bilibili-0.5.3.15-chromium.zip (186644 bytes): 4eabde6e928ed854077080b24b12034fde578c0498be360bd062af0ab45bb54a
+- Ambient-light-for-Bilibili-0.5.3.15-firefox.zip (196434 bytes): 931517f9834cc05b3d0f28bb5500b1ec5d8a296814ef34638f918097e79fbd57
+- Ambient-light-for-Bilibili-0.5.3.15-source.zip (207282 bytes): 4684851d7ac842b5dce4e6cfcaf0f7327f0abf567cb350cbbe14acfa8e245f60
+
+Published Firefox and source packages include the updated .15 privacy-version labels; runtime code is unchanged from the verified local repair. Independently extracting the published source ZIP and running its included package.cjs reproduced all three archives byte-for-byte. Cached web-ext 10.7.0: 0 errors, 0 notices, 3 existing warnings (desktop-inapplicable Android minimum-version warning and two bundled UI innerHTML assignments).
+
+GitHub Pages: deployment run 37844023587 completed successfully for code commit950cd00. Public project homepage and all three privacy pages returned HTTP 200. The homepage shows .15 and all three release-download links with Firefox temporary-install/restart instructions; Chrome/Edge and Firefox privacy applicability labels include .15 in Chinese and English.
+
+Store submission results observed in the actual dashboards:
+- Chrome: cancelled the pending .14 review; uploaded .15, saved Chinese listing description and current-version test instructions, and submitted. Dashboard .15 Pending review; automatic publication after approval selected. Current public package remains .12 at submission.
+- Edge: .14 was already Live when updating. Uploaded .15, saved Chinese listing and certification notes, verified the package, then submitted using Publish. Dashboard .15 In review; .14 remains Live.
+- Firefox: submitted .15 to the same AMO listing, version6556531 / file5100670. Online validator reported 0 errors and 3 existing warnings; desktop Firefox checked, Android unchecked. Matching published source ZIP uploaded and Finish completed; the version editor shows current source available. Reviewer notes and Chinese release notes saved and confirmed unchanged after refresh. Version manager explicitly shows Waiting review, 0 errors and 3 existing warnings. AMO moved .14 and .13 into disabled old versions automatically; neither was manually cancelled or deleted. GitHub .14 Release/assets remain available. Same Gecko ID, MIT, desktop Firefox140+, storage only and unchanged local-only data practices. Submission is awaiting review; signed permanent installation, restart persistence and upgrade were not verified.
+
+Evidence: /Users/dperenn/Documents/Codex/2026-10-08/bug/outputs/scroll-fix-0.5.3.15
+Public/package gates: public-download-verification.json, project-page-verification.json, published-package-verification.json, published-web-ext-lint.json. Store dashboard evidence: chrome-submitted.png, chrome-package-pending.png/.txt, edge-submitted.jpg/.txt, firefox-submitted.png, firefox-versions.png and firefox-version-saved.png/.txt; listing/reviewer/release text files are retained alongside them. Submission does not mean store approval or public availability.
 
 0.5.3.14 publication — 2026-10-08
 
