@@ -1,10 +1,18 @@
+0.5.3.13 publication — 2026-10-08
+
+GitHub main commit 814b0d5ecdc5787b91d9fdeaa3e0173693c0ee8b and release v0.5.3.13 published. Chromium, Firefox and matching source assets all publicly downloadable; HTTP 200, sizes and SHA-256 match the final local archives. An independent rebuild from the source ZIP reproduced all three archives byte-for-byte. web-ext 10.7: 0 errors, 0 notices, 3 existing warnings.
+
+Edge: .13 uploaded, verified and submitted; dashboard explicitly shows UPDATE Version 0.5.3.13 / In review. Current live version .12. Chinese description and certification notes updated; scope, markets, privacy and assets retained. Firefox: version 6555127 / file 5099266 waiting review, matching source visible at /firefox/downloads/source/6555127. Chinese release notes and reviewer notes saved; .12 moved to old disabled versions by AMO. Chrome .13 not submitted: browser tool refused opening developer console (Not allowed); user asked to open the authorized console manually. No alternate control or security bypass attempted.
+
+Evidence: task outputs/publish-0.5.3.13; final status and remaining work recorded in submission-result.json and progress.json. Submission is not store approval or public availability.
+
 0.5.3.13 release preparation — 2026-10-08
 
 Actual Chrome Bilibili BV1AtpF6eEZN now confirms data-version 0.5.3.13. Wide video area: 12px radius, overflow clip, scrollTop 0; video and controls share bottom 750.6875px. Chapter panel was opened through the native chapter control; both background layers compute transparent. Screenshots retained in outputs/publish-0.5.3.13. The previously pending actual-site load noted below is resolved for these observed cases.
 
 Final Chromium bytes are unchanged from the local trial. Privacy pages now include .13 in their version/date labels; Firefox and matching source packages were regenerated only to include that text update. Data practices and runtime files are unchanged. Final package validation and source reproduction are recorded separately in the publication outputs.
 
-0.5.3.13 — local UI repairs, not published (2026-10-08)
+0.5.3.13 — local UI repair phase (historical; publication update above)
 
 Observed in actual Chrome Bilibili BV1AtpF6eEZN with .12: the wide .bpx-player-video-area had clientHeight 766, scrollHeight 775 and scrollTop 9; its video/control contents were 9px above their rounded container. The sidebar .bpx-player-viewpoint and its body both painted rgb(28,36,50).
 
@@ -16,7 +24,7 @@ Verification:
 - 85 Node tests passed; package CRC/hash checks passed. Runtime Chromium/Firefox packages and matching reproducible source are generated locally.
 - Local Chrome screenshots inspected for single rounded boundary with glass controls and transparent chapters.
 
-Limits: .13 has not yet been loaded into the real Bilibili host; browser security policy blocked opening Chrome extension management, so manual loading is requested. Native fullscreen for .13, hardware acceleration disabled, Edge host, Firefox 140, Windows/Linux and all player skins are not newly verified. No GitHub push or store submission performed. Evidence and packages: task outputs/ui-fixes-0.5.3.13.
+At the local repair checkpoint, .13 was not yet loaded into the real Bilibili host; manual loading was requested after browser security policy blocked extension management. This load and the observed wide/chapter cases were subsequently verified above. Native fullscreen for .13, hardware acceleration disabled, Edge host, Firefox 140, Windows/Linux and all player skins are not newly verified. No publication occurred during that repair checkpoint. The user later moved its outputs to Desktop/ui-fixes-0.5.3.13; final publication evidence is in task outputs/publish-0.5.3.13.
 
 GitHub Firefox preview asset — 2026-10-07
 

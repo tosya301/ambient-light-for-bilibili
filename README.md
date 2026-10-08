@@ -8,7 +8,7 @@
 
 - 修复普通／宽屏播放器内部隐藏滚动造成的视频、控制栏与圆角边框错位；沿用已有圆角开关。
 - 章节侧栏及列表底色透明，保留缩略图、文字、播放标记和独立菜单。
-- [GitHub 0.5.3.13](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.13) 同时提供 Chromium、Firefox 和匹配源码包；Chrome、Edge、Firefox 商店更新提交中。
+- [GitHub 0.5.3.13](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.13) 同时提供 Chromium、Firefox 和匹配源码包；2026-10-08：Edge 已提交审核（当前公开版 0.5.3.12），Firefox 已提交审核；Chrome 0.5.3.13 待提交。
 - Chrome 与 Firefox 各通过 119 项本地浏览器检查，85 项 Node 测试通过；Chrome 真实 B 站已核对宽屏零内部滚动、边框与控件对齐及章节透明。验证范围见 [QA.txt](QA.txt)。
 
 ## 0.5.3.12：玻璃控制栏、宽屏圆角与评论栏修复
@@ -21,9 +21,9 @@
 
 同时包含 0.5.3.11 的吸底评论栏修复：保留完整的不透明底板，避免后方评论文字和配图透进头像、输入框与工具栏；普通内联评论继续透光。验证范围见 [QA.txt](QA.txt)。
 
-## Firefox 商店进展（2026-10-07）
+## Firefox 商店进展（2026-10-08）
 
-**0.5.3.12 已提交 Mozilla Add-ons，接替此前待审的 0.5.3.10，当前等待审核。商店尚未公开提供安装，GitHub 已提供下方的临时体验包。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。本次同步玻璃控制栏、宽屏圆角和吸底评论栏修复；旧版 0.5.3.10 已被 AMO 列为停用版本。Firefox 157.0.1 已通过 77 项本地浏览器检查，最终 Firefox 包已在真实 B 站视频页验证玻璃控制栏、宽屏、播放/暂停、设置菜单和原生全屏切换；匹配源码与复现步骤一并提交。
+**0.5.3.13 已提交 Mozilla Add-ons，接替此前待审的 0.5.3.12，当前等待审核。商店尚未公开提供安装，GitHub 已提供下方的临时体验包。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。本次修复宽屏双层圆角边缘和章节背景透光，匹配源码、复现步骤、中文发行说明与审核备注一并提交。AMO 校验为 0 错误、3 项已有警告；旧版 0.5.3.12 已被 AMO 列为停用版本。0.5.3.13 在 Firefox 157.0.1 通过 119 项本地浏览器检查；此前 0.5.3.12 的 Firefox 真实 B 站验证和本次 Chrome 真实 B 站验证范围详见 [QA.txt](QA.txt)，不将它们等同于本版 Firefox 宿主实测。
 
 ## Firefox 提前体验
 
@@ -40,7 +40,7 @@
 
 同一套功能源码分别生成 Chromium（Chrome/Edge）与 Firefox 发行包。Firefox 包使用 MV3 后台脚本、固定扩展 ID `ambient-light-for-bilibili@tosya301`，最低版本设为桌面 Firefox 140；不声明 Android 支持。权限仍为 `storage`，内容脚本站点仍限 `www.bilibili.com` 与 `live.bilibili.com`。Firefox 声明无数据传输，并附带可离线查看的内置隐私政策。
 
-首个 0.5.3.10 的历史验证：Firefox 157.0.1 通过 9 组本地合成场景、136 项检查，76 项 Node 测试通过；临时扩展已在真实 B 站视频页和直播间轮播验证。原生容器全屏、快捷键、工具栏入口与内置隐私政策已检查。当前待审版本已更新为 0.5.3.12，签名安装与升级仍待验证，详情见 [QA.txt](QA.txt)。
+首个 0.5.3.10 的历史验证：Firefox 157.0.1 通过 9 组本地合成场景、136 项检查，76 项 Node 测试通过；临时扩展已在真实 B 站视频页和直播间轮播验证。原生容器全屏、快捷键、工具栏入口与内置隐私政策已检查。当前待审版本已更新为 0.5.3.13，签名安装与升级仍待验证，详情见 [QA.txt](QA.txt)。
 
 使用下方打包命令生成两个发行包；原始 `extension/manifest.json` 保持 Chromium 入口，不能直接作为 Firefox 包使用。Firefox 发行 ZIP 需经 Mozilla 签名后用于普通用户安装，本地开发可在 `about:debugging#/runtime/this-firefox` 临时加载生成目录中的 `firefox/manifest.json`，重启浏览器后临时扩展会移除。
 
