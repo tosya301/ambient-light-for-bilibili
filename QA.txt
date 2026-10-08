@@ -1,3 +1,7 @@
+GitHub Firefox preview asset — 2026-10-07
+
+Added the exact AMO-submitted 0.5.3.12 Firefox ZIP as a GitHub Release asset for temporary loading, with explicit restart/reload instructions in README, Pages and release notes. SHA-256 3a3624d5ab5744bda08cca67876b5b00ec911b16a4b350173f14e7aeeae8a5f7. No runtime, manifest, source archive, Chromium package or AMO submission changes. Existing 77 Firefox checks and real-site validation below apply to these same bytes. Future releases must include Chromium, Firefox and matching source assets; recorded in AGENTS.md and README.
+
 Firefox 0.5.3.12 — verified and submitted 2026-10-07 (America/New_York)
 
 Mozilla Add-ons: version 6553151 / file 5097290, status waiting review. Matching source is visible at /firefox/downloads/source/6553151; Chinese release notes and reviewer instructions saved. Same listing, publisher Deperenn, MIT, desktop Firefox 140+, no Android target. The version list now shows .12 as the current pending version and .10 under old versions as disabled by Mozilla; no manual deletion or cancellation was performed. Public installation remains unavailable pending review.

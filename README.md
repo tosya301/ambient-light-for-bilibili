@@ -16,7 +16,18 @@
 
 ## Firefox 商店进展（2026-10-07）
 
-**0.5.3.12 已提交 Mozilla Add-ons，接替此前待审的 0.5.3.10，当前等待审核，尚未公开提供安装。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。本次同步玻璃控制栏、宽屏圆角和吸底评论栏修复；旧版 0.5.3.10 已被 AMO 列为停用版本。Firefox 157.0.1 已通过 77 项本地浏览器检查，最终 Firefox 包已在真实 B 站视频页验证玻璃控制栏、宽屏、播放/暂停、设置菜单和原生全屏切换；匹配源码与复现步骤一并提交。
+**0.5.3.12 已提交 Mozilla Add-ons，接替此前待审的 0.5.3.10，当前等待审核。商店尚未公开提供安装，GitHub 已提供下方的临时体验包。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。本次同步玻璃控制栏、宽屏圆角和吸底评论栏修复；旧版 0.5.3.10 已被 AMO 列为停用版本。Firefox 157.0.1 已通过 77 项本地浏览器检查，最终 Firefox 包已在真实 B 站视频页验证玻璃控制栏、宽屏、播放/暂停、设置菜单和原生全屏切换；匹配源码与复现步骤一并提交。
+
+## Firefox 提前体验
+
+使用 **Firefox 桌面版 140 或更高版本**，下载 [Firefox 0.5.3.12 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.12/Ambient-light-for-Bilibili-0.5.3.12-firefox.zip)。此包与提交 Mozilla 审核的包一致，无需自行构建。
+
+1. 解压 `Ambient-light-for-Bilibili-0.5.3.12-firefox.zip`。
+2. 在 Firefox 地址栏打开 `about:debugging#/runtime/this-firefox`。
+3. 点击「临时载入附加组件」，选择解压目录内的 `manifest.json`。
+4. 刷新 Bilibili 播放页面，从小电视按钮或工具栏扩展图标打开设置并开启氛围光。
+
+**这是未签名的临时体验包，完全退出并重启 Firefox 后需要重新载入。** 下载 ZIP 本身不会完成普通安装，不要选择 Chromium 包或仓库原始 `extension/manifest.json`。无需关闭签名检查或其他安全设置。长期安装请等待商店审核与签名完成。机制见 [Mozilla 临时安装说明](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/)。
 
 ## Firefox 桌面发行方式（自 0.5.3.10）
 
@@ -109,7 +120,7 @@
 
 下载 [GitHub 0.5.3.12 正式版](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.12) 的 `Ambient-light-for-Bilibili-0.5.3.12-chromium.zip`，解压后可本地加载。包含点播、稍后再看、普通与 `/blanc/` 直播间、全屏背景修复、可隐藏的拖动入口，以及圆角与阴影选项。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
 
-Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 使用上方单独说明的生成包和临时加载方式。
+Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 请下载上方的专用体验包，按「Firefox 提前体验」步骤临时加载。
 
 点击页面右下角的小电视按钮或工具栏扩展图标打开设置，阅读本地处理说明并明确同意后才会开启。可在“更多”撤回同意并停止处理。默认快捷键为 **Alt+Shift+A**；可在浏览器的扩展快捷键设置中调整。更新时替换同一目录内的文件，再重新加载扩展并刷新页面，以保留扩展 ID 和设置。
 
@@ -153,6 +164,18 @@ npm run package:firefox -- --out-dir dist-firefox
 默认在 `dist/chromium/` 和 `dist/firefox/` 写出加载目录，并生成带版本与浏览器名称的 ZIP，以及可重现的 `-source.zip`。打包只白名单复制运行文件、MIT 许可证和 Firefox 内置隐私政策，排除演示、测试、调查截图及未使用的图标；不会改写源码 manifest。脚本拒绝覆盖已有发行目录或 ZIP，重复打包应通过 `--out-dir` 选择新的输出目录。
 
 源码 ZIP 内的 `BUILDING.txt` 提供离线重现步骤。JavaScript、HTML 和 CSS 原样复制，仅生成 Firefox manifest；ZIP 使用固定时间、文件权限和顺序，因此相同源码得到相同归档内容。源码 ZIP 中保留隐私页来源和打包脚本，可作为 AMO 对应版本的审核材料。固定 Gecko ID 用于同一 AMO 条目的后续升级，版本号必须递增；不同浏览器的本地设置不会自动迁移。
+
+### GitHub 发布约定
+
+每个后续版本的 GitHub Release（包括预发布）必须同时附带同版本的三份文件：
+
+- `Ambient-light-for-Bilibili-<版本>-chromium.zip`：Chrome / Edge 本地加载包。
+- `Ambient-light-for-Bilibili-<版本>-firefox.zip`：Firefox 专用临时体验包。
+- `Ambient-light-for-Bilibili-<版本>-source.zip`：可复现两个浏览器包的匹配源码。
+
+从已验证的同一版本源码运行 `npm run package` 生成三份文件，核对 manifest 版本与 Release 标签一致。完成相应浏览器验证后一起上传；不能只发布 Chromium 包而遗漏 Firefox 包。补发已有版本时复用该版本已验证的包或匹配源码，不能以更新中的源码覆盖旧版本产物。
+
+上传后核对三份附件的版本、大小和 SHA-256，并检查公开下载链接。Release 说明、README 和项目网站须同时列出两个浏览器的下载方式；未签名 Firefox 包必须明确写明临时加载步骤、最低版本及重启后需要重载。商店审核状态单独记录，不把临时包称为已签名或已上架。取得签名的 `.xpi` 后可另行提供并明确区分。
 
 ```text
 extension/    可加载的扩展源码与图标
