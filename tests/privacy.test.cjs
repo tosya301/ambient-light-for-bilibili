@@ -653,3 +653,42 @@ test('native composer base survives header rebuild, position changes and extensi
   assert.equal(next.host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
   assert.equal(next.body.style.backgroundColor,'var(--bg1)');
 });
+
+const hasGlass=h=>h.html.hasAttribute('data-biliglow-glass-controls');
+
+test('glass controls switch immediately with consent and preference changes, including queued work after revoke',async()=>{
+  const active={privacyAccepted:true,enabled:true,glassControls:true};
+  const h=contentHarness({enabled:true,glassControls:true},false,false,{screen:'normal'});await h.ready();
+  assert.equal(hasGlass(h),false,'saved opt-in cannot bypass consent');
+  h.change(active);assert.equal(hasGlass(h),true);
+  h.change({...active,glassControls:false});assert.equal(hasGlass(h),false,'no timer or video frame is needed to turn the style off');
+  h.change({...active,dark:false});assert.equal(hasGlass(h),true,'glass opt-in is independent of page theme');
+  h.change({...active,enabled:false});assert.equal(hasGlass(h),false);
+  h.change(active);assert.equal(hasGlass(h),true);
+  const lateFrame=[...h.frames.values()][0];
+  h.change({...active,privacyAccepted:false});assert.equal(hasGlass(h),false);
+  lateFrame?.(1000);h.flush();h.reconcile();assert.equal(hasGlass(h),false,'queued work cannot restore a revoked appearance');
+});
+
+test('glass controls follow VOD mode changes, SPA routes and player replacement while excluding direct video fullscreen',async()=>{
+  const active={privacyAccepted:true,enabled:true,glassControls:true};
+  const h=contentHarness(active,false,false,{screen:'normal'});await h.ready();assert.equal(hasGlass(h),true);
+  for(const screen of ['wide','web','normal']){h.container.setAttribute('data-screen',screen);h.reconcile();assert.equal(hasGlass(h),true,screen);}
+  h.context.document.fullscreenElement=h.container;h.documentEvent('fullscreenchange');h.flush();assert.equal(hasGlass(h),true,'container fullscreen retains the bpx controls');
+  h.context.document.fullscreenElement=h.video;h.documentEvent('fullscreenchange');h.flush();assert.equal(hasGlass(h),false,'direct video fullscreen has no bpx control layer');
+  h.context.document.fullscreenElement=null;h.documentEvent('fullscreenchange');h.flush();assert.equal(hasGlass(h),true);
+  h.navigate('/');assert.equal(hasGlass(h),false,'SPA exit clears the style');
+  h.navigate('/list/watchlater/?bvid=fixture');assert.equal(hasGlass(h),true,'watch-later uses the same VOD player');
+  h.replaceVideo();h.reconcile();assert.equal(hasGlass(h),true);
+  h.navigate('/bangumi/play/ep123');assert.equal(hasGlass(h),true);
+  h.change({...active,enabled:false});assert.equal(hasGlass(h),false);
+});
+
+test('glass controls do not activate on live streams or videos without a bpx player',async()=>{
+  const active={privacyAccepted:true,enabled:true,glassControls:true};
+  const live=contentHarness(active,false,true,{screen:'normal'});await live.ready();assert.equal(hasGlass(live),false);
+  live.reconcile();live.flush();assert.equal(hasGlass(live),false);
+  const other=contentHarness(active);await other.ready();assert.equal(hasGlass(other),false);
+  const ordinary=contentHarness({privacyAccepted:true,enabled:true},false,false,{screen:'normal'});await ordinary.ready();
+  assert.equal(hasGlass(ordinary),false,'existing users keep their original control appearance');
+});

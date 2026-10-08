@@ -94,3 +94,47 @@ test('partial fixed ancestors, mini players and offset room stages are not live 
     assert.equal(P.presentation(v,'live',null).stage,null,JSON.stringify(rect));
   }
 });
+
+function frameFixture(){
+  const attrs=new Set(),rect={left:100,top:50,width:960,height:540};
+  const frame={hasAttribute:key=>attrs.has(key),toggleAttribute(key,on){if(on)attrs.add(key);else attrs.delete(key);},removeAttribute:key=>attrs.delete(key),getBoundingClientRect:()=>({...rect})};
+  const container={screen:'normal',tagName:'DIV',getAttribute(){return this.screen;},contains:()=>true};
+  const video={isConnected:true,closest:selector=>selector==='.bpx-player-container'?container:frame};
+  const root={children:[],append(child){this.children.push(child);}};
+  const sandbox=vm.createContext({document:{createElement:()=>({dataset:{},style:{},setAttribute(){}})},
+    innerWidth:1280,innerHeight:800,getComputedStyle:()=>({borderRadius:attrs.has('data-biliglow-rounded')?'12px':'0px'})});
+  vm.runInContext(fs.readFileSync(__dirname+'/../extension/player.js','utf8'),sandbox);
+  const api=sandbox.BiliGlowPlayer,effect=api.createFrame(root),origin={left:0,top:0};
+  return {api,effect,video,container,frame,rect,origin,shadow:root.children[0],
+    rounded:()=>attrs.has('data-biliglow-rounded'),
+    update(settings,fullscreen=null){return effect.update(video,settings,'video',api.presentation(video,'video',fullscreen).mode,origin);}};
+}
+
+test('one rounded-corner preference applies in ordinary and widescreen modes without enabling a shadow',()=>{
+  const h=frameFixture(),settings={enabled:true,roundedCorners:true,frameShadow:0};
+  for(const screen of ['normal','wide','normal']){
+    h.container.screen=screen;const result=h.update(settings);
+    assert.equal(h.rounded(),true,screen);assert.equal(result.radius,12);
+    assert.equal(h.shadow.style.display,'none','rounding must not opt into a shadow');
+    assert.match(h.api.roundedCutout(h.rect,result,h.origin,{width:1280,height:800}),/A12 12/,'the light cutout follows the same radius in widescreen');
+  }
+  h.container.screen='wide';h.update({...settings,roundedCorners:false});
+  assert.equal(h.rounded(),false);assert.equal(h.shadow.style.display,'none');
+});
+
+test('widescreen rounding keeps independent shadow strength and fullscreen cleanup',()=>{
+  const h=frameFixture(),settings={enabled:true,roundedCorners:false,frameShadow:65};
+  h.container.screen='wide';h.update(settings);
+  assert.equal(h.rounded(),false);assert.equal(h.shadow.style.display,'block');
+  const originalShadow=h.shadow.style.boxShadow;
+  h.update({...settings,roundedCorners:true});
+  assert.equal(h.rounded(),true);assert.equal(h.shadow.style.boxShadow,originalShadow);
+  assert.equal(h.shadow.style.borderRadius,'12px','shadow follows the rounded frame without changing strength');
+  h.container.screen='web';assert.equal(h.update({...settings,roundedCorners:true}),null);
+  assert.equal(h.rounded(),false);assert.equal(h.shadow.style.display,'none');
+  h.container.screen='wide';h.update({...settings,roundedCorners:true});assert.equal(h.rounded(),true);
+  assert.equal(h.update({...settings,roundedCorners:true},h.container),null,'native container fullscreen also uses the fullscreen gate');
+  assert.equal(h.rounded(),false);assert.equal(h.shadow.style.display,'none');
+  h.update({...settings,roundedCorners:true});assert.equal(h.rounded(),true);assert.equal(h.shadow.style.boxShadow,originalShadow);
+  h.update({...settings,roundedCorners:true,enabled:false});assert.equal(h.rounded(),false);assert.equal(h.shadow.style.display,'none');
+});

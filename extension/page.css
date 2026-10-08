@@ -1,4 +1,14 @@
 /* Only layer backgrounds: never opacity/filter the page, cards, text, images or controls. */
+/* Opt-in VOD control glass. The site's mask stays behind its controls and keeps
+   its own visibility lifecycle. Limit blur to the control band, not the old
+   tall gradient; menus and progress previews retain their native backgrounds. */
+html[data-biliglow-active][data-biliglow-glass-controls] .bpx-player-container .bpx-player-control-mask {
+  height: 100% !important;
+  background: rgba(18, 23, 31, .5) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.15) brightness(.82);
+  backdrop-filter: blur(12px) saturate(1.15) brightness(.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
+}
 html[data-biliglow-active] [data-biliglow-rounded] {
   border-radius: 12px !important;
   overflow: hidden !important;

@@ -78,7 +78,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.11';
+    root.dataset.version='0.5.3.12';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);
@@ -251,6 +251,7 @@
     setCommentActivity(active);
     document.documentElement.toggleAttribute('data-biliglow-live',kind==='live'&&active);
     document.documentElement.toggleAttribute('data-biliglow-dark',active&&settings.dark);
+    document.documentElement.toggleAttribute('data-biliglow-glass-controls',active&&kind==='video'&&settings.glassControls&&Boolean(video?.closest('.bpx-player-container')));
     const nextStage=active?presentation.stage:null;
     setStage(nextStage);
     mode=presentation.mode;
@@ -323,6 +324,7 @@
       document.documentElement.removeAttribute('data-biliglow-active');
       document.documentElement.removeAttribute('data-biliglow-dark');
       document.documentElement.removeAttribute('data-biliglow-live');
+      document.documentElement.removeAttribute('data-biliglow-glass-controls');
       if(root){root.style.display='none';canvas.width=256;painted=false;}
       if(ui){if(ui.parentNode!==document.documentElement)document.documentElement.append(ui);ui.style.display=supported?'block':'none';}
       setStatus(settings.privacyAccepted?'氛围光已关闭':'尚未开启 · 请先确认本地处理说明');

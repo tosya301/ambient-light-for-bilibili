@@ -152,3 +152,43 @@ test('frame preferences persist independently of light presets and enable/disabl
     await B.storage.set({frameShadow:0});saved=await B.storage.get();assert.equal(saved.roundedCorners,true);assert.equal(saved.frameShadow,0);
   }finally{await B.storage.set(B.defaults);}
 });
+
+test('glass controls are opt-in on upgrade and accept only boolean settings',()=>{
+  const old={privacyAccepted:true,enabled:true,roundedCorners:true,frameShadow:65,strength:103};
+  const upgraded=B.sanitize(old);
+  assert.equal(B.defaults.glassControls,false);assert.equal(upgraded.glassControls,false);
+  for(const [key,value] of Object.entries(old))assert.equal(upgraded[key],value,key);
+  for(const glassControls of [undefined,null,'true','false',0,1,[],{},NaN])assert.equal(B.sanitize({glassControls}).glassControls,false);
+  assert.equal(B.sanitize({glassControls:true}).glassControls,true);
+});
+
+test('glass preference synchronizes between extension contexts and survives reload, presets and consent changes',async()=>{
+  const stored={privacyAccepted:true,enabled:true,roundedCorners:true,frameShadow:65},listeners=new Set(),writes=[];
+  const shared=fs.readFileSync(__dirname+'/../extension/shared.js','utf8');
+  function load(){
+    const context=vm.createContext({chrome:{storage:{local:{
+      async get(){return {...stored};},
+      async set(patch){
+        writes.push({...patch});const changes={};
+        for(const [key,value] of Object.entries(patch)){changes[key]={oldValue:stored[key],newValue:value};stored[key]=value;}
+        for(const listener of listeners)listener(changes,'local');
+      }
+    },onChanged:{addListener(fn){listeners.add(fn);},removeListener(fn){listeners.delete(fn);}}}}});
+    vm.runInContext(shared,context);return context.BiliGlow;
+  }
+  const popup=load(),content=load(),updates=[];
+  assert.equal((await content.storage.get()).glassControls,false);assert.equal(writes.length,0,'old preferences are read without migration writes');
+  const unsubscribe=content.storage.subscribe(settings=>updates.push(settings));
+  try{
+    await popup.storage.set({glassControls:true});await new Promise(setImmediate);
+    assert.deepEqual(writes[0],{glassControls:true});assert.equal(updates.at(-1).glassControls,true);
+    assert.equal((await load().storage.get()).glassControls,true,'a new page receives the saved preference');
+    await popup.storage.set(B.presets.vivid);await popup.storage.set({enabled:false});await popup.storage.set({privacyAccepted:false});
+    const saved=await content.storage.get();
+    assert.equal(saved.glassControls,true);assert.equal(saved.roundedCorners,true);assert.equal(saved.frameShadow,65);
+    assert.equal(saved.privacyAccepted,false);assert.equal(saved.enabled,false);
+    await popup.storage.set({glassControls:false});await new Promise(setImmediate);
+    assert.equal(updates.at(-1).glassControls,false);assert.equal((await load().storage.get()).glassControls,false);
+    assert.equal(stored.privacyAccepted,false,'the appearance toggle cannot grant consent');
+  }finally{unsubscribe();}
+});

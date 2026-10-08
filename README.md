@@ -1,16 +1,20 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前本地源码 **0.5.3.11**（尚未发布），Firefox **0.5.3.10** 已提交 AMO 审核；现有 GitHub 正式版为 **0.5.3.9**。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码 **0.5.3.12**，Firefox 商店仍保留已提交的 **0.5.3.10** 等待审核。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.3.11：吸底评论栏修复（本地待发布）
+## 0.5.3.12：玻璃控制栏、宽屏圆角与评论栏修复
 
-保留 B 站吸底评论栏的原生不透明底板，避免后方评论文字和配图透进头像、输入框及工具栏；普通内联评论继续透光。支持原生深浅色背景，不新增权限。已在真实 Chrome B 站页面检查展开输入框和深浅色底板；Firefox 与 Chrome 的本地组件回归通过，78 项 Node 测试通过。Firefox 商店仍在审核 0.5.3.10，本修复未替换该提交，详细边界见 [QA.txt](QA.txt)。
+在「画面」→「播放器外观」开启「玻璃控制栏」，即可将点播播放器底部的黑色渐变换成半透明磨砂底色。默认关闭；只模糊按钮后方的背景，进度条、文字、图标和设置菜单保留清晰度。支持普通、宽屏和播放器全屏；直播控制栏不受影响。关闭选项或氛围光即可恢复原有外观，设置保存于本机，不新增权限。
+
+圆角开启后，普通与宽屏模式都保留 12px 圆角，只在网页全屏和原生全屏恢复直角，无需单独设置。
+
+同时包含 0.5.3.11 的吸底评论栏修复：保留完整的不透明底板，避免后方评论文字和配图透进头像、输入框与工具栏；普通内联评论继续透光。验证范围见 [QA.txt](QA.txt)。
 
 ## Firefox 商店进展（2026-10-07）
 
-**0.5.3.10 已提交 Mozilla Add-ons，当前等待审核，尚未公开提供安装。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。Chrome / Edge 用户可继续使用现有商店版本或 GitHub 0.5.3.9 正式版。
+**0.5.3.10 已提交 Mozilla Add-ons，当前等待审核，尚未公开提供安装。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。Chrome / Edge 的后续版本独立发布，不替换这次 Firefox 提交。
 
 ## 0.5.3.10：Firefox 桌面版
 
@@ -101,7 +105,7 @@ Firefox 157.0.1 已通过 9 组本地合成场景、136 项检查，76 项 Node 
 
 ## 安装与使用
 
-下载 [GitHub 0.5.3.9 正式版](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.9) 的 `Ambient-light-for-Bilibili-0.5.3.9.zip`，解压后可本地加载。包含点播、稍后再看、普通与 `/blanc/` 直播间、全屏背景修复、可隐藏的拖动入口，以及圆角与阴影选项。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
+下载 [GitHub 0.5.3.12 正式版](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.12) 的 `Ambient-light-for-Bilibili-0.5.3.12-chromium.zip`，解压后可本地加载。包含点播、稍后再看、普通与 `/blanc/` 直播间、全屏背景修复、可隐藏的拖动入口，以及圆角与阴影选项。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
 
 Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 使用上方单独说明的生成包和临时加载方式。
 

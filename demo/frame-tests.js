@@ -52,8 +52,14 @@
       check(light().shadowRoot.querySelectorAll('[data-biliglow-frame-shadow]').length===1,'换片后继续生效，阴影不重复叠加');
       if(!live){
         $('#theater').click();await until(()=>light().dataset.mode==='theater');
-        check(!rounded()&&shadow().style.display==='block','宽屏遵循 YouTube 直角规则，独立阴影可用');
-        $('#theater').click();await until(()=>rounded());
+        check(rounded()&&getComputedStyle(frame()).borderRadius==='12px'&&shadow().style.display==='block','宽屏保留同一设置的 12px 圆角，独立阴影继续可用');
+        const wideShadow=shadow().style.boxShadow;
+        await B.storage.set({roundedCorners:false});await until(()=>!rounded());
+        check(shadow().style.display==='block'&&shadow().style.boxShadow===wideShadow,'宽屏关闭圆角不改变阴影强度');
+        await B.storage.set({roundedCorners:true,frameShadow:0});await until(()=>rounded()&&shadow().style.display==='none');
+        check(getComputedStyle(frame()).borderRadius==='12px','宽屏 0% 阴影时仍保留 12px 圆角');
+        await B.storage.set({frameShadow:80});await until(()=>shadow().style.display==='block');
+        $('#theater').click();await until(()=>light().dataset.mode==='normal'&&rounded());
       }
       $('#web-fullscreen').click();await until(()=>light().dataset.mode==='fullscreen');
       check(!rounded()&&shadow().style.display==='none','网页全屏自动撤去圆角和阴影');

@@ -44,8 +44,8 @@
     const container=video?.closest('.bpx-player-container'),screen=container?.getAttribute('data-screen');
     return {stage:screen==='web'?container:null,mode:screen==='web'?'fullscreen':screen==='wide'?'theater':'normal',native:false};
   }
-  // YouTube desktop watch player, measured 2026-10-05: 12px in the
-  // default layout, 0px in theater/fullscreen. Only round the media stage;
+  // Keep the same 12px radius in ordinary and widescreen layouts; only
+  // fullscreen restores square corners. Only round the media stage;
   // the sending bar, live header, gifts and chat are outside this element.
   function createFrame(shadowRoot){
     let frame=null;
@@ -60,7 +60,7 @@
         ?video.closest(kind==='live'?'#live-player':'.bpx-player-video-area'):null;
       if(next!==frame){clear();frame=next;}
       if(!frame)return null;
-      const rounded=settings.roundedCorners&&mode==='normal';
+      const rounded=settings.roundedCorners;
       if(frame.hasAttribute('data-biliglow-rounded')!==rounded)frame.toggleAttribute('data-biliglow-rounded',rounded);
       const r=frame.getBoundingClientRect(),style=getComputedStyle(frame);
       const amount=settings.frameShadow/100;
