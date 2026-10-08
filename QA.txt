@@ -1,5 +1,7 @@
 0.5.3.12 optional glass controls — 2026-10-07
 
+Release: source commit aededbb09010d90fed32d893e41e14cf67d95b59 pushed to main. GitHub v0.5.3.12 published as Latest, asset SHA-256 3f450d0d39ceb1960de465004dae69508c250d3643651f7aae0ca50a5d96d723 matches the final local Chromium ZIP. Source archive rebuilds identical Chromium bytes; CRC and source/runtime comparisons pass. Chrome submitted with automatic publication after approval, confirmed Pending review. Edge confirmed Version 0.5.3.12 In review; both prior public versions .9. Descriptions and reviewer steps updated. Firefox .10 submission unchanged. Screenshots and submission-result.json retained in task outputs/glass-controls-0.5.3.12.
+
 Adds a default-off glassControls setting at Picture > Player appearance. Applies only to the native bpx VOD control mask while ambient lighting is active. Replaces the tall black gradient with a control-height translucent background and 12px backdrop blur; no foreground opacity/filter, pointer handling, menu styles, player sizing or permissions are changed. Includes the previously verified .11 pinned-comment fix.
 
 Verification:
