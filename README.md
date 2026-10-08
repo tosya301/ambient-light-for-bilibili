@@ -8,7 +8,7 @@
 
 - 修复普通／宽屏播放器内部隐藏滚动造成的视频、控制栏与圆角边框错位；沿用已有圆角开关。
 - 章节侧栏及列表底色透明，保留缩略图、文字、播放标记和独立菜单。
-- [GitHub 0.5.3.13](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.13) 同时提供 Chromium、Firefox 和匹配源码包；2026-10-08：Edge 已提交审核（当前公开版 0.5.3.12），Firefox 已提交审核；Chrome 0.5.3.13 待提交。
+- [GitHub 0.5.3.13](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.13) 同时提供 Chromium、Firefox 和匹配源码包；2026-10-08：Chrome、Edge 与 Firefox 的 0.5.3.13 均已提交审核；Chrome 通过后自动发布，Chrome 与 Edge 当前公开版均为 0.5.3.12。
 - Chrome 与 Firefox 各通过 119 项本地浏览器检查，85 项 Node 测试通过；Chrome 真实 B 站已核对宽屏零内部滚动、边框与控件对齐及章节透明。验证范围见 [QA.txt](QA.txt)。
 
 ## 0.5.3.12：玻璃控制栏、宽屏圆角与评论栏修复
