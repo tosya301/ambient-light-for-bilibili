@@ -97,7 +97,7 @@ test('partial fixed ancestors, mini players and offset room stages are not live 
 
 function frameFixture(){
   const attrs=new Set(),rect={left:100,top:50,width:960,height:540};
-  const frame={hasAttribute:key=>attrs.has(key),toggleAttribute(key,on){if(on)attrs.add(key);else attrs.delete(key);},removeAttribute:key=>attrs.delete(key),getBoundingClientRect:()=>({...rect})};
+  const frame={closest:()=>null,hasAttribute:key=>attrs.has(key),toggleAttribute(key,on){if(on)attrs.add(key);else attrs.delete(key);},removeAttribute:key=>attrs.delete(key),getBoundingClientRect:()=>({...rect})};
   const container={screen:'normal',tagName:'DIV',getAttribute(){return this.screen;},contains:()=>true};
   const video={isConnected:true,closest:selector=>selector==='.bpx-player-container'?container:frame};
   const root={children:[],append(child){this.children.push(child);}};

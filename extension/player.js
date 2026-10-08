@@ -48,12 +48,42 @@
   // fullscreen restores square corners. Only round the media stage;
   // the sending bar, live header, gifts and chat are outside this element.
   function createFrame(shadowRoot){
-    let frame=null;
+    let frame=null,space=null,extra=0;
     const shadow=document.createElement('div');
     shadow.dataset.biliglowFrameShadow='';shadow.setAttribute('aria-hidden','true');
     shadow.style.cssText='position:absolute;pointer-events:none!important;background:transparent;display:none;';
     shadowRoot.append(shadow);
-    function clear(){frame?.removeAttribute('data-biliglow-rounded');frame=null;shadow.style.display='none';}
+    function clearSpace(){
+      if(space){
+        space.removeAttribute('data-biliglow-player-space');
+        space.style.removeProperty('--biliglow-player-padding');
+        space.style.removeProperty('--biliglow-player-extra');
+      }
+      space=null;extra=0;
+    }
+    function reserveSpace(rounded,kind){
+      const next=rounded&&kind==='video'?frame.closest('#playerWrap'):null;
+      if(next!==space)clearSpace();
+      if(!next)return;
+      // Native Bilibili keeps a definite inner player height. overflow:clip
+      // lets a taller in-flow recording exceed it. Reserve that actual excess
+      // on the outer wrapper, without resizing the inner player or the video.
+      const style=getComputedStyle(next);
+      if(style.boxSizing!=='content-box'){clearSpace();return;}
+      const primary=frame.closest('.bpx-player-primary-area');
+      const sending=primary?.querySelector('.bpx-player-sending-area');
+      const bottom=Math.max(frame.getBoundingClientRect().bottom,sending?.getBoundingClientRect().bottom||0);
+      const nativeBottom=next.getBoundingClientRect().bottom-extra;
+      const needed=bottom-nativeBottom>1?Math.ceil(bottom-nativeBottom):0;
+      if(!needed){clearSpace();return;}
+      if(!space){
+        space=next;
+        space.style.setProperty('--biliglow-player-padding',style.paddingBottom);
+        space.setAttribute('data-biliglow-player-space','');
+      }
+      if(needed!==extra){space.style.setProperty('--biliglow-player-extra',`${needed}px`);extra=needed;}
+    }
+    function clear(){clearSpace();frame?.removeAttribute('data-biliglow-rounded');frame=null;shadow.style.display='none';}
     function update(video,settings,kind,mode,origin){
       const enabled=settings.enabled&&mode!=='fullscreen'&&video?.isConnected;
       const next=enabled&&(settings.roundedCorners||settings.frameShadow>0)
@@ -62,6 +92,7 @@
       if(!frame)return null;
       const rounded=settings.roundedCorners;
       if(frame.hasAttribute('data-biliglow-rounded')!==rounded)frame.toggleAttribute('data-biliglow-rounded',rounded);
+      reserveSpace(rounded,kind);
       const r=frame.getBoundingClientRect(),style=getComputedStyle(frame);
       const amount=settings.frameShadow/100;
       // The shadow lives above the light canvas, below page content, outside

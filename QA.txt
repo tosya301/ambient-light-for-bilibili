@@ -1,3 +1,18 @@
+0.5.3.14 release preparation — 2026-10-08
+
+Fixes the high-aspect-ratio VOD regression in .13. With rounded corners enabled, overflow:clip lets taller in-flow media exceed Bilibili's definite inner flex height. The recording and sending bar could then cover the following action toolbar. Preserve that naturally enlarged, uncropped picture and reserve its measured overflow as additional bottom padding on the content-box #playerWrap. Keep the native inner height chain intact; the action toolbar follows normal document flow. No new global enlargement option, media transform, permission or data handling change.
+
+Verified at this checkpoint:
+- Chrome 154 and Firefox 157 each passed all 118 local aspect-ratio/layout checks using the real production code and synthetic media. Ordinary and wide modes cover 1670:1080, 16:10, 4:3, 9:16 and 16:9. The fixture reproduces #playerWrap > #bilibili-player > player > primary, content-box outer wrappers, the definite height chain, flex automatic minimum and 56px sending bar. Taller media stays enlarged; the outer footprint contains the sending bar, toolbar moves down, controls remain hittable, and 16:9 layout is unchanged.
+- Lifecycle checks cover stable nonaccumulating space, switching the same player back to 16:9 and back to taller media, disabling/re-enabling, web-fullscreen entry/exit and consent withdrawal. Closing rounded corners restores the native layout.
+- Chrome and Firefox each passed all 26 existing frame checks, including the 9px overflow/zero-hidden-scroll regression. 85 Node tests passed.
+- Actual Chrome Bilibili BV1f5Hm69Enr was verified with the fix: normal mode reserves 81px and wide mode 110px; sending-bar bottom is at or above the following toolbar's top. The larger recording is retained. The local 16:9 fixture remains unchanged.
+- Evidence: task outputs/aspect-ratio-0.5.3.14, including chrome-ratio-tests.json, real-before.json/png, real-fixed-normal.png and real-fixed-wide.json.
+
+Limits: Firefox results use the production code with synthetic local media, not the .14 extension on the live Bilibili host. Earlier Firefox .13/.12 results below remain historical. Edge runtime, Firefox 140, signed installation/upgrade, Windows/Linux, native fullscreen and all player skins were not newly verified.
+
+Publication status at this checkpoint: .14 GitHub publication and removal of the faulty .13 Release downloads are authorized and in preparation. Chrome, Edge and Firefox .14 have not yet been submitted. The previously submitted .13 remains the last recorded pending store version; Chrome and Edge's last observed public package is .12. Update this status after confirmed publication/submission. The historical .13 record below is retained as an account of the original release, not a statement about present download availability.
+
 0.5.3.13 publication — 2026-10-08
 
 GitHub main commit 814b0d5ecdc5787b91d9fdeaa3e0173693c0ee8b and release v0.5.3.13 published. Chromium, Firefox and matching source assets all publicly downloadable; HTTP 200, sizes and SHA-256 match the final local archives. An independent rebuild from the source ZIP reproduced all three archives byte-for-byte. web-ext 10.7: 0 errors, 0 notices, 3 existing warnings.

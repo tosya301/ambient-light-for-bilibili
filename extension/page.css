@@ -15,9 +15,17 @@ html[data-biliglow-active] [data-biliglow-rounded] {
 }
 /* VOD controls can overflow the video area by a few pixels. Hidden would make
    this a scroll container: focusing controls can shift the video inside its
-   rounded frame. Clip preserves the same edge without allowing that scroll. */
+   rounded frame. Clip preserves the same edge without allowing that scroll.
+   Its content minimum can enlarge taller recordings; player.js reserves the
+   extra space in the page so the sending bar cannot cover the action toolbar. */
 html[data-biliglow-active] .bpx-player-video-area[data-biliglow-rounded] {
   overflow: clip !important;
+}
+/* Keep the site's fixed inner playback height and reserve only its measured
+   overflow in the outer, content-box page wrapper. Native video sizing stays
+   intact and the following toolbar moves naturally in document flow. */
+html[data-biliglow-active] #playerWrap[data-biliglow-player-space] {
+  padding-bottom: calc(var(--biliglow-player-padding) + var(--biliglow-player-extra)) !important;
 }
 /* Crop effects use owned variables so original player inline styles survive,
    including when the site clones a video element during source replacement. */

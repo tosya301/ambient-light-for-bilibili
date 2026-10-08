@@ -78,7 +78,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.13';
+    root.dataset.version='0.5.3.14';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);
@@ -268,15 +268,17 @@
       visible=false;root.style.display='none';cancelFrames();
       setStatus(blocked?'此视频暂时无法生成光效，播放不受影响':!settings.enabled?'氛围光已关闭':document.hidden?'后台待机':fs?'系统全屏 · 氛围光待机':kind==='live'?'等待直播画面 · 停播时自动待机':'等待播放器',blocked);return;
     }
+    root.style.display='block';root.style.visibility=painted&&!blocked?'visible':'hidden';
+    // Apply the frame and its page footprint before measuring the video. A
+    // taller recording can grow when rounded clipping becomes active.
+    const origin=root.getBoundingClientRect();
+    const frame=frameEffect?.update(video,{...settings,enabled:active},kind,mode,origin);
     const r=video.getBoundingClientRect();
     visible=r.width>=160&&r.height>=90&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth;
     if(!visible){root.style.display='none';cancelFrames();setStatus('播放器离开视野 · 已省电暂停');return;}
     const rect=croppedRect||B.contentRect({left:r.left,top:r.top,width:r.width,height:r.height},video.videoWidth,video.videoHeight,getComputedStyle(video).objectFit);
     const l=rect.left,t=rect.top,right=l+rect.width,bottom=t+rect.height;
-    root.style.display='block';root.style.visibility=painted&&!blocked?'visible':'hidden';
     // Convert viewport coordinates to the layer's containing block (fullscreen can create one).
-    const origin=root.getBoundingClientRect();
-    const frame=frameEffect?.update(video,{...settings,enabled:active},kind,mode,origin);
     const ox=origin.left,oy=origin.top;
     // Inverse rectangle: light never paints over the actual video image.
     root.style.clipPath=P.roundedCutout(rect,frame,origin,{width:origin.width,height:origin.height})||`polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,${l-ox}px ${t-oy}px,${right-ox}px ${t-oy}px,${right-ox}px ${bottom-oy}px,${l-ox}px ${bottom-oy}px,${l-ox}px ${t-oy}px)`;
