@@ -13,6 +13,12 @@ html[data-biliglow-active] [data-biliglow-rounded] {
   border-radius: 12px !important;
   overflow: hidden !important;
 }
+/* VOD controls can overflow the video area by a few pixels. Hidden would make
+   this a scroll container: focusing controls can shift the video inside its
+   rounded frame. Clip preserves the same edge without allowing that scroll. */
+html[data-biliglow-active] .bpx-player-video-area[data-biliglow-rounded] {
+  overflow: clip !important;
+}
 /* Crop effects use owned variables so original player inline styles survive,
    including when the site clones a video element during source replacement. */
 html[data-biliglow-active] video[data-biliglow-bar-crop] {
@@ -92,6 +98,13 @@ html[data-biliglow-active] .bpx-player-dm-management,
 html[data-biliglow-active] .bpx-player-dm-function,
 html[data-biliglow-active] .bpx-player-dm-load-status,
 html[data-biliglow-active] .bpx-player-dm-wrap-child {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* The sidebar chapter panel and its scrolling body each paint an opaque
+   background. Keep covers, the playing indicator and nested menus intact. */
+html[data-biliglow-active] .bpx-docker-minor > .bpx-player-viewpoint,
+html[data-biliglow-active] .bpx-docker-minor > .bpx-player-viewpoint .bpx-player-viewpoint-body {
   background: transparent !important;
   box-shadow: none !important;
 }

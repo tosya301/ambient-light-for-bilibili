@@ -1,3 +1,23 @@
+0.5.3.13 release preparation — 2026-10-08
+
+Actual Chrome Bilibili BV1AtpF6eEZN now confirms data-version 0.5.3.13. Wide video area: 12px radius, overflow clip, scrollTop 0; video and controls share bottom 750.6875px. Chapter panel was opened through the native chapter control; both background layers compute transparent. Screenshots retained in outputs/publish-0.5.3.13. The previously pending actual-site load noted below is resolved for these observed cases.
+
+Final Chromium bytes are unchanged from the local trial. Privacy pages now include .13 in their version/date labels; Firefox and matching source packages were regenerated only to include that text update. Data practices and runtime files are unchanged. Final package validation and source reproduction are recorded separately in the publication outputs.
+
+0.5.3.13 — local UI repairs, not published (2026-10-08)
+
+Observed in actual Chrome Bilibili BV1AtpF6eEZN with .12: the wide .bpx-player-video-area had clientHeight 766, scrollHeight 775 and scrollTop 9; its video/control contents were 9px above their rounded container. The sidebar .bpx-player-viewpoint and its body both painted rgb(28,36,50).
+
+Fix: keep 12px rounding but use overflow:clip only on the rounded VOD video area, so it cannot become a hidden scroll container. Live rounding keeps overflow:hidden. Clear only the sidebar viewpoint and body backgrounds; preserve cover images, active playing indicator and nested menu backgrounds. Existing opt-in settings and fullscreen cleanup are unchanged.
+
+Verification:
+- Old production CSS failed the new scroll/geometry and chapter-transparency checks in both ordinary VOD and watch-later fixtures; existing comment and glass checks still passed.
+- Final Chrome 154 and Firefox 157 each passed 119 local browser checks: 15 comment surfaces, 20 glass controls, 26 VOD framing, 16 VOD chapters, 26 watch-later framing, 16 watch-later chapters. Production scripts and CSS with local synthetic media. Covers 9px overflow, zero hidden scrolling, layer alignment, settings cleanup, ordinary/wide/web-fullscreen layouts, light/dark chapter surfaces, images/indicator preservation, scrolling and fixture rebuild. Fixture chapter clicks test CSS noninterference, not real-site chapter seeking.
+- 85 Node tests passed; package CRC/hash checks passed. Runtime Chromium/Firefox packages and matching reproducible source are generated locally.
+- Local Chrome screenshots inspected for single rounded boundary with glass controls and transparent chapters.
+
+Limits: .13 has not yet been loaded into the real Bilibili host; browser security policy blocked opening Chrome extension management, so manual loading is requested. Native fullscreen for .13, hardware acceleration disabled, Edge host, Firefox 140, Windows/Linux and all player skins are not newly verified. No GitHub push or store submission performed. Evidence and packages: task outputs/ui-fixes-0.5.3.13.
+
 GitHub Firefox preview asset — 2026-10-07
 
 Added the exact AMO-submitted 0.5.3.12 Firefox ZIP as a GitHub Release asset for temporary loading, with explicit restart/reload instructions in README, Pages and release notes. SHA-256 3a3624d5ab5744bda08cca67876b5b00ec911b16a4b350173f14e7aeeae8a5f7. No runtime, manifest, source archive, Chromium package or AMO submission changes. Existing 77 Firefox checks and real-site validation below apply to these same bytes. Future releases must include Chromium, Firefox and matching source assets; recorded in AGENTS.md and README.
