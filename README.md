@@ -10,10 +10,10 @@
 - 保留较高比例视频自然增大的完整画面，为播放器外层补足实际超出的空间，让按钮区随内容自然下移。沿用已有圆角开关，不增加全局放大开关；普通 16:9 视频布局不变。
 - 关闭圆角或氛围光、撤回同意、进入全屏时清理额外空间；同一播放器换回 16:9 视频时自动恢复，不累加高度。保留此前玻璃控制栏、圆角边缘与章节透明修复。
 - [GitHub 0.5.3.14](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.14)：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.14/Ambient-light-for-Bilibili-0.5.3.14-chromium.zip) · [Firefox 专用包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.14/Ambient-light-for-Bilibili-0.5.3.14-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.14/Ambient-light-for-Bilibili-0.5.3.14-source.zip)。
-- 2026-10-08：0.5.3.14 商店更新准备中，尚未提交。此前 Chrome、Edge 与 Firefox 的 0.5.3.13 均已提交审核；Chrome 与 Edge 上次核对的公开版为 0.5.3.12。
+- 2026-10-08：0.5.3.14 已提交三家商店：Chrome 为 Pending review（审核通过后自动发布），Edge 为 In review，Firefox 为等待审核。Chrome 与 Edge 提交时的公开版为 0.5.3.12；提交审核不代表新版已公开上架。
 - Chrome 与 Firefox 各通过 118 项视频比例与布局专项检查、26 项既有圆角检查；85 项 Node 测试通过。Chrome 真实 B 站问题视频已验证普通和宽屏下按钮区正确顺延。范围见 [QA.txt](QA.txt)。
 
-0.5.3.13 存在上述高比例布局回归，不再推荐安装；已安装的用户请更新到 0.5.3.14。0.5.3.13 的圆角边缘与章节透明修复继续保留，历史验证和提交记录保存在 [QA.txt](QA.txt)。
+0.5.3.13 存在上述高比例布局回归，GitHub Release、附件和远程标签已删除；已安装的用户请更新到 0.5.3.14。0.5.3.13 的圆角边缘与章节透明修复继续保留，历史验证和提交记录保存在 [QA.txt](QA.txt)。
 
 ## 0.5.3.12：玻璃控制栏、宽屏圆角与评论栏修复
 
@@ -27,9 +27,9 @@
 
 ## Firefox 商店进展（2026-10-08）
 
-**Mozilla Add-ons 当前待审版本仍为 0.5.3.13；0.5.3.14 更新准备中，尚未提交。商店尚未公开提供安装，GitHub 提供下方的 0.5.3.14 临时体验包。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。
+**Mozilla Add-ons 当前待审版本为 0.5.3.14，已提交匹配源码、中文发行说明和审核备注。商店尚未公开提供安装，GitHub 提供下方的 0.5.3.14 临时体验包。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。
 
-0.5.3.13 的匹配源码、发行说明和审核备注已提交，AMO 校验为 0 错误、3 项已有警告；0.5.3.12 已被 AMO 列为停用版本。这些是历史提交记录，不代表 0.5.3.14 已审核或已完成 Firefox 新增比例专项验证。详见 [QA.txt](QA.txt)。
+0.5.3.14 的 AMO 校验为 0 错误、3 项已有警告；旧版 0.5.3.13 已被 AMO 列为停用版本。Chrome 与 Firefox 各通过 118 项本地比例与布局专项和 26 项既有圆角检查；Firefox 本次结果来自生产代码与本地合成视频，不等同于真实 B 站或签名安装验证。详见 [QA.txt](QA.txt)。
 
 ## Firefox 提前体验
 

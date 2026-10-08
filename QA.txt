@@ -1,4 +1,4 @@
-0.5.3.14 release preparation — 2026-10-08
+0.5.3.14 publication — 2026-10-08
 
 Fixes the high-aspect-ratio VOD regression in .13. With rounded corners enabled, overflow:clip lets taller in-flow media exceed Bilibili's definite inner flex height. The recording and sending bar could then cover the following action toolbar. Preserve that naturally enlarged, uncropped picture and reserve its measured overflow as additional bottom padding on the content-box #playerWrap. Keep the native inner height chain intact; the action toolbar follows normal document flow. No new global enlargement option, media transform, permission or data handling change.
 
@@ -11,7 +11,11 @@ Verified at this checkpoint:
 
 Limits: Firefox results use the production code with synthetic local media, not the .14 extension on the live Bilibili host. Earlier Firefox .13/.12 results below remain historical. Edge runtime, Firefox 140, signed installation/upgrade, Windows/Linux, native fullscreen and all player skins were not newly verified.
 
-Publication status at this checkpoint: .14 GitHub publication and removal of the faulty .13 Release downloads are authorized and in preparation. Chrome, Edge and Firefox .14 have not yet been submitted. The previously submitted .13 remains the last recorded pending store version; Chrome and Edge's last observed public package is .12. Update this status after confirmed publication/submission. The historical .13 record below is retained as an account of the original release, not a statement about present download availability.
+Publication confirmed: GitHub main/tag commit 87d61e7686ee2b372ecbe9547cf35ab2cb18db3a and Latest release v0.5.3.14 published. Chromium, Firefox and matching source ZIPs all returned HTTP 200 with SHA-256 matching local archives. Independent source rebuild reproduced all three ZIPs byte-for-byte. Faulty v0.5.3.13 Release, assets and remote tag removed; commit history retained.
+Chrome: .13 review cancelled, .14 uploaded, Chinese description/test instructions saved and submitted. Pending review; automatic publication after approval selected. Published package remains .12 at submission.
+Edge: .13 submission cancelled, .14 package verified and submitted with updated Chinese description/certification notes. Dashboard Version 0.5.3.14 / In review; live version .12.
+Firefox: .14 version 6555435 / file 5099574 waiting review; source ZIP attached, reviewer notes and Chinese release notes saved. AMO validation 0 errors / 3 existing warnings. .13 automatically moved to disabled versions. No new permissions or data handling. Submission does not mean approval or public availability.
+Evidence: task outputs/aspect-ratio-0.5.3.14, including chrome-submitted.png, edge-submitted.png, firefox-submitted.png and firefox-versions.png. Historical .13 records below describe the original submission, not current download availability.
 
 0.5.3.13 publication — 2026-10-08
 
