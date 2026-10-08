@@ -1,3 +1,26 @@
+0.5.3.15 — 2026-10-08
+
+Scope: user authorized GitHub formal release and all three store updates after local verification. Publication/submission results will be recorded separately below. Preserve Mac 1670:1080/16:10 enlargement and toolbar displacement; keep square, 4:3, 3:4 and portrait videos at their native contained size. Round the actual picture by 12px while surrounding empty player areas remain transparent.
+
+Root causes and fixes:
+- reserveSpace compared fixed mini-player viewport coordinates with a scrolling page wrapper, adding the scroll distance to page height. Before repair, actual scrollY 2632.5 had 2409px extra padding; the next wheel movement produced scrollY 4450.5 and 3318px extra. Freeze the established in-flow footprint while mini/fixed/sticky, then recalculate on return.
+- overflow:clip removed the flex item's automatic scroll minimum, allowing square/portrait media to grow to full player width. Apply min-height:0 to media ratios <=4:3 and all mini players. Other recording ratios retain the previous behavior.
+- Clip the video-only .bpx-player-video-wrap to the actual contained picture, independently from the video's bar crop/transform and sibling controls. Remeasure crop geometry after frame sizing, including when rounding turns off.
+
+Verified final code:
+- 101/101 Node tests; 9 new footprint regressions (7 failed on the old implementation) and 7 metadata/ratio lifecycle regressions. Syntax and git diff --check passed.
+- Chrome and Firefox each passed 196/196 ratio/layout checks with production scripts and synthetic video: ordinary/wide, 1670:1080, 16:10, 4:3, 9:16, 16:9, square and 3:4. Controls, sending bar, toolbar, picture inset geometry, size restoration, source switching, consent/enable cleanup and web-fullscreen lifecycle are included.
+- The 196 include actual continuous-frame encoded black-bar detection with fill and rounding together on Mac and square media. Applied picture insets match the detected, transformed visible crop; square is inset(0px 137.5px 0px 137.5px round 12px). Rounding off leaves bar removal intact, and on restores correct geometry.
+- Chrome and Firefox each passed 60/60 fixed-mini scrolling checks: exact scroll positions 200/650/1200/1800px, stable page height and footprint, media change in mini, return to the main player and off/on while mini. These fixtures reproduce Bilibili's definite internal flex-height chain.
+- Chrome installed unpacked extension 0.5.3.15 was tested on real Bilibili BV1AmHm6AE8u, source1080x1080. Ordinary mode remained 951x535 before/after rounding; picture clip inset(0px 208px round 12px). Wide mode remained 1267x710; inset(0px 278.5px round 12px). No extra page padding. Real wheel scrollY 853/1706/2559 kept page height3837 and mini video area203; returning to0 restored the535px main area. Actual screenshots and DOM evidence saved.
+- Native scrollbar-drag attempts did not produce an observable movement and are not counted as verified. Wheel scrolling and exact-position mini checks are the verified scrolling evidence. The final real Mac recording tab was closed during checking; Mac preservation is verified in both browsers' production-code fixtures and earlier .14 real-host measurements, not claimed as a final .15 real Mac-page measurement.
+- Final Chromium/Firefox/source ZIP CRCs passed. Runtime/source bytes match the working repository; extracting the source ZIP and rebuilding all three archives reproduces every SHA-256 exactly. Installed Chrome runtime matches final Chromium package, allowing only manifest whitespace differences.
+
+Installed directory: /Users/dperenn/Documents/Codex/2026-10-07/ambient-bilibili-firefox-discussion/outputs/aspect-ratio-0.5.3.14/release/chromium
+The directory keeps its old name to preserve extension ID/settings, but its manifest and runtime are0.5.3.15. Original0.5.3.14 backup: /Users/dperenn/Documents/Codex/2026-10-08/bug/work/installed-chromium-0.5.3.14-backup.
+Evidence and final local packages: /Users/dperenn/Documents/Codex/2026-10-08/bug/outputs/scroll-fix-0.5.3.15
+Firefox checks use local production scripts; no Firefox installed/signed real-site injection, Edge or system-native fullscreen is claimed for this repair.
+
 0.5.3.14 publication — 2026-10-08
 
 Fixes the high-aspect-ratio VOD regression in .13. With rounded corners enabled, overflow:clip lets taller in-flow media exceed Bilibili's definite inner flex height. The recording and sending bar could then cover the following action toolbar. Preserve that naturally enlarged, uncropped picture and reserve its measured overflow as additional bottom padding on the content-box #playerWrap. Keep the native inner height chain intact; the action toolbar follows normal document flow. No new global enlargement option, media transform, permission or data handling change.

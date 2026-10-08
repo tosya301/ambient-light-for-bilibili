@@ -48,7 +48,7 @@
   // fullscreen restores square corners. Only round the media stage;
   // the sending bar, live header, gifts and chat are outside this element.
   function createFrame(shadowRoot){
-    let frame=null,space=null,extra=0;
+    let frame=null,picture=null,space=null,extra=0;
     const shadow=document.createElement('div');
     shadow.dataset.biliglowFrameShadow='';shadow.setAttribute('aria-hidden','true');
     shadow.style.cssText='position:absolute;pointer-events:none!important;background:transparent;display:none;';
@@ -65,6 +65,14 @@
       const next=rounded&&kind==='video'?frame.closest('#playerWrap'):null;
       if(next!==space)clearSpace();
       if(!next)return;
+      // A floating player uses viewport coordinates while its page wrapper
+      // continues scrolling. Comparing their bottoms would grow the page by
+      // the scroll distance. Keep the last in-flow footprint until it returns;
+      // removing it here would also move the toolbar and comments mid-scroll.
+      if(frame.closest('.bpx-player-container')?.getAttribute('data-screen')==='mini')return;
+      for(let el=frame;el&&el!==next;el=el.parentElement){
+        if(['fixed','sticky'].includes(getComputedStyle(el).position))return;
+      }
       // Native Bilibili keeps a definite inner player height. overflow:clip
       // lets a taller in-flow recording exceed it. Reserve that actual excess
       // on the outer wrapper, without resizing the inner player or the video.
@@ -83,17 +91,42 @@
       }
       if(needed!==extra){space.style.setProperty('--biliglow-player-extra',`${needed}px`);extra=needed;}
     }
-    function clear(){clearSpace();frame?.removeAttribute('data-biliglow-rounded');frame=null;shadow.style.display='none';}
-    function update(video,settings,kind,mode,origin){
+    function clearPicture(){
+      picture?.removeAttribute('data-biliglow-picture-rounded');
+      picture?.style.removeProperty('--biliglow-picture-clip');
+      picture=null;
+    }
+    function roundPicture(video,rounded,kind,cropRect){
+      const next=rounded&&kind==='video'?video.closest('.bpx-player-video-wrap'):null;
+      if(next!==picture)clearPicture();
+      // This layer contains the video alone; player controls remain outside.
+      // Clipping it composes with the video's independent bar-crop transform.
+      if(!next||next===frame||!frame.contains(next)||!video.videoWidth||!video.videoHeight){clearPicture();return null;}
+      const rect=cropRect||globalThis.BiliGlow.contentRect(video.getBoundingClientRect(),video.videoWidth,video.videoHeight,getComputedStyle(video).objectFit);
+      const wrap=next.getBoundingClientRect();
+      const insets=[rect.top-wrap.top,wrap.right-rect.left-rect.width,wrap.bottom-rect.top-rect.height,rect.left-wrap.left];
+      if(rect.width<=0||rect.height<=0||wrap.width<=0||wrap.height<=0||insets.some(value=>!Number.isFinite(value)||value< -1)){clearPicture();return null;}
+      picture=next;
+      picture.style.setProperty('--biliglow-picture-clip',`inset(${insets.map(value=>Math.max(0,value)+'px').join(' ')} round 12px)`);
+      picture.setAttribute('data-biliglow-picture-rounded','');
+      return rect;
+    }
+    function clear(){clearPicture();clearSpace();frame?.removeAttribute('data-biliglow-rounded');frame?.removeAttribute('data-biliglow-native-size');frame=null;shadow.style.display='none';}
+    function update(video,settings,kind,mode,origin,readCrop){
       const enabled=settings.enabled&&mode!=='fullscreen'&&video?.isConnected;
       const next=enabled&&(settings.roundedCorners||settings.frameShadow>0)
         ?video.closest(kind==='live'?'#live-player':'.bpx-player-video-area'):null;
       if(next!==frame){clear();frame=next;}
-      if(!frame)return null;
+      if(!frame){readCrop?.();return null;}
       const rounded=settings.roundedCorners;
       if(frame.hasAttribute('data-biliglow-rounded')!==rounded)frame.toggleAttribute('data-biliglow-rounded',rounded);
+      // Square, 4:3 and portrait media retain their native contained size.
+      // Slightly taller widescreen recordings keep the existing larger frame.
+      const nativeSize=rounded&&kind==='video'&&video.videoWidth>0&&video.videoHeight>0&&video.videoWidth*3<=video.videoHeight*4;
+      if(frame.hasAttribute('data-biliglow-native-size')!==nativeSize)frame.toggleAttribute('data-biliglow-native-size',nativeSize);
       reserveSpace(rounded,kind);
-      const r=frame.getBoundingClientRect(),style=getComputedStyle(frame);
+      const cropRect=readCrop?.();
+      const r=roundPicture(video,rounded,kind,cropRect)||frame.getBoundingClientRect(),style=getComputedStyle(frame);
       const amount=settings.frameShadow/100;
       // The shadow lives above the light canvas, below page content, outside
       // Bilibili's overflow:hidden wrappers. It never intercepts player input.

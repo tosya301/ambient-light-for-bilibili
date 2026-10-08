@@ -256,7 +256,7 @@
     setStage(nextStage);
     mode=presentation.mode;
     barEffect?.configure({...settings,enabled:active},mode);
-    const croppedRect=barEffect?.layout();
+    let croppedRect=barEffect?.layout();
     root.dataset.mode=mode;
     const parent=stage||document.body;
     if(root.parentNode!==parent)parent.append(root);
@@ -272,7 +272,11 @@
     // Apply the frame and its page footprint before measuring the video. A
     // taller recording can grow when rounded clipping becomes active.
     const origin=root.getBoundingClientRect();
-    const frame=frameEffect?.update(video,{...settings,enabled:active},kind,mode,origin);
+    const frame=frameEffect?.update(video,{...settings,enabled:active},kind,mode,origin,()=>{
+      // Rounding can change the frame's flex minimum. Measure bar geometry
+      // again after that sizing rule, before clipping the actual picture.
+      croppedRect=barEffect?.layout();return croppedRect;
+    });
     const r=video.getBoundingClientRect();
     visible=r.width>=160&&r.height>=90&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth;
     if(!visible){root.style.display='none';cancelFrames();setStatus('播放器离开视野 · 已省电暂停');return;}

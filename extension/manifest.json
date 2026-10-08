@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "0.5.3.14",
+  "version": "0.5.3.15",
   "description": "__MSG_extensionDescription__",
   "minimum_chrome_version": "111",
   "permissions": [
@@ -49,5 +49,5 @@
     }
   ],
   "default_locale": "zh_CN",
-  "version_name": "0.5.3.14"
+  "version_name": "0.5.3.15"
 }
