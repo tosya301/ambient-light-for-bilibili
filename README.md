@@ -1,6 +1,6 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码 **0.5.3.12**，Firefox 商店仍保留已提交的 **0.5.3.10** 等待审核。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码 **0.5.3.12**，Firefox 商店已提交同版 **0.5.3.12**，当前等待审核。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
@@ -16,13 +16,13 @@
 
 ## Firefox 商店进展（2026-10-07）
 
-**0.5.3.10 已提交 Mozilla Add-ons，当前等待审核，尚未公开提供安装。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。Chrome / Edge 的后续版本独立发布，不替换这次 Firefox 提交。
+**0.5.3.12 已提交 Mozilla Add-ons，接替此前待审的 0.5.3.10，当前等待审核，尚未公开提供安装。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。本次同步玻璃控制栏、宽屏圆角和吸底评论栏修复；旧版 0.5.3.10 已被 AMO 列为停用版本。Firefox 157.0.1 已通过 77 项本地浏览器检查，最终 Firefox 包已在真实 B 站视频页验证玻璃控制栏、宽屏、播放/暂停、设置菜单和原生全屏切换；匹配源码与复现步骤一并提交。
 
-## 0.5.3.10：Firefox 桌面版
+## Firefox 桌面发行方式（自 0.5.3.10）
 
 同一套功能源码分别生成 Chromium（Chrome/Edge）与 Firefox 发行包。Firefox 包使用 MV3 后台脚本、固定扩展 ID `ambient-light-for-bilibili@tosya301`，最低版本设为桌面 Firefox 140；不声明 Android 支持。权限仍为 `storage`，内容脚本站点仍限 `www.bilibili.com` 与 `live.bilibili.com`。Firefox 声明无数据传输，并附带可离线查看的内置隐私政策。
 
-Firefox 157.0.1 已通过 9 组本地合成场景、136 项检查，76 项 Node 测试通过；临时扩展已在真实 B 站视频页和直播间轮播验证。原生容器全屏、快捷键、工具栏入口与内置隐私政策已检查。2026-10-07 已提交 AMO（等待审核），签名安装与升级仍待验证，详情见 [QA.txt](QA.txt)。
+首个 0.5.3.10 的历史验证：Firefox 157.0.1 通过 9 组本地合成场景、136 项检查，76 项 Node 测试通过；临时扩展已在真实 B 站视频页和直播间轮播验证。原生容器全屏、快捷键、工具栏入口与内置隐私政策已检查。当前待审版本已更新为 0.5.3.12，签名安装与升级仍待验证，详情见 [QA.txt](QA.txt)。
 
 使用下方打包命令生成两个发行包；原始 `extension/manifest.json` 保持 Chromium 入口，不能直接作为 Firefox 包使用。Firefox 发行 ZIP 需经 Mozilla 签名后用于普通用户安装，本地开发可在 `about:debugging#/runtime/this-firefox` 临时加载生成目录中的 `firefox/manifest.json`，重启浏览器后临时扩展会移除。
 
