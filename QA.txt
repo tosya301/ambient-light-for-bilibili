@@ -1,6 +1,6 @@
-0.5.3.16 — 2026-10-09（正式发布准备，发布已授权）
+0.5.3.16 — 2026-10-09（GitHub 正式版）
 
-Scope: keep ordinary, wide and web-fullscreen danmaku within the actual current picture. Follow-up: show complete top/bottom ordinary and fixed comments, preserve font size and animation, and avoid the native control strip. After local verification, the user authorized a formal GitHub 0.5.3.16 release and updates to Chrome, Edge and Firefox stores. Actual publication/submission results must be recorded separately from preparation.
+Scope: keep ordinary, wide and web-fullscreen danmaku within the actual current picture. Follow-up: show complete top/bottom ordinary and fixed comments, preserve font size and animation, and avoid the native control strip. After local verification, the user authorized a formal GitHub 0.5.3.16 release and updates to Chrome, Edge and Firefox stores. Final publication and store submission results are recorded below.
 
 Root causes and implementation:
 - Video-only rounding/crop did not constrain the independent static zero-height render-dm-wrap. Its absolute DOM/Canvas children kept filling the outer video-area and letterboxing.
@@ -12,7 +12,7 @@ Root causes and implementation:
 Verified:
 - 148/148 Node tests, including 47 danmaku boundary/track/cleanup regressions; syntax and git diff --check passed. Tests include fractional real-player geometry, scrollTop9, ancestor scaling, grouped tracks, mixed fonts, control safety height, idempotent observer writes and late callbacks after clearing.
 - Chrome and Firefox each passed 328/328 production-code local browser checks. Normal/wide/web × 16:9, 4:3, square, portrait3:4 and Mac1670:1080; rounding off; actual continuous-frame bar detection/fill; six complete top/bottom rolling/fixed test lines; distinct same-type tracks with at least1px gap; unchanged25px font/28.125px line-height/native transform; actual four-edge/corner clipping; controls and interactive buttons; internal scroll, mini scrolling, source and root/video replacement; disabled/revoked ownership cleanup.
-- The fixture result area has fixed height so output cannot invalidate page-height assertions. Size-only comparison excludes scrollIntoView position changes. These fixture repairs did not weaken the actual boundary, line, track-gap or scroll-footprint checks.
+- Browser fixture output has fixed height and size-only comparisons exclude scrollIntoView position changes, so reporting does not invalidate boundary, track-gap or page-footprint assertions.
 - Chrome existing layout/ratio regression196/196 and mini-scroll regression60/60 passed. Square,4:3 and portrait keep native size; Mac recording enlargement/toolbar displacement are retained.
 - Installed unpacked Chrome0.5.3.16 was reloaded and tested on real Bilibili BV1UqHi6uEie, source1920×1080. Normal DM/picture951×534.9375; wide1267×712.6875 (old713px snapshot replaced); web1516.4375×853 with native CSS quantization. Final active-line samples7/9/6 all fit completely inside the picture and above the native controls, with25px font. Screenshots and geometry were saved for all three modes.
 - Firefox validation uses local synthetic media and the real production scripts. No signed Firefox installation/upgrade, Edge host, system fullscreen, or all third-party skins is claimed. Physically overfull cached tracks can overlap without shrinking text; native allocation settles on resize. Deliberately animated advanced/BAS coordinates outside the picture remain boundary-clipped.
@@ -23,18 +23,24 @@ Installed path: /Users/dperenn/Documents/Codex/2026-10-07/ambient-bilibili-firef
 The old directory name is retained to preserve extension ID/settings; its final manifest/runtime are0.5.3.16. Prior installed0.5.3.15 is backed up in task work/installed-chromium-before-danmaku-0.5.3.15. Other open Bilibili tabs need refresh to receive the reloaded content scripts.
 Evidence/local packages: /Users/dperenn/Documents/Codex/2026-10-08/bug/outputs/danmaku-fix-0.5.3.16
 
-0.5.3.16 publication preparation — 2026-10-09
+0.5.3.16 publication — 2026-10-09
 
-GitHub formal release and all three store submissions are authorized. At this preparation checkpoint, the .16 GitHub release/public downloads have not yet been independently verified; Chrome, Edge and Firefox .16 are pending submission, not claimed submitted or approved. Earlier .15 publication/submission evidence remains below.
+GitHub formal release v0.5.3.16 is published as Latest, draft=false and prerelease=false. Code/tag commit 4a03b8859a0ead0cfe8f43b7df09da803d4a1678 is pushed to main. Independent anonymous downloads of all three attachments returned HTTP 200 with no Authorization header or cookies. Downloaded bytes, sizes and SHA-256 match the verified local archives and GitHub asset digests; downloaded ZIP CRCs passed. Report: public-download-verification.json. Earlier .15 publication/submission evidence remains below.
 
-Verified release archive SHA-256 (package-verification.json):
+Published release archive SHA-256 (package-verification.json and public-download-verification.json):
 - Ambient-light-for-Bilibili-0.5.3.16-chromium.zip (196449 bytes): 12870c0561a7090fb1af2ed5e515e732b31045f0ff3083da6a7024e0863aa77a
 - Ambient-light-for-Bilibili-0.5.3.16-firefox.zip (206239 bytes): cde8dadb3cc8440527f6ea49c96aee20826afdaa7bd5174e3be55ad5ca4758ab
 - Ambient-light-for-Bilibili-0.5.3.16-source.zip (217087 bytes): 1a392cb86513df178a2702912b450c99dfa86ff8bb5d9c596e825254ecdfc252
 
 All three CRC checks passed; independent source rebuild reproduced all three archives exactly. These archives are fixed for release; documentation updates do not change runtime or package bytes. Chromium manifest .16 retains MV3/service worker, minimum Chrome 111, storage only and the original two Bilibili matches. Firefox .16 retains MV3/background scripts, Gecko ID ambient-light-for-bilibili@tosya301, desktop minimum 140.0, required data collection none, storage only, original matches and bundled offline privacy policy. Android is not declared supported. The GitHub Firefox ZIP is unsigned and only for temporary loading; signed permanent installation and upgrade remain outside the verified scope.
 
-Prepared publication text in task outputs/danmaku-fix-0.5.3.16: release-notes.md, store-release-notes.txt, firefox-reviewer-notes.txt. Final GitHub asset/Pages checks and actual store dashboard statuses are to be appended after execution.
+Store results observed in the actual dashboards on 2026-10-09:
+- Chrome: .16 uploaded with current Chinese description and test instructions, submitted and confirmed Pending review. Automatic publication after approval selected; public version .15 is Published.
+- Edge: .16 uploaded with current listing and certification notes, then Publish submitted; dashboard .16 In review. Online version .15 remains Live.
+- Firefox: .16 submitted to the same AMO listing, version 6558332 / file 5102470, status Waiting review. Online validator: 0 errors and 3 existing warnings (Android 140 minimum versus data_collection_permissions support introduced in 142, plus content.js:91 and shared.js:118 innerHTML template assignments). Desktop Firefox 140+ only; Android unchecked. Matching source ZIP uploaded; version editor has the current-source view link and Clear=0. Chinese 228-character release notes and reviewer notes saved; reload comparison confirmed exact text. No new signed permanent installation, restart persistence or upgrade verification is claimed.
+
+Submission does not imply store approval or .16 public availability. The .15 Chrome Published and Edge Live facts above were newly checked on 2026-10-09; their original .15 submission-time statuses remain in the historical record below.
+Evidence: task outputs/danmaku-fix-0.5.3.16/package-verification.json and public-download-verification.json; chrome-submitted.png/.txt, chrome-package-pending.png/.txt, edge-submitted.png/.txt, firefox-submitted.png/.txt, firefox-version-saved.png/.txt and firefox-validation-report.txt. Release/listing/reviewer text files are retained in that directory. Public documentation deployment and byte-comparison evidence is recorded in task outputs/danmaku-fix-0.5.3.16/final-publication-verification.json.
 
 0.5.3.15 — 2026-10-08
 
