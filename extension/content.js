@@ -6,6 +6,7 @@
   let lastFrame=0,nextPaint=0,needsDraw=false,painted=false,visible=false,blocked=false,supported=false,layoutDirty=true,frames=0;
   let status={text:'等待播放器',error:false},ui=null,panel=null,panelHost=null,launcher=null,root=null,canvas=null,ctx=null;
   let stage=null,backdrop=null,mode='normal',barEffect=null,frameEffect=null,barStatus='宽屏去边已关闭';
+  const danmakuEffect=P.createDanmakuBounds();
   let launcherPosition=null,drag=null,suppressLauncherClick=false;
   const setBarStatus=text=>{barStatus=text;panel?.setBarStatus(text);};
   let kind=P.pageKind(location);
@@ -78,7 +79,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.14';
+    root.dataset.version='0.5.3.16';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);
@@ -260,7 +261,7 @@
     root.dataset.mode=mode;
     const parent=stage||document.body;
     if(root.parentNode!==parent)parent.append(root);
-    if(!active)frameEffect?.clear();
+    if(!active){frameEffect?.clear();danmakuEffect.clear();}
     const uiParent=ownFullscreen?fs:document.documentElement;
     if(ui.parentNode!==uiParent){cancelLauncherDrag();uiParent.append(ui);positionLauncher();}
     ui.style.display=supported&&(!fs||Boolean(ownFullscreen))?'block':'none';
@@ -278,9 +279,12 @@
       croppedRect=barEffect?.layout();return croppedRect;
     });
     const r=video.getBoundingClientRect();
+    const rect=croppedRect||B.contentRect({left:r.left,top:r.top,width:r.width,height:r.height},video.videoWidth,video.videoHeight,getComputedStyle(video).objectFit);
+    // Independent from rounded/shadow gates: fullscreen and square corners
+    // still constrain the native render layers to the current visible image.
+    danmakuEffect.update(video,{...settings,enabled:active},kind,mode,rect);
     visible=r.width>=160&&r.height>=90&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth;
     if(!visible){root.style.display='none';cancelFrames();setStatus('播放器离开视野 · 已省电暂停');return;}
-    const rect=croppedRect||B.contentRect({left:r.left,top:r.top,width:r.width,height:r.height},video.videoWidth,video.videoHeight,getComputedStyle(video).objectFit);
     const l=rect.left,t=rect.top,right=l+rect.width,bottom=t+rect.height;
     // Convert viewport coordinates to the layer's containing block (fullscreen can create one).
     const ox=origin.left,oy=origin.top;
@@ -299,7 +303,7 @@
   const modeObserver=new MutationObserver(()=>invalidate());
   function bind(next){
     if(next===video)return;
-    cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;frameEffect?.clear();resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
+    cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;frameEffect?.clear();danmakuEffect.clear();resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
     if(canvas){canvas.width=256;root.style.display='none';}
     if(!next){setStatus('等待播放器');return;}
     if(kind==='live')setBarStatus('直播保留完整画面 · 自动去边仅用于视频宽屏');

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>弹幕画面边界 · 本地验证</title>
+  <link rel="stylesheet" href="../extension/page.css?v=danmaku-local">
+  <style>
+    *{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:#10141d;color:#e4edf4;font:14px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif}
+    button,select,input{font:inherit}button,select{color:inherit;background:#233044;border:1px solid #405169;border-radius:6px;padding:7px 11px}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+    header,main,footer{max-width:1180px;margin:auto;padding:24px}h1{font-size:25px;font-weight:550;margin:0 0 9px}.note{color:#acbccb;margin:0 0 18px}.lab-tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.lab-tools label{display:flex;gap:7px;align-items:center}.lab-tools input{accent-color:#62d2b6}
+    .viewer{min-height:360px}.player-shell{position:relative;box-sizing:content-box;padding:0;width:760px;height:483.5px;max-width:100%;margin:0 auto}
+    #bilibili-player,#player,.bpx-player-primary-area{width:100%;height:100%}.bpx-player-container{position:relative}.bpx-player-primary-area{display:flex;flex-direction:column;overflow:visible}
+    .bpx-player-video-area{position:relative;display:flex;flex-direction:column;flex:1 1 0%;min-height:auto;width:100%;height:auto;overflow:hidden;background:#000}
+    .bpx-player-video-perch{display:flex;position:relative;flex:0 0 auto;min-height:0;width:100%;height:100%}.bpx-player-video-wrap{display:block;position:static;flex:0 1 auto;min-height:auto;width:100%;height:100%;overflow:visible}
+    #test-video{position:static;display:block;width:100%;height:100%;object-fit:contain;object-position:50% 50%}
+    /* Real Bilibili structure: the rendering root has no normal-flow height.
+       Its absolute children originally take the media area as their stage. */
+    .bpx-player-render-dm-wrap{position:static;width:100%;height:0;z-index:40;pointer-events:none}
+    .bpx-player-render-dm-wrap>.bpx-player-dm-svg-mask-wrap,.bpx-player-render-dm-wrap>.bpx-player-dm-mask-wrap,.bpx-player-render-dm-wrap>.bpx-player-bas-dm-wrap,.bpx-player-render-dm-wrap>.bpx-player-cmd-dm-wrap{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .bpx-player-dm-mask,.bpx-player-row-dm-wrap,.bpx-player-adv-dm-wrap{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .dm-grid{position:absolute;left:-18px;top:-18px;width:calc(100% + 36px);height:calc(100% + 36px);opacity:.38;pointer-events:none}
+    .bili-danmaku-x-dm{position:absolute;white-space:nowrap;font-weight:650;font-size:25px;line-height:1.125;color:#fff;text-shadow:1px 1px 2px #000,-1px -1px 2px #000;pointer-events:none}
+    .bili-danmaku-x-roll{left:100%;top:var(--top);animation:dm-roll 7s linear infinite}
+    .bili-danmaku-x-center{left:50%;top:0;transform:translate(-50%,var(--translateY))}
+    .dm-line.top{color:#ffdb6e;animation-delay:-1s}.dm-line.middle{color:#98fff1;animation-delay:-2s}.dm-line.bottom{color:#d6baff;animation-delay:-4s}.dm-line.bottom.second{color:#eee2ff;animation-delay:-5s}.dm-fixed.top{color:#ffceb8}.dm-fixed.bottom{color:#bbe6ff}.dm-fixed.bottom.second{color:#c8ffa9}
+    @keyframes dm-roll{from{transform:translateX(0)}to{transform:translateX(calc(-100vw - 100%))}}
+    .dm-advanced{position:absolute;top:-24px;left:37%;font-size:19px;white-space:nowrap;color:#ff9eaa;transform:rotate(13deg);animation:dm-vertical 6s ease-in-out infinite;pointer-events:none}
+    @keyframes dm-vertical{0%,100%{top:-24px}50%{top:104%}}
+    .dm-bas{position:absolute;left:-45px;top:62%;font-size:16px;color:#ffeaa3;white-space:nowrap;pointer-events:none}
+    .dm-command{position:absolute;left:54%;top:58%;padding:4px 8px;font-size:12px;background:#254b5e;border:1px solid #bcefff;pointer-events:auto}
+    .dm-probe{position:absolute;width:8px;height:8px;background:#ff46a2;z-index:5000;pointer-events:auto}
+    .bpx-player-control-wrap{position:absolute;left:0;right:0;bottom:0;height:34px;z-index:90;display:flex;gap:12px;align-items:center;padding:0 10px;background:rgba(12,18,28,.65);font-size:12px}
+    .bpx-player-control-wrap button{padding:2px 7px}.bpx-player-sending-area{flex:0 0 56px;width:100%;height:56px;position:relative;z-index:100;background:#243042;padding:10px;display:flex;gap:10px;align-items:center}.bpx-player-sending-area input{flex:1;min-width:0;color:#dceaf2;background:#182638;border:1px solid #59728b;border-radius:4px;padding:5px 8px}
+    #arc_toolbar_report{max-width:1080px;margin:12px auto 0;border:1px solid #536175;padding:12px;display:flex;align-items:center;justify-content:space-between}.caption{color:#b7c8d7;font-size:13px}
+    #player[data-screen="web"]{position:fixed;inset:0;width:100vw;height:100vh;z-index:600;background:#10141d}#player[data-screen="mini"]{position:fixed;right:28px;bottom:92px;width:360px;height:203px;z-index:600}#player[data-screen="mini"] .bpx-player-sending-area{display:none}
+    body[data-lab-mode="web"]{overflow:hidden}#leave-web{display:none;position:fixed;right:16px;top:12px;z-index:800}body[data-lab-mode="web"] #leave-web{display:block}
+    .testing-probes .bpx-player-control-wrap{pointer-events:none!important}.testing-probes .bpx-player-control-wrap button{pointer-events:none!important}
+    #danmaku-results{display:block;box-sizing:border-box;height:360px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.8 ui-monospace,SFMono-Regular,monospace;max-width:1080px;margin:20px auto;padding:15px;border:1px solid #405169;border-radius:8px;color:#c9dbe7}
+    #scroll-fixture{height:2200px;margin-top:24px;border-top:1px solid #34475e;color:#91a6b8;padding-top:20px}footer{color:#8fa3b6;font-size:12px}
+    @media(max-width:650px){header,main,footer{padding:16px}.lab-tools{gap:8px}#player[data-screen="mini"]{right:16px;width:320px;height:180px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>弹幕限制在当前视频画面内</h1>
+    <p class="note">真实生产脚本与静态零高度弹幕根。普通和固定弹幕各有一条顶部、两条底部越界原生轨道，整行应移回画面内，同类型轨道保持间距；高级轨迹、BAS 网格仍按边界裁切。控制栏和发送框仍可操作。此页只使用本地合成视频，并自动开启本地测试设置。</p>
+    <div class="lab-tools">
+      <button id="danmaku-run" type="button">运行弹幕边界自检</button>
+      <button id="danmaku-preview" type="button">预览弹幕</button>
+      <label>模式 <select id="mode-select"><option value="normal">普通</option><option value="wide">宽屏</option><option value="web">网页全屏</option><option value="mini">小窗</option></select></label>
+      <label>视频比例 <select id="ratio-select"><option value="standard">16:9</option><option value="four-three">4:3</option><option value="square">方形 1:1</option><option value="portrait">竖向 3:4</option><option value="mac">Mac 1670:1080</option></select></label>
+      <label><input id="rounded-select" type="checkbox" checked>圆角</label>
+      <label><input id="bars-select" type="checkbox">编码黑边＋去边填充</label>
+      <output id="lab-status" aria-live="polite">正在初始化…</output>
+    </div>
+  </header>
+  <button id="leave-web" type="button">退出网页全屏 · Esc</button>
+  <main>
+    <section class="viewer" aria-label="合成视频与越界弹幕">
+      <div id="playerWrap" class="player-shell">
+        <div id="bilibili-player">
+          <div id="player" class="bpx-player-container" data-screen="normal">
+            <div class="bpx-player-primary-area">
+              <div class="bpx-player-video-area">
+                <div class="bpx-player-video-perch"><div class="bpx-player-video-wrap"><video id="test-video" muted autoplay playsinline aria-label="本地合成视频"></video></div></div>
+                <div class="bpx-player-control-wrap"><button id="play-control" type="button">暂停／播放</button><span>原生控制栏 · 弹幕层外</span></div>
+              </div>
+              <div class="bpx-player-sending-area"><label for="sending-input">弹幕发送框</label><input id="sending-input" placeholder="本地测试，不发送网络消息"><button id="sending-button" type="button">测试发送</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="arc_toolbar_report"><span class="caption">页面操作区 · 播放器下方自然流布局</span><button id="toolbar-button" type="button">操作区命中测试</button></div>
+    </section>
+    <output id="danmaku-results" aria-live="polite" data-state="initializing">等待运行</output>
+    <section id="scroll-fixture">评论区滚动测试：小窗显示时，这一段页面长度应保持稳定。</section>
+  </main>
+  <footer>本地验证；未提交弹幕、未上传视频。结果可从 window.__danmakuResults 读取。</footer>
+  <script id="danmaku-report" type="application/json">{"state":"initializing"}</script>
+  <script src="../extension/shared.js"></script>
+  <script src="../extension/player.js"></script>
+  <script src="../extension/preview.js"></script>
+  <script src="../extension/bars.js"></script>
+  <script src="../extension/bar-effects.js"></script>
+  <script src="../extension/content.js"></script>
+  <script src="danmaku-tests.js"></script>
+</body>
+</html>

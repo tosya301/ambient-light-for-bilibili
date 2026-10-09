@@ -139,11 +139,124 @@
     }
     return {update,clear};
   }
+  // Fit cached pixel tracks without cropping whole lines or collapsing several
+  // bottom tracks into one. Messages on the same native track stay together;
+  // rolling/fixed tracks keep their independent native allocation.
+  function fitDanmakuTracks(tracks,height,gap){
+    const positions=tracks.map(track=>Math.max(gap,Math.min(track.top,height-gap-track.height)));
+    for(const type of new Set(tracks.map(track=>track.type))){
+      const ordered=tracks.map((track,index)=>({...track,index})).filter(track=>track.type===type).sort((a,b)=>a.top-b.top);
+      const groups=[];
+      for(const track of ordered){
+        let group=groups[groups.length-1];
+        if(!group||track.top-group.native>=1){group={native:track.top,height:track.height,members:[]};groups.push(group);}
+        group.height=Math.max(group.height,track.height);group.members.push(track.index);
+      }
+      for(let i=0;i<groups.length;i++){
+        const group=groups[i],previous=groups[i-1];
+        group.top=Math.max(gap,Math.min(group.native,height-gap-group.height),previous?previous.top+previous.height+1:gap);
+      }
+      for(let i=groups.length-1;i>=0;i--){
+        const group=groups[i],next=groups[i+1];
+        group.top=Math.min(group.top,next?next.top-group.height-1:height-gap-group.height);
+        // A transient overfull cached stage cannot fit every full-size track.
+        // Keep each complete line inside; native allocation resolves on resize.
+        for(const index of group.members)positions[index]=Math.max(gap,Math.min(group.top,height-gap-tracks[index].height));
+      }
+    }
+    return positions;
+  }
+  // The site's render root is a zero-height, static sibling of the video.
+  // Its absolutely positioned DOM/canvas layers otherwise fill the player,
+  // including transparent letterboxing. Give only that root the actual
+  // picture's containing block; native tracks then start inside the picture.
+  function createDanmakuBounds(){
+    let layers=new Set(),tracks=new Set();
+    const stages=new Map(),trackProperty='--biliglow-danmaku-track-top';
+    const observer=typeof MutationObserver==='function'?new MutationObserver(syncTracks):null;
+    const properties=['left','top','width','height','radius','track-height'];
+    function syncTracks(){
+      const next=new Set();
+      for(const [layer,stage] of stages){
+        const nodes=[...(layer.querySelectorAll?.('.bpx-player-row-dm-wrap > .bili-danmaku-x-show')||[])];
+        const entries=[];
+        for(const node of nodes){
+          const type=node.classList.contains('bili-danmaku-x-roll')?'roll':node.classList.contains('bili-danmaku-x-center')?'center':null;
+          if(!type)continue;
+          const top=parseFloat(node.style.getPropertyValue(type==='roll'?'--top':'--translateY'));
+          const style=getComputedStyle(node),height=parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.125;
+          if(Number.isFinite(top)&&Number.isFinite(height)&&height>0&&height+stage.gap*2<=stage.height)entries.push({node,type,top,height});
+        }
+        const positions=fitDanmakuTracks(entries,stage.height,stage.gap);
+        entries.forEach((entry,index)=>{
+          const value=`${positions[index]}px`;next.add(entry.node);
+          if(entry.node.style.getPropertyValue(trackProperty)!==value)entry.node.style.setProperty(trackProperty,value);
+        });
+      }
+      for(const node of tracks)if(!next.has(node))node.style.removeProperty(trackProperty);
+      tracks=next;
+    }
+    function restore(layer){
+      layer.removeAttribute('data-biliglow-danmaku-bounds');
+      for(const property of properties)layer.style.removeProperty(`--biliglow-danmaku-${property}`);
+    }
+    function clear(){observer?.disconnect();for(const layer of layers)restore(layer);layers.clear();stages.clear();for(const node of tracks)node.style.removeProperty(trackProperty);tracks.clear();}
+    function update(video,settings,kind,mode,rect){
+      const area=settings.enabled&&kind==='video'&&video?.isConnected&&video.videoWidth>0&&video.videoHeight>0
+        ?video.closest('.bpx-player-video-area'):null;
+      if(!area||!rect||!['left','top','width','height'].every(key=>Number.isFinite(rect[key]))||rect.width<=0||rect.height<=0){clear();return null;}
+      const next=new Set(area.querySelectorAll('.bpx-player-render-dm-wrap'));
+      let changed=next.size!==layers.size;
+      for(const layer of layers)if(!next.has(layer)){restore(layer);stages.delete(layer);changed=true;}
+      for(const layer of next)if(!layers.has(layer))changed=true;
+      layers=next;
+      if(changed){observer?.disconnect();for(const layer of layers)observer?.observe(layer,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style']});}
+      if(!layers.size){syncTracks();return null;}
+      const box=area.getBoundingClientRect();
+      if(box.width<=0||box.height<=0){clear();return null;}
+      // offsetHeight rounds fractional CSS pixels: treating that rounding as
+      // a transform can expand danmaku beyond the picture by a whole pixel.
+      // Use the computed border box to recover real ancestor scale/zoom.
+      const style=getComputedStyle(area),number=property=>parseFloat(style[property])||0;
+      function localSize(dimension,sides,fallback){
+        const size=parseFloat(style[dimension]);
+        if(!Number.isFinite(size)||size<=0)return fallback;
+        return size+(style.boxSizing==='border-box'?0:sides.reduce((sum,side)=>sum+number(`padding${side}`)+number(`border${side}Width`),0));
+      }
+      const localWidth=localSize('width',['Left','Right'],area.offsetWidth||box.width);
+      const localHeight=localSize('height',['Top','Bottom'],area.offsetHeight||box.height);
+      const scaleX=box.width/localWidth,scaleY=box.height/localHeight;
+      const originLeft=box.left+(area.clientLeft||0)*scaleX,originTop=box.top+(area.clientTop||0)*scaleY;
+      const left=Math.max(originLeft,rect.left),top=Math.max(originTop,rect.top);
+      const right=Math.min(box.right,rect.left+rect.width),bottom=Math.min(box.bottom,rect.top+rect.height);
+      const width=Math.max(0,right-left),height=Math.max(0,bottom-top);
+      // Reserve the native control strip even while auto-hidden: revealing it
+      // must not obscure an otherwise complete bottom comment. The render root
+      // and advanced/BAS paths still cover the whole actual picture.
+      const control=area.querySelector?.('.bpx-player-control-wrap')?.getBoundingClientRect();
+      const trackBottom=control&&control.width>0&&control.height>0&&control.right>left&&control.left<right&&control.top>top+height/2
+        ?Math.min(bottom,control.top):bottom;
+      // overflow:hidden can retain an internal scroll offset after mode/focus
+      // changes. Absolute children use its scroll coordinates, not viewport.
+      const values=[(left-originLeft)/scaleX+(area.scrollLeft||0),(top-originTop)/scaleY+(area.scrollTop||0),width/scaleX,height/scaleY,settings.roundedCorners&&mode!=='fullscreen'?12:0,Math.max(0,trackBottom-top)/scaleY];
+      for(const layer of layers){
+        stages.set(layer,{height:values[5],gap:Math.max(2,values[4])});
+        properties.forEach((property,index)=>{
+          const name=`--biliglow-danmaku-${property}`,value=`${values[index]}px`;
+          if(layer.style.getPropertyValue(name)!==value)layer.style.setProperty(name,value);
+        });
+        if(!layer.hasAttribute('data-biliglow-danmaku-bounds'))layer.setAttribute('data-biliglow-danmaku-bounds','');
+      }
+      syncTracks();
+      return {left,top,width,height};
+    }
+    return {update,clear};
+  }
   function roundedCutout(rect,frame,origin,viewport){
     if(!frame?.radius||!['left','top','width','height'].every(k=>Math.abs(rect[k]-frame.rect[k])<2))return null;
     const x=rect.left-origin.left,y=rect.top-origin.top,w=rect.width,h=rect.height,r=Math.min(frame.radius,w/2,h/2);
     // A rounded inverse hole lets light reach the newly exposed corner pixels.
     return `path(evenodd, "M0 0H${viewport.width}V${viewport.height}H0Z M${x+r} ${y}H${x+w-r}A${r} ${r} 0 0 1 ${x+w} ${y+r}V${y+h-r}A${r} ${r} 0 0 1 ${x+w-r} ${y+h}H${x+r}A${r} ${r} 0 0 1 ${x} ${y+h-r}V${y+r}A${r} ${r} 0 0 1 ${x+r} ${y}Z")`;
   }
-  globalThis.BiliGlowPlayer=Object.freeze({pageKind,selectVideo,presentation,createFrame,roundedCutout});
+  globalThis.BiliGlowPlayer=Object.freeze({pageKind,selectVideo,presentation,createFrame,createDanmakuBounds,fitDanmakuTracks,roundedCutout});
 })();

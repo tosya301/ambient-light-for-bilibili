@@ -32,6 +32,32 @@ html[data-biliglow-active] .bpx-player-video-area[data-biliglow-rounded][data-bi
 html[data-biliglow-active] .bpx-player-video-wrap[data-biliglow-picture-rounded] {
   clip-path: var(--biliglow-picture-clip) !important;
 }
+/* Keep all native DOM/canvas danmaku inside the visible picture in normal,
+   wide and fullscreen layouts. Controls, subtitles and sending UI are siblings.
+   Clip also catches cached tracks during a resize, without a scroll container. */
+html[data-biliglow-active] .bpx-player-render-dm-wrap[data-biliglow-danmaku-bounds] {
+  position: absolute !important;
+  left: var(--biliglow-danmaku-left) !important;
+  top: var(--biliglow-danmaku-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--biliglow-danmaku-width) !important;
+  height: var(--biliglow-danmaku-height) !important;
+  box-sizing: border-box !important;
+  overflow: clip !important;
+  clip-path: inset(0px round var(--biliglow-danmaku-radius)) !important;
+  pointer-events: none;
+  --biliglow-danmaku-track-gap: max(2px, var(--biliglow-danmaku-radius));
+}
+/* Native tracks cache pixel positions from the larger player. Reposition
+   ordinary rolling and fixed comments by their full line height, rather than
+   cutting their first/last row. Keep native horizontal motion and font size. */
+html[data-biliglow-active] .bpx-player-render-dm-wrap[data-biliglow-danmaku-bounds] .bpx-player-row-dm-wrap > .bili-danmaku-x-roll {
+  top: var(--biliglow-danmaku-track-top, clamp(var(--biliglow-danmaku-track-gap), var(--top, 0px), max(var(--biliglow-danmaku-track-gap), calc(var(--biliglow-danmaku-track-height) - 1lh - var(--biliglow-danmaku-track-gap))))) !important;
+}
+html[data-biliglow-active] .bpx-player-render-dm-wrap[data-biliglow-danmaku-bounds] .bpx-player-row-dm-wrap > .bili-danmaku-x-center {
+  top: calc(var(--biliglow-danmaku-track-top, clamp(var(--biliglow-danmaku-track-gap), var(--translateY, 0px), max(var(--biliglow-danmaku-track-gap), calc(var(--biliglow-danmaku-track-height) - 1lh - var(--biliglow-danmaku-track-gap))))) - var(--translateY, 0px)) !important;
+}
 /* Keep the site's fixed inner playback height and reserve only its measured
    overflow in the outer, content-box page wrapper. Native video sizing stays
    intact and the following toolbar moves naturally in document flow. */
