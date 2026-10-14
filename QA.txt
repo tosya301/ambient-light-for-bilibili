@@ -16,6 +16,10 @@ Verified:
 - Local archive SHA-256: Chromium (197828 bytes) b7f27c7185e0c09185f33da797f6b0c361fa7b40ce85dfb86ec971c71c43ab78; Firefox (207618 bytes) 2fd5c7deb3111a0e5971e2fa52af5c009db678651b1102d24b8a457d7d605dcc; source (218466 bytes) 0bd8501ec3a9242b4ab13c11b4792eeaf160bd6fbc8aee7711babf1d6e361f4e.
 - Screenshots and package-verification.json are retained in task outputs/release-0.5.3.17 and task outputs/firefox-0.5.3.17-*.png.
 
+0.5.3.17 publication — 2026-10-14
+
+Published v0.5.3.17 as Latest with draft=false and prerelease=false. Tag/code commit: 60efa41. Main and the new tag were pushed atomically without force. Chromium, Firefox and matching source ZIPs are all present. Independent anonymous downloads returned HTTP 200; downloaded sizes, SHA-256, bytes and ZIP CRCs match the validated local packages and GitHub asset digests listed above. Evidence: task outputs/release-0.5.3.17/public-download-verification.json. README and the project website include all three downloads and the Firefox 140+ unsigned temporary-loading/restart instructions. No store submission was performed.
+
 0.5.3.16 — 2026-10-09（GitHub 正式版）
 
 Scope: keep ordinary, wide and web-fullscreen danmaku within the actual current picture. Follow-up: show complete top/bottom ordinary and fixed comments, preserve font size and animation, and avoid the native control strip. After local verification, the user authorized a formal GitHub 0.5.3.16 release and updates to Chrome, Edge and Firefox stores. Final publication and store submission results are recorded below.

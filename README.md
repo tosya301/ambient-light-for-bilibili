@@ -1,6 +1,6 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.3.17**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.3.17（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
@@ -9,6 +9,7 @@
 深色页面中的吸底评论栏改为烟灰色半透明磨砂底板，让底栏与周围氛围光衔接得更自然。底板上方使用 14px 圆角，输入框使用 9px 圆角，左右各留出 16px 空隙，避免头像和发布按钮紧贴边框；保留原生输入、聚焦与工具栏交互。仅在氛围光与深色页面背景启用时使用新样式，关闭后恢复原生外观，不支持背景模糊的浏览器使用不透明底色。
 
 - [GitHub 0.5.3.17](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.17)：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.17/Ambient-light-for-Bilibili-0.5.3.17-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.17/Ambient-light-for-Bilibili-0.5.3.17-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.17/Ambient-light-for-Bilibili-0.5.3.17-source.zip)。
+- 2026-10-14：GitHub 0.5.3.17 已发布为最新正式版。三份附件均通过匿名公开下载，大小与 SHA-256 和已验证的本地包一致；匹配源码可逐字节重建两个浏览器包。
 - Chromium 与 Firefox 包使用同一版本功能源码，保留此前弹幕边界、圆角尺寸与评论滚动修复；不新增权限、采样循环或网络传输。
 - 148/148 项 Node 测试通过；Chrome 与 Firefox 各通过 23/23 项本地生产代码评论组件检查，磨砂、圆角及左右留白已核对。Chrome 已在真实 B 站验证 0.5.3.17 吸底评论栏；Firefox 使用本地合成媒体与生产脚本验证，未验证签名安装或升级。详见 [QA.txt](QA.txt)。
 - 本次更新范围为 GitHub，尚未提交 0.5.3.17 至扩展商店。下方商店状态均附历史日期，实际可安装版本以各商店页面为准。
