@@ -22,27 +22,52 @@
       :host([data-biliglow-comments-active]) #div { border-bottom-color:var(--line_regular)!important; }
     `,
     'bili-comments-header-renderer':`
-      /* The site creates its bottom-fixed wrapper only while the composer is
-         pinned. Preserve that wrapper's native opaque base so comment pictures
-         cannot show through the avatar, editor, tools and send-button row. */
+      /* Style the full pinned row, including the avatar and tools. Keep the
+         site's layout and visible overflow so emoji popovers are not clipped. */
+      :host([data-biliglow-comments-active][data-biliglow-comments-dark]) .bili-comments-bottom-fixed-wrapper > div {
+        box-sizing:border-box!important;
+        padding-inline:16px!important;
+        background:rgba(18,23,31,.80)!important;
+        -webkit-backdrop-filter:blur(10px) saturate(.85)!important;
+        backdrop-filter:blur(10px) saturate(.85)!important;
+        border-radius:14px 14px 0 0!important;
+        border-top-color:#e4efff10!important;
+        box-shadow:inset 0 1px 0 #ffffff12,inset 0 0 0 1px #e4efff10,0 4px 18px #03080d20!important;
+        --biliglow-comment-editor-bg:#ffffff06;
+        --biliglow-comment-editor-border:#dceaff18;
+        --biliglow-comment-editor-radius:9px;
+      }
+      @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+        :host([data-biliglow-comments-active][data-biliglow-comments-dark]) .bili-comments-bottom-fixed-wrapper > div { background:rgb(18,23,31)!important; }
+      }
       :host([data-biliglow-comments-active]) #disabled-commentbox #edit { background:transparent!important;box-shadow:none!important;border-color:transparent!important; }
     `,
     'bili-comment-box':`
       :host([data-biliglow-comments-active]),
       :host([data-biliglow-comments-active]) :is(#comment-area, #body, #editor, #footer, .tool-btn) { background:transparent!important;box-shadow:none!important; }
-      :host([data-biliglow-comments-active]) #editor { border-color:transparent!important; }
+      :host([data-biliglow-comments-active]) #editor {
+        background:var(--biliglow-comment-editor-bg,transparent)!important;
+        border-color:var(--biliglow-comment-editor-border,transparent)!important;
+        border-radius:var(--biliglow-comment-editor-radius,6px)!important;
+      }
       :host([data-biliglow-comments-active]) #editor:focus-within { outline:1px solid var(--brand_blue,#00aeec);outline-offset:1px; }
     `
   };
   // Firefox does not implement :host-context(). Mirror only our own active
   // state onto known hosts, including immediate fullscreen mode transitions.
   function setCommentActivity(active){
-    for(const host of commentStyles.keys())host.toggleAttribute('data-biliglow-comments-active',active&&kind==='video');
+    for(const host of commentStyles.keys()){
+      host.toggleAttribute('data-biliglow-comments-active',active&&kind==='video');
+      host.toggleAttribute('data-biliglow-comments-dark',active&&kind==='video'&&settings.dark);
+    }
   }
   function syncCommentSurfaces(){
     const active=document.documentElement.hasAttribute('data-biliglow-active');
     for(const [host,style] of commentStyles){
-      if(!active||kind==='live'||!host.isConnected){host.removeAttribute('data-biliglow-comments-active');style.remove();commentStyles.delete(host);}
+      if(!active||kind==='live'||!host.isConnected){
+        host.removeAttribute('data-biliglow-comments-active');host.removeAttribute('data-biliglow-comments-dark');
+        style.remove();commentStyles.delete(host);
+      }
     }
     if(!active||kind==='live')return;
     function visit(scope){
@@ -52,6 +77,7 @@
         const css=commentCSS[host.localName];
         if(css){
           host.setAttribute('data-biliglow-comments-active','');
+          host.toggleAttribute('data-biliglow-comments-dark',Boolean(settings.dark));
           let style=commentStyles.get(host);
           if(!style){
             style=document.createElement('style');style.dataset.biliglowComments='';
@@ -79,7 +105,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.16';
+    root.dataset.version='0.5.3.17';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);

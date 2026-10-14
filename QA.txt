@@ -1,3 +1,21 @@
+0.5.3.17 — 2026-10-14（GitHub 发布验证）
+
+Scope: user selected the original smoke material and requested a GitHub update including Firefox after testing the personal Chrome build. This release changes the dark pinned comment composer appearance and horizontal spacing. No extension-store submission is part of this update.
+
+Implementation:
+- Use an 80% smoke-gray base, 10px background blur, 14px top corners and a subtle edge on the complete pinned row. The editor uses a faint tint and 9px corners; avatar and publish button each have 16px horizontal breathing room. Border-box preserves native outer width and vertical padding.
+- Gate the material on the extension's active and dark state, mirrored onto known comment Shadow DOM hosts for Firefox compatibility. Preserve native input and toolbar behavior, focus outline and visible overflow for popovers. Unsupported backdrop-filter falls back to an opaque smoke background.
+- Reuse existing comment reconciliation. No new permissions, network transmission, frame loop or observer. Disable, consent withdrawal, fullscreen and host replacement remove owned state and restore the existing/native surfaces.
+
+Verified:
+- Final public manifest/version_name 0.5.3.17; package metadata 0.5.3+17. Runtime content.js and shared.js are unchanged from the user-tested 0.5.3.17-personal build.
+- 148/148 Node tests passed; independent privacy/lifecycle and package subset 40/40 passed. Syntax and git diff --check passed.
+- Chrome and Firefox each passed 23/23 local production-code comment-surface checks: dark material, 16px gaps with unchanged wrapper width, focus, native-shaped nested rich textarea, popover background/overflow, fixed/sticky modes, component replacement, light theme, unpinning and disable cleanup.
+- Firefox results and final material were inspected in the installed Firefox app using local synthetic media with production scripts. Chrome 0.5.3.17 was also observed on the actual Bilibili video page with the pinned composer. No signed Firefox install/upgrade or Edge host verification is claimed for this release.
+- All three ZIP CRCs passed; browser manifests and every runtime/source file match the verified repository. A fresh extraction of the matching source ZIP rebuilt Chromium, Firefox and source ZIPs byte-for-byte. Firefox keeps desktop minimum 140.0, its fixed Gecko ID, MV3 background scripts, data collection none and the offline privacy page.
+- Local archive SHA-256: Chromium (197828 bytes) b7f27c7185e0c09185f33da797f6b0c361fa7b40ce85dfb86ec971c71c43ab78; Firefox (207618 bytes) 2fd5c7deb3111a0e5971e2fa52af5c009db678651b1102d24b8a457d7d605dcc; source (218466 bytes) 0bd8501ec3a9242b4ab13c11b4792eeaf160bd6fbc8aee7711babf1d6e361f4e.
+- Screenshots and package-verification.json are retained in task outputs/release-0.5.3.17 and task outputs/firefox-0.5.3.17-*.png.
+
 0.5.3.16 — 2026-10-09（GitHub 正式版）
 
 Scope: keep ordinary, wide and web-fullscreen danmaku within the actual current picture. Follow-up: show complete top/bottom ordinary and fixed comments, preserve font size and animation, and avoid the native control strip. After local verification, the user authorized a formal GitHub 0.5.3.16 release and updates to Chrome, Edge and Firefox stores. Final publication and store submission results are recorded below.

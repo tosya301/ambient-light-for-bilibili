@@ -601,14 +601,18 @@ test('comment surface state follows native fullscreen immediately and never accu
   const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{comments:true});await h.ready();
   const host=h.comments[0];
   assert.equal(host.hasAttribute('data-biliglow-comments-active'),true);
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),true);
   assert.equal(host.shadowRoot.children.length,1);
   h.context.document.fullscreenElement=h.video;h.documentEvent('fullscreenchange');h.flush();
   assert.equal(host.hasAttribute('data-biliglow-comments-active'),false,'video-only native fullscreen restores surfaces before discovery interval');
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),false);
   h.context.document.fullscreenElement=null;h.documentEvent('fullscreenchange');h.flush();
   assert.equal(host.hasAttribute('data-biliglow-comments-active'),true);
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),true);
   h.reconcile();h.reconcile();assert.equal(host.shadowRoot.children.length,1);
   h.change({privacyAccepted:false,enabled:true});
   assert.equal(host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),false);
   assert.equal(host.shadowRoot.children.length,0,'revocation removes owned styles synchronously');
 });
 
@@ -616,25 +620,37 @@ test('rebuilt comment hosts are adopted and old hosts lose all extension state',
   const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{comments:true});await h.ready();
   const old=h.comments[0];old.isConnected=false;const next=h.addComment();h.reconcile();
   assert.equal(old.hasAttribute('data-biliglow-comments-active'),false);assert.equal(old.shadowRoot.children.length,0);
+  assert.equal(old.hasAttribute('data-biliglow-comments-dark'),false);
   assert.equal(next.hasAttribute('data-biliglow-comments-active'),true);assert.equal(next.shadowRoot.children.length,1);
+  assert.equal(next.hasAttribute('data-biliglow-comments-dark'),true);
   h.change({privacyAccepted:true,enabled:false});
   assert.equal(next.hasAttribute('data-biliglow-comments-active'),false);assert.equal(next.shadowRoot.children.length,0);
+  assert.equal(next.hasAttribute('data-biliglow-comments-dark'),false);
 });
 
-test('comment header styling leaves the native fixed and sticky composer base outside its override scope',async()=>{
+test('comment material follows dark mode without mutating native composer layout or background declarations',async()=>{
   const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{composer:{wrapperPosition:'fixed'}});await h.ready();
   const {host,wrapper,body}=h.composers[0];
   const nativeWrapper={...wrapper.style},nativeBody={...body.style};
   const style=host.shadowRoot.children.find(child=>child.localName==='style');
   assert.ok(style);
-  assert.doesNotMatch(style.textContent,/\.bili-comments-bottom-fixed-wrapper/,'the native full-row base must not be targeted by transparent background overrides');
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),true);
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),true);
   assert.deepEqual({...wrapper.style},nativeWrapper);assert.deepEqual({...body.style},nativeBody);
   wrapper.style.position='sticky';h.reconcile();
   assert.equal(wrapper.style.position,'sticky');assert.deepEqual({...body.style},nativeBody);
-  h.change({privacyAccepted:true,enabled:true,dark:false});assert.deepEqual({...body.style},nativeBody,'theme is inherited through the native bg1 variable');
+  h.change({privacyAccepted:true,enabled:true,dark:false});
+  assert.equal(host.hasAttribute('data-biliglow-comments-active'),true);
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),false,'light theme removes the smoke material gate immediately');
+  assert.equal(host.shadowRoot.children.filter(child=>child.localName==='style').length,1);
+  assert.deepEqual({...body.style},nativeBody,'theme changes preserve the native bg1 variable');
+  h.change({privacyAccepted:true,enabled:true,dark:true});
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),true);
+  assert.equal(host.shadowRoot.children.filter(child=>child.localName==='style').length,1);
   h.change({privacyAccepted:false,enabled:true});
   assert.equal(host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
   assert.equal(host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(host.hasAttribute('data-biliglow-comments-dark'),false);
   assert.deepEqual({...body.style},nativeBody,'revocation preserves all native composer declarations');
 });
 
@@ -643,13 +659,16 @@ test('native composer base survives header rebuild, position changes and extensi
   const original=h.composers[0];original.host.isConnected=false;
   const next=h.addComposer({wrapperPosition:'sticky'});h.reconcile();h.reconcile();
   assert.equal(original.host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(original.host.hasAttribute('data-biliglow-comments-dark'),false);
   assert.equal(original.host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
   assert.equal(next.host.shadowRoot.children.filter(child=>child.localName==='style').length,1);
+  assert.equal(next.host.hasAttribute('data-biliglow-comments-dark'),true);
   assert.equal(next.body.style.backgroundColor,'var(--bg1)');assert.equal(next.body.style.padding,'15px 0px');
   next.wrapper.remove();h.reconcile();
   assert.equal(next.wrapper.style.position,'sticky','leaving pinned mode does not overwrite detached native layout');
   h.change({privacyAccepted:true,enabled:false});
   assert.equal(next.host.hasAttribute('data-biliglow-comments-active'),false);
+  assert.equal(next.host.hasAttribute('data-biliglow-comments-dark'),false);
   assert.equal(next.host.shadowRoot.children.filter(child=>child.localName==='style').length,0);
   assert.equal(next.body.style.backgroundColor,'var(--bg1)');
 });
