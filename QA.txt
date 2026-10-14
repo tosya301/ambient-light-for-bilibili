@@ -1,6 +1,6 @@
 0.5.3.17 — 2026-10-14（GitHub 发布验证）
 
-Scope: user selected the original smoke material and requested a GitHub update including Firefox after testing the personal Chrome build. This release changes the dark pinned comment composer appearance and horizontal spacing. No extension-store submission is part of this update.
+Scope: user selected the original smoke material and requested a GitHub update including Firefox after testing the personal Chrome build. This release changes the dark pinned comment composer appearance and horizontal spacing. The user subsequently authorized updates to all three extension stores; submission and approval results are recorded below.
 
 Implementation:
 - Use an 80% smoke-gray base, 10px background blur, 14px top corners and a subtle edge on the complete pinned row. The editor uses a faint tint and 9px corners; avatar and publish button each have 16px horizontal breathing room. Border-box preserves native outer width and vertical padding.
@@ -18,7 +18,17 @@ Verified:
 
 0.5.3.17 publication — 2026-10-14
 
-Published v0.5.3.17 as Latest with draft=false and prerelease=false. Tag/code commit: 60efa41. Main and the new tag were pushed atomically without force. Chromium, Firefox and matching source ZIPs are all present. Independent anonymous downloads returned HTTP 200; downloaded sizes, SHA-256, bytes and ZIP CRCs match the validated local packages and GitHub asset digests listed above. Evidence: task outputs/release-0.5.3.17/public-download-verification.json. README and the project website include all three downloads and the Firefox 140+ unsigned temporary-loading/restart instructions. No store submission was performed.
+Published v0.5.3.17 as Latest with draft=false and prerelease=false. Tag/code commit: 60efa41. Main and the new tag were pushed atomically without force. Chromium, Firefox and matching source ZIPs are all present. Independent anonymous downloads returned HTTP 200; downloaded sizes, SHA-256, bytes and ZIP CRCs match the validated local packages and GitHub asset digests listed above. Evidence: task outputs/release-0.5.3.17/public-download-verification.json. README and the project website include all three downloads and the Firefox 140+ unsigned temporary-loading/restart instructions. No store submission had been performed at the time of the GitHub publication; the subsequent authorized store updates are recorded below.
+
+0.5.3.17 store updates — 2026-10-14
+
+The same validated release archives were submitted to the existing Chrome, Edge and Firefox listings. No runtime or archive changes, additional permissions or data transmission were introduced for these submissions.
+- Chrome: 0.5.3.17 submitted and confirmed Pending review. Automatic publication after approval was selected. The dashboard's published version at submission was 0.5.3.16.
+- Edge: 0.5.3.17 submitted and confirmed In review; online version 0.5.3.16 remains Live.
+- Firefox: version 6579043 / file 5123176 was submitted and initially showed Waiting review, then passed review; the AMO dashboard now shows the listed version as 0.5.3.17. Matching source ZIP, the 153-character public Chinese release notes and English reviewer notes were saved. Online validation returned 0 errors and 3 warnings. No signed-package installation, upgrade or restart-persistence testing is claimed.
+
+Chrome and Edge submission does not imply approval or public availability of 0.5.3.17. Firefox approval does not turn the separately published GitHub ZIP into a signed permanent-installation package: that archive remains an unsigned Firefox 140+ temporary-loading package and must be reloaded after a full browser restart. Historical 0.5.3.16 submission-time statuses below are retained unchanged.
+Evidence: task outputs/release-0.5.3.17/chrome-package-pending.txt, edge-submitted.txt and firefox-approved.txt/png; accompanying submission screenshots and saved listing/reviewer text are retained in the same task output directory.
 
 0.5.3.16 — 2026-10-09（GitHub 正式版）
 

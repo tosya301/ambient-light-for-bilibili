@@ -12,7 +12,7 @@
 - 2026-10-14：GitHub 0.5.3.17 已发布为最新正式版。三份附件均通过匿名公开下载，大小与 SHA-256 和已验证的本地包一致；匹配源码可逐字节重建两个浏览器包。
 - Chromium 与 Firefox 包使用同一版本功能源码，保留此前弹幕边界、圆角尺寸与评论滚动修复；不新增权限、采样循环或网络传输。
 - 148/148 项 Node 测试通过；Chrome 与 Firefox 各通过 23/23 项本地生产代码评论组件检查，磨砂、圆角及左右留白已核对。Chrome 已在真实 B 站验证 0.5.3.17 吸底评论栏；Firefox 使用本地合成媒体与生产脚本验证，未验证签名安装或升级。详见 [QA.txt](QA.txt)。
-- 本次更新范围为 GitHub，尚未提交 0.5.3.17 至扩展商店。下方商店状态均附历史日期，实际可安装版本以各商店页面为准。
+- 2026-10-14：0.5.3.17 已提交三个商店。Chrome 为 Pending review，审核通过后自动发布；Edge 为 In review；两者此次提交时的公开版均为 0.5.3.16。Firefox 已通过审核，AMO 后台显示上架版本为 0.5.3.17。Chrome 与 Edge 的提交审核不代表新版已公开上架，后续状态以各商店页面为准。
 
 ## 0.5.3.16：弹幕画面边界修复（正式版）
 
@@ -22,7 +22,7 @@
 
 - [GitHub 0.5.3.16](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.3.16)：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.16/Ambient-light-for-Bilibili-0.5.3.16-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.16/Ambient-light-for-Bilibili-0.5.3.16-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.3.16/Ambient-light-for-Bilibili-0.5.3.16-source.zip)。
 - 2026-10-09：GitHub 0.5.3.16 已发布为最新正式版；三个附件均通过匿名公开下载，大小、SHA-256 与已验证发行包一致，匹配源码可逐字节重建浏览器包。
-- 0.5.3.16 已提交三个商店：Chrome 为 Pending review，审核通过后自动发布，当前公开版为 0.5.3.15；Edge 为 In review，当前在线版为 0.5.3.15；Firefox 为等待审核，匹配源码、中文发行说明和审核备注已保存。提交审核不代表 0.5.3.16 已公开上架。
+- 历史提交记录（2026-10-09）：0.5.3.16 已提交三个商店。Chrome 为 Pending review，审核通过后自动发布，当时公开版为 0.5.3.15；Edge 为 In review，当时在线版为 0.5.3.15；Firefox 为等待审核，匹配源码、中文发行说明和审核备注已保存。提交审核不代表 0.5.3.16 当时已公开上架。
 
 ## 0.5.3.15：圆角尺寸与评论滚动修复
 
@@ -55,9 +55,11 @@
 
 同时包含 0.5.3.11 的吸底评论栏修复：保留完整的不透明底板，避免后方评论文字和配图透进头像、输入框与工具栏；普通内联评论继续透光。验证范围见 [QA.txt](QA.txt)。
 
-## Firefox 商店进展（2026-10-09）
+## Firefox 商店进展（2026-10-14）
 
-**Mozilla Add-ons 0.5.3.16 已提交并等待审核，匹配源码、中文发行说明和审核备注已保存并刷新核对。本次在线校验为 0 错误、3 项已有警告。此为 2026-10-09 的历史审核记录；GitHub 当前体验包见下方，普通安装与更新以商店审核、签名和发布结果为准。** 发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本，不声明 Android 支持。审核完成后可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 安装；等待期间该页面可能无法公开访问。
+**Mozilla Add-ons 0.5.3.17 已通过审核，AMO 后台显示上架版本为 0.5.3.17。匹配源码、中文发行说明和英文审核备注已保存；本次在线校验为 0 错误、3 项警告。** 可通过 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) 普通安装。发布者为 Deperenn，采用 MIT 许可证，面向 Firefox 桌面端 140 及以上版本，不声明 Android 支持。GitHub 下方 ZIP 仍为未签名临时体验包，商店通过审核不改变该 ZIP 的安装方式；本次未实测签名包安装或升级。
+
+历史记录（2026-10-09）：0.5.3.16 已提交并等待审核，匹配源码、中文发行说明和审核备注已保存并刷新核对。当次在线校验为 0 错误、3 项已有警告。
 
 历史记录（2026-10-08）：0.5.3.15 的 AMO 在线校验与本地 web-ext 校验均为 0 错误、3 项已有警告。Chrome 与 Firefox 各通过 196 项本地比例／布局／去边组合检查和 60 项小窗滚动检查；Firefox 当次结果来自生产代码与本地合成视频，不等同于真实 B 站或签名安装、升级验证。提交版本与验证范围详见 [QA.txt](QA.txt)。上传 0.5.3.15 后，AMO 已将 0.5.3.14 和 0.5.3.13 列为停用旧版；没有手动取消或删除这些 AMO 版本。GitHub 0.5.3.14 Release 与三份附件仍保留。
 
@@ -70,7 +72,7 @@
 3. 点击「临时载入附加组件」，选择解压目录内的 `manifest.json`。
 4. 刷新 Bilibili 播放页面，从小电视按钮或工具栏扩展图标打开设置并开启氛围光。
 
-**这是未签名的临时体验包，完全退出并重启 Firefox 后需要重新载入。** 下载 ZIP 本身不会完成普通安装，不要选择 Chromium 包或仓库原始 `extension/manifest.json`。无需关闭签名检查或其他安全设置。长期安装请等待商店审核与签名完成。机制见 [Mozilla 临时安装说明](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/)。
+**这是未签名的临时体验包，完全退出并重启 Firefox 后需要重新载入。** 下载 ZIP 本身不会完成普通安装，不要选择 Chromium 包或仓库原始 `extension/manifest.json`。无需关闭签名检查或其他安全设置。长期安装请使用 [Firefox Add-ons 商店页面](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/)。机制见 [Mozilla 临时安装说明](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/)。
 
 ## Firefox 桌面发行方式（自 0.5.3.10）
 
@@ -183,7 +185,7 @@ Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开�
 | --- | --- | --- | --- |
 | Chrome Web Store | Deperenn | txim301@gmail.com | [Chrome 版政策](https://tosya301.github.io/ambient-light-for-bilibili/privacy-chrome.html) |
 | Microsoft Edge Add-ons | TXIM301 | txim301@outlook.com | [Edge 版政策](https://tosya301.github.io/ambient-light-for-bilibili/privacy-edge.html) |
-| [Firefox Add-ons（等待审核）](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) | Deperenn | txim301@gmail.com | [Firefox 版政策源码](docs/privacy-firefox.html)，发行包内可离线查看 |
+| [Firefox Add-ons](https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/) | Deperenn | txim301@gmail.com | [Firefox 版政策源码](docs/privacy-firefox.html)，发行包内可离线查看 |
 
 [项目与政策页面](https://tosya301.github.io/ambient-light-for-bilibili/)
 
