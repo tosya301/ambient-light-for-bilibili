@@ -1,17 +1,17 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.6（发布准备）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.6（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.6：直播悬停底栏圆角与白线修复（发布准备）
+## 0.5.6：直播悬停底栏圆角与白线修复（正式版）
 
 修复鼠标划过直播画面或停在底栏时，黑色渐变重新露出尖角的问题；同时补齐普通与网页模式圆角边缘的细白线。只调整底栏背景的绘制，视频仍保持原来的 12px 圆角、尺寸与位置，播放按钮和向上展开的菜单保持可用。
 
-- 正在准备 [GitHub 0.5.6](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.6)，目标附件为：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-source.zip)。发布与公开下载结果确认后补记。
+- 2026-10-15：[GitHub 0.5.6](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.6) 已发布为最新正式版，提供：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-source.zip)。
 - 本地修复版通过 181/181 项 Node 测试；Chrome 与 Firefox 各通过 188/188 项生产代码合成场景检查，覆盖原生样式重写、控件重建、模式切换和关闭还原。Chrome 真实直播普通与网页模式中，已实际将鼠标停在底栏检查，用户随后确认修复完成。
 - Firefox 本轮使用原生应用、本地合成媒体及当前生产源码验证；未验证签名安装／升级、真实 B 站 Firefox 页面或原生系统全屏。详细范围见 [QA.txt](QA.txt)。
-- 三包通过 38 项独立检查，匹配源码可逐字节重建 Chromium、Firefox 与源码 ZIP；发布及匿名公开下载结果待确认。
+- 三包通过 38 项独立检查，匹配源码可逐字节重建 Chromium、Firefox 与源码 ZIP。三份附件的匿名公开下载均返回 HTTP 200，大小、SHA-256、完整内容和 ZIP CRC 均与已验证本地包一致，GitHub 附件摘要一致；见[公开下载验证记录](qa/release-0.5.6-public-download-verification.json)。
 - 保留 0.5.5 的弹幕稳定性与竖屏弹幕全宽修复，不增加权限或数据传输。本轮仅更新 GitHub，未提交扩展商店；下方商店状态为附日期的历史记录。
 
 ## 0.5.5：直播弹幕不再上下跳动，竖屏弹幕扩展为全宽（历史正式版）
@@ -101,7 +101,7 @@
 
 ## Firefox 提前体验
 
-使用 **Firefox 桌面版 140 或更高版本**。本轮准备 [Firefox 0.5.6 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-firefox.zip)，包含直播悬停底栏圆角与白线修复，并保留 0.5.5 的弹幕跳动与竖屏弹幕全宽修复，无需自行构建。发布结果见本文顶部；Firefox 原生应用已通过 188/188 项本地生产代码合成检查，未验证签名安装／升级或真实 B 站 Firefox 页面。
+使用 **Firefox 桌面版 140 或更高版本**。下载 [Firefox 0.5.6 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-firefox.zip)，包含直播悬停底栏圆角与白线修复，并保留 0.5.5 的弹幕跳动与竖屏弹幕全宽修复，无需自行构建。Firefox 原生应用已通过 188/188 项本地生产代码合成检查，未验证签名安装／升级或真实 B 站 Firefox 页面。
 
 1. 解压 `Ambient-light-for-Bilibili-0.5.6-firefox.zip`。
 2. 在 Firefox 地址栏打开 `about:debugging#/runtime/this-firefox`。
@@ -199,7 +199,7 @@
 
 ## 安装与使用
 
-本轮准备 [GitHub 0.5.6](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.6) 的 `Ambient-light-for-Bilibili-0.5.6-chromium.zip`，发布结果见本文顶部。下载后解压并本地加载，包含直播悬停底栏圆角与白线修复，保留点播、稍后再看、普通与 `/blanc/` 直播间、0.5.5 的弹幕修复及原有外观设置。本轮 0.5.6 未提交商店；可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看各渠道当前可用版本。
+下载 [GitHub 0.5.6](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.6) 的 `Ambient-light-for-Bilibili-0.5.6-chromium.zip`，解压后本地加载，包含直播悬停底栏圆角与白线修复，保留点播、稍后再看、普通与 `/blanc/` 直播间、0.5.5 的弹幕修复及原有外观设置。本轮 0.5.6 未提交商店；可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看各渠道当前可用版本。
 
 Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 请下载上方的专用体验包，按「Firefox 提前体验」步骤临时加载。
 
