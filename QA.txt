@@ -1,6 +1,6 @@
 0.5.4 — 2026-10-15（GitHub 正式版）
 
-Scope: after confirming the r6 personal build fixed the live-player issue, the user authorized version 0.5.4, a GitHub update with Chromium, Firefox and matching-source packages, and a local personal-install update. This authorization supersedes the earlier personal-only scope. The user subsequently authorized store updates, then requested that Chrome be handled in a separate session. Edge and Firefox results are recorded below.
+Scope: after confirming the r6 personal build fixed the live-player issue, the user authorized version 0.5.4, a GitHub update with Chromium, Firefox and matching-source packages, and a local personal-install update. This authorization supersedes the earlier personal-only scope. The user subsequently authorized store updates. Chrome was completed in a separate session at the user's request; all three store results are recorded below.
 
 Implementation:
 - Give expanded live audience/high-energy-rank and fleet/guard panels an opaque dark rounded base so page content does not show through them.
@@ -27,9 +27,9 @@ Published v0.5.4 as the latest formal GitHub release at https://github.com/tosya
 
 - Edge: the validated 0.5.4 Chromium archive was submitted; the dashboard confirms Version 0.5.4 / In review. The previous online version 0.5.3.17 remains Live. Listing text and reviewer notes were saved. Evidence: task outputs/release-0.5.4/edge-submitted.txt and edge-submitted.png.
 - Firefox: submission completed for version 6581420 / file 5125552. AMO version details show 0.5.4 approved and listed. The matching source archive is uploaded and has the current-source view link. Online validation returned 0 errors and 3 warnings. Chinese release notes, 2352-character reviewer notes with build steps, and the updated product description were saved. The version page confirms changes saved successfully. Evidence: task outputs/release-0.5.4/firefox-version-saved.txt/png, firefox-listing-saved.txt/png, firefox-submitted.txt/png and firefox-upload-validation.txt. This approval is not a signed-installation or upgrade test.
-- Chrome: the user explicitly deferred this channel to a separate session. No 0.5.4 submission is confirmed in this session; do not report it as pending review or approved.
+- Chrome: 0.5.4 was submitted in a separate authorized session. Its completion record confirms Pending review with automatic publication after approval selected. The saved screenshot was independently inspected and shows Status: Pending review, the submission confirmation and the 0.5.4 update description. Evidence: task outputs/release-0.5.4/chrome-submitted-other-session.jpg.
 
-Edge review does not imply public availability of 0.5.4. GitHub package bytes and source are unchanged; the separately published Firefox ZIP remains unsigned and requires temporary loading and reloading after browser restart. The local personal extension remains at 0.5.4-personal on disk with manual browser reload unconfirmed.
+Chrome and Edge review do not imply public availability of 0.5.4. GitHub package bytes and source are unchanged; the separately published Firefox ZIP remains unsigned and requires temporary loading and reloading after browser restart. The local personal extension remains at 0.5.4-personal on disk with manual browser reload unconfirmed.
 
 0.5.3.17 — 2026-10-14（GitHub 发布验证）
 

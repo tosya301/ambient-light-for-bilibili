@@ -12,7 +12,7 @@
 
 - 2026-10-15：[GitHub 0.5.4](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.4) 已发布为最新正式版，提供 [Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-chromium.zip)、[Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-firefox.zip) 和 [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-source.zip)。三份附件的匿名公开下载均返回 HTTP 200，大小、SHA-256、ZIP CRC 与文件内容均通过核对，与已验证本地包一致；见[公开下载验证记录](qa/release-0.5.4-public-download-verification.json)。
 - 172/172 项 Node 测试通过；Firefox 与内置浏览器各通过 120/120 项本地生产代码检查。Chrome 真实直播页面的圆角、底栏和榜单已核验；Firefox 使用本地合成媒体与生产代码检查，未验证签名安装或升级。详细范围见 [QA.txt](QA.txt)。
-- 截至 2026-10-15，Edge 0.5.4 已提交审核（In review），提交时在线版为 0.5.3.17；Firefox 0.5.4 的 AMO 后台显示已通过审核且为上架版本。Chrome 0.5.4 将另行处理，目前尚未确认提交。Edge 提交审核不代表新版已公开上架。下方 0.5.3.17 商店状态保留为历史记录。
+- 截至 2026-10-15，Chrome 0.5.4 已提交审核（Pending review），审核通过后自动发布；Edge 0.5.4 已提交审核（In review），提交时在线版为 0.5.3.17；Firefox 0.5.4 的 AMO 后台显示已通过审核且为上架版本。Chrome 与 Edge 提交审核不代表新版已公开上架。下方 0.5.3.17 商店状态保留为历史记录。
 
 ## 0.5.3.17：烟灰磨砂评论栏（历史）
 
