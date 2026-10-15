@@ -99,10 +99,14 @@ function frameFixture(){
   const attrs=new Set(),rect={left:100,top:50,width:960,height:540};
   const frame={closest:()=>null,hasAttribute:key=>attrs.has(key),toggleAttribute(key,on){if(on)attrs.add(key);else attrs.delete(key);},removeAttribute:key=>attrs.delete(key),getBoundingClientRect:()=>({...rect})};
   const container={screen:'normal',tagName:'DIV',getAttribute(){return this.screen;},contains:()=>true};
-  const video={isConnected:true,videoWidth:1920,videoHeight:1080,closest:selector=>selector==='.bpx-player-container'?container:frame};
+  const videoAttrs=new Set(),videoStyles=new Map();
+  const video={isConnected:true,videoWidth:1920,videoHeight:1080,closest:selector=>selector==='.bpx-player-container'?container:frame,
+    getBoundingClientRect:()=>({...rect}),hasAttribute:key=>videoAttrs.has(key),setAttribute:key=>videoAttrs.add(key),removeAttribute:key=>videoAttrs.delete(key),
+    style:{getPropertyValue:key=>videoStyles.get(key)||'',setProperty:(key,value)=>videoStyles.set(key,value),removeProperty:key=>videoStyles.delete(key)}};
   const root={children:[],append(child){this.children.push(child);}};
   const sandbox=vm.createContext({document:{createElement:()=>({dataset:{},style:{},setAttribute(){}})},
-    innerWidth:1280,innerHeight:800,getComputedStyle:()=>({borderRadius:attrs.has('data-biliglow-rounded')?'12px':'0px'})});
+    innerWidth:1280,innerHeight:800,getComputedStyle:()=>({borderRadius:attrs.has('data-biliglow-rounded')?'12px':'0px',objectFit:'contain'})});
+  vm.runInContext(fs.readFileSync(__dirname+'/../extension/shared.js','utf8'),sandbox);
   vm.runInContext(fs.readFileSync(__dirname+'/../extension/player.js','utf8'),sandbox);
   const api=sandbox.BiliGlowPlayer,effect=api.createFrame(root),origin={left:0,top:0};
   return {api,effect,video,container,frame,rect,origin,shadow:root.children[0],
@@ -319,10 +323,11 @@ test('replacing a native-sized frame removes its owned attribute from the old fr
   old.effect.clear();assert.equal(next.frame.hasAttribute('data-biliglow-native-size'),false);
 });
 
-test('live frames retain their existing rounded behavior without VOD native-size classification',()=>{
+test('live media rounds independently without the VOD container or native-size classification',()=>{
   const h=frameFixture(),settings={enabled:true,roundedCorners:true,frameShadow:0};
   h.video.videoWidth=1080;h.video.videoHeight=1080;h.update(settings);assert.equal(h.frame.hasAttribute('data-biliglow-native-size'),true);
   h.update(settings,null,'live');
   assert.equal(h.frame.hasAttribute('data-biliglow-native-size'),false);
-  assert.equal(h.rounded(),true);
+  assert.equal(h.rounded(),false,'live player controls and menus are outside the rounded media clip');
+  assert.equal(h.video.hasAttribute('data-biliglow-live-picture-rounded'),true);
 });

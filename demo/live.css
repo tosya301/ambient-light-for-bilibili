@@ -8,3 +8,36 @@
 .fixture-web-chat #gift-control-vm{height:84px;min-height:84px;border-radius:0;position:relative;z-index:1001}
 .fixture-web-chat #aside-area-vm{position:fixed;right:0;top:0;width:300px;height:100vh;z-index:1000;border-radius:0;overflow:hidden}
 .fixture-web-chat .lab-controls{background:repeating-linear-gradient(45deg,#df327f 0 30px,#624dce 30px 60px);min-height:500px}
+/* Native full-player video/overlay boxes deliberately disagree with the
+   contained picture in web and portrait modes. Production CSS owns the fix. */
+#live-player > #synthetic-video{position:absolute;inset:0;width:100%;height:100%}
+#live-player > :is(.web-player-danmaku,#animation-mask-wrapper,.web-player-inject-wrap){position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:2}
+.web-player-danmaku > .danmaku-item-container,#animation-mask-wrapper > #move-wrapper,.web-player-inject-wrap > #businessContainerElement{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.fixture-danmaku-line,.fixture-gift,.fixture-notification{position:absolute;left:100%;white-space:nowrap;animation:fixture-live-traverse 12s linear infinite;font-size:18px;font-weight:600;text-shadow:0 1px 3px #000,1px 0 2px #000}
+.fixture-danmaku-line{top:19%}.fixture-danmaku-line.alternate{top:29%;animation-delay:-5s;color:#e6c7ff}
+.fixture-gift{top:45%;animation-duration:16s;color:#ffe0a6}
+.fixture-notification{top:60%;animation-duration:18s;animation-delay:-8s;padding:6px 13px;border:1px solid #c6e9ff55;border-radius:8px;background:#11385de8;color:#eafaff;font-size:13px}
+#center-tip{position:absolute;left:0;right:0;top:8%;text-align:center;color:#ffffffaa;font-size:10px;letter-spacing:2px}
+.on-screen-label,.player-toolbar{z-index:5}.offline-overlay{z-index:6}
+#live-picture-results,#live-native-picture-results,#live-control-shade-results,#live-track-results{display:block;white-space:pre-line;font-size:11px;line-height:1.8;margin-top:15px;padding:12px 16px;border:1px solid #ffffff15;border-radius:9px;background:#15152255}
+@keyframes fixture-live-traverse{from{transform:translateX(0)}to{transform:translateX(calc(-100vw - 100%))}}
+/* Fixture's native player behavior, independent of extension selectors. */
+#fullscreen-container:fullscreen{width:100vw;height:100vh;background:#080a11}
+#fullscreen-container:fullscreen .player-section,#fullscreen-container:fullscreen #live-player-ctnr,#fullscreen-container:fullscreen #live-player{width:100%;height:100%;max-height:none;aspect-ratio:auto}
+#exit-native-fullscreen{display:none}
+#fullscreen-container:fullscreen #exit-native-fullscreen{display:block}
+/* Native controls sit in a zero-height full-width anchor above a separate
+   56px gradient. Production CSS may align both to the contained picture. */
+.player-toolbar{z-index:11;background:none}
+.player-toolbar #scene-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.player-toolbar .resolution{min-width:0;overflow:hidden;white-space:nowrap;flex-shrink:2}.player-toolbar>button{white-space:nowrap}
+.fixture-controller-menu{position:relative;margin-left:auto;font-size:10px}
+.fixture-controller-menu summary{cursor:pointer;padding:5px 9px;border:1px solid #ffffff55;border-radius:5px;background:#120d2c90;list-style:none}
+.fixture-controller-menu-panel{position:absolute;right:0;bottom:calc(100% + 10px);width:180px;padding:12px;background:#1b2232;border:1px solid #ffffff33;border-radius:8px;box-shadow:0 4px 16px #0006}
+.fixture-controller-menu-panel strong{display:block;font-size:10px;font-weight:500;margin-bottom:8px}.fixture-controller-menu-panel button{white-space:nowrap}
+/* Observed native engine positioning. Production code must preserve the
+   original --top/--translateY and horizontal transforms while fitting tracks. */
+.bili-danmaku-x-dm{position:absolute;white-space:nowrap;font-size:var(--fontSize,24px);line-height:1.125;font-weight:600;color:white;text-shadow:0 1px 3px #000,1px 0 2px #000;pointer-events:none}
+.bili-danmaku-x-roll{left:100%;top:var(--top,0px);animation:fixture-live-traverse 12s linear infinite}
+.bili-danmaku-x-center{top:0;left:50%;transform:translate(-50%,var(--translateY,0px))}
+.fixture-tall-emoji{vertical-align:middle;display:inline-block;width:48px;height:48px}
+.bili-danmaku-x-dm:not(.bili-danmaku-x-show){display:none}

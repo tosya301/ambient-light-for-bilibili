@@ -6,7 +6,7 @@
   const video=()=>frame().querySelector('video');
   const light=()=>$('[data-biliglow-root]');
   const shadow=()=>light().shadowRoot.querySelector('[data-biliglow-frame-shadow]');
-  const rounded=()=>frame().hasAttribute('data-biliglow-rounded');
+  const rounded=()=>live?video().hasAttribute('data-biliglow-live-picture-rounded'):frame().hasAttribute('data-biliglow-rounded');
   const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   async function until(test){for(let i=0;i<60;i++){if(test())return;await wait(60);}throw new Error('播放器外观未按预期更新');}
   // Reproduce the live VOD DOM's 9px downward overflow. A hidden overflow
@@ -52,7 +52,7 @@
       const ui=$('[data-biliglow-ui]').shadowRoot;if(ui.querySelector('.holder').hidden)ui.querySelector('.launcher').click();
       const panel=ui.querySelector('.holder').shadowRoot;panel.querySelector('[data-tab=picture]').click();
       panel.querySelector('#roundedCorners').click();await until(()=>rounded());
-      check(getComputedStyle(frame()).borderRadius==='12px'&&getComputedStyle(frame()).overflow===(live?'hidden':'clip'),'设置开关使四个角均为 YouTube 的 12px 圆角');
+      check(live?getComputedStyle(video()).clipPath.includes('round 12px')&&getComputedStyle(frame()).overflow===baseOverflow:getComputedStyle(frame()).borderRadius==='12px'&&getComputedStyle(frame()).overflow==='clip','设置开关使实际画面四角呈现12px圆角，保留原生控制层');
       if(!live)await checkNoScroll('普通模式');
       check(shadow().style.display==='none','只开圆角不会自动添加阴影');
       const slider=panel.querySelector('#frameShadow');slider.value='35';slider.dispatchEvent(new Event('input',{bubbles:true}));slider.dispatchEvent(new Event('change',{bubbles:true}));
@@ -66,7 +66,7 @@
       check(getComputedStyle(shadow()).pointerEvents==='none'&&getComputedStyle(shadow()).backgroundColor==='rgba(0, 0, 0, 0)','阴影层不覆盖画面或拦截点击');
       const control=$(live?'.player-toolbar':'.bpx-player-dm-input'),cr=control.getBoundingClientRect(),hit=document.elementFromPoint(cr.x+cr.width/2,cr.y+cr.height/2);
       check(hit===control||control.contains(hit),'播放器控件或弹幕输入框仍可命中');
-      const r=frame().getBoundingClientRect(),sr=shadow().getBoundingClientRect();
+      const r=live?B.contentRect(video().getBoundingClientRect(),video().videoWidth,video().videoHeight,getComputedStyle(video()).objectFit):frame().getBoundingClientRect(),sr=shadow().getBoundingClientRect();
       check(['left','top','width','height'].every(k=>Math.abs(r[k]-sr[k])<1),'阴影准确贴合画面区，不包住聊天或发送栏');
       check(getComputedStyle(light()).clipPath!=='none','圆角光效遮罩是浏览器支持的有效路径');
       await B.storage.set({roundedCorners:false});await until(()=>!rounded());
@@ -89,7 +89,7 @@
         $('#theater').click();await until(()=>light().dataset.mode==='normal'&&rounded());
       }
       $('#web-fullscreen').click();await until(()=>light().dataset.mode==='fullscreen');
-      check(!rounded()&&shadow().style.display==='none'&&getComputedStyle(frame()).borderRadius===baseRadius&&getComputedStyle(frame()).overflow===baseOverflow,'网页全屏自动撤去圆角和阴影，恢复原生溢出样式');
+      check(live?rounded()&&shadow().style.display==='block'&&getComputedStyle(frame()).overflow===baseOverflow:!rounded()&&shadow().style.display==='none'&&getComputedStyle(frame()).borderRadius===baseRadius&&getComputedStyle(frame()).overflow===baseOverflow,live?'直播网页模式保留画面圆角和阴影，控制层溢出规则不变':'点播网页全屏保持原有方角行为');
       check(Boolean($('[data-biliglow-backdrop]')),'全屏遮挡底层页面的修复仍然保留');
       leave();await until(()=>rounded()&&shadow().style.display==='block');check(true,'退出全屏自动恢复保存的外观');
       await B.storage.set({enabled:false});await until(()=>!rounded());

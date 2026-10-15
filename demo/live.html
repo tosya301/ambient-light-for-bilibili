@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>合成直播测试 · Ambient light for Bilibili</title>
-  <link rel="stylesheet" href="../extension/page.css?v=0.5.3.7">
-  <link rel="stylesheet" href="live.css?v=0.5.3.7">
+  <link rel="stylesheet" href="../extension/page.css?v=0.5.4">
+  <link rel="stylesheet" href="live.css?v=0.5.4">
 </head>
 <body>
   <div class="room-bg" aria-hidden="true"></div>
@@ -31,9 +31,23 @@
                 <div id="live-player-ctnr" class="normal" data-screen="normal">
                   <div id="live-player">
                     <video id="synthetic-video" muted autoplay playsinline aria-label="本地合成直播画面"></video>
+                    <!-- Native direct-child overlay hierarchy observed on live.bilibili.com.
+                         The moving content is synthetic and never sends messages. -->
+                    <div class="web-player-danmaku" aria-hidden="true"><div class="danmaku-item-container">
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show" data-fixture-track="roll-top" style="--top:-14px;animation-delay:-3s">顶部滚动弹幕 · 整行都应可见</span>
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show" data-fixture-track="roll-bottom" style="--top:6000px;animation-delay:-6s">缓存底轨 · 不应裁掉下半行</span>
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-center bili-danmaku-x-show" data-fixture-track="fixed-top" style="--translateY:-12px">固定顶部弹幕</span>
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-center bili-danmaku-x-show" data-fixture-track="fixed-bottom" style="--translateY:6100px">固定底部弹幕</span>
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show" data-fixture-track="emoji-bottom" style="--top:6200px;animation-delay:-9s">高表情也需完整 <img class="fixture-tall-emoji" width="48" height="48" alt="星星表情" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23ffd97b' d='m24 2 7 14 15 2-11 11 3 16-14-8-14 8 3-16L2 18l15-2z'/%3E%3C/svg%3E"></span>
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show" data-fixture-track="emoji-peer" style="--top:6200px;animation-delay:-7s">和高表情共享原生底轨</span>
+                      <span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show bili-danmaku-x-dm-rotate" data-fixture-track="rotate-helper" style="--top:-90px;left:200%">旋转辅助节点保留原生定位</span>
+                    </div></div>
+                    <div id="animation-mask-wrapper" aria-hidden="true"><div id="move-wrapper"><span class="fixture-gift">✦ 合成礼物动画</span></div><div id="center-tip">本地直播画面边界样本</div></div>
+                    <div class="web-player-inject-wrap" aria-hidden="true"><div id="businessContainerElement"><span class="fixture-notification">系统通知样例 · 只在视频画面内移动</span></div></div>
+                    <div class="web-player-controller-bg web-player-controller-wrap" aria-hidden="true" style="display:none;position:absolute;bottom:0;left:0;width:100%;z-index:10;height:56px;background:linear-gradient(transparent,rgba(0,0,0,.85));pointer-events:none"></div>
                     <div class="on-screen-label"><span class="live-pill"><i></i>SYNTHETIC LIVE</span><span>画面由本机 Canvas 实时生成</span></div>
                     <div class="offline-overlay" hidden><span>◌</span><strong>合成直播已停止</strong><p>点击“重连直播”重新建立播放器</p></div>
-                    <div class="player-toolbar"><span class="clock" id="scene-clock">00:00</span><span id="scene-name">01 / 粉紫花园</span><button id="exit-web" type="button" hidden>退出网页全屏 · Esc</button><span class="resolution" id="resolution-label">960 × 540 · 30 fps</span></div>
+                    <div id="web-player-controller-wrap-el" class="web-player-controller-wrap" style="position:absolute;bottom:0;left:0;width:100%;height:0;z-index:11;overflow:visible"><div class="player-toolbar"><span class="clock" id="scene-clock">00:00</span><span id="scene-name">01 / 粉紫花园</span><button id="exit-web" type="button" hidden>退出网页全屏 · Esc</button><button id="exit-native-fullscreen" type="button">退出原生全屏 · Esc</button><details class="fixture-controller-menu"><summary>画质样例</summary><div class="fixture-controller-menu-panel"><strong>仅用于命中测试</strong><button type="button">原画 · 本地合成流</button></div></details><span class="resolution" id="resolution-label">960 × 540 · 30 fps</span></div></div>
                   </div>
                 </div>
               </div>
@@ -71,22 +85,32 @@
             <details class="sample-menu"><summary>菜单底色样本 ▾</summary><div class="sample-menu-panel" id="protected-menu"><strong>应保留的菜单底色</strong><p>菜单仍有不透明背景，防止选项与流光混在一起。</p><span>清晰度 · 测试项</span><span>播放线路 · 测试项</span></div></details>
             <button type="button" class="run-tests" id="run-live-tests">运行直播自检</button>
             <button type="button" id="run-web-tests">运行网页模式回归</button>
+            <button type="button" id="run-live-picture-tests">运行直播画面边界回归</button>
+            <button type="button" id="run-live-native-picture-tests">测试原生全屏与退出恢复</button>
+            <button type="button" id="toggle-live-control-shade" aria-pressed="false">固定显示控制栏底色</button>
+            <button type="button" id="run-live-control-shade-tests">运行直播底栏圆角回归</button>
+            <button type="button" id="run-live-track-tests">运行弹幕完整可见回归</button>
           </div>
           <div class="test-report" id="live-test-report" data-state="idle" aria-live="polite"><div class="test-report-heading"><strong>浏览器自检</strong><output id="live-test-summary">等待运行 · 不会自动同意或保存测试参数</output></div><ol id="live-test-results"></ol></div>
+          <output id="live-picture-results" data-state="idle" aria-live="polite">直播画面边界：等待运行</output>
+          <output id="live-native-picture-results" data-state="idle" aria-live="polite">原生全屏：等待点击测试；会真实进入全屏并自动退出，不支持或拒绝会明确报告。</output>
+          <output id="live-control-shade-results" data-state="idle" aria-live="polite">底栏渐变：鼠标移入画面可见，也可固定显示。等待运行回归。</output>
+          <output id="live-track-results" data-state="idle" aria-live="polite">弹幕完整显示：等待运行。测试真实全屏、普通模式和网页模式的顶部、底部及高表情轨道。</output>
           <p class="test-footnote">本页验证本地合成流、DOM 结构与生产代码的协作；不能替代真实 Bilibili 直播的播放器、线路和浏览器宿主实测。</p>
         </section>
-        <footer><span>Ambient light for Bilibili <b>· 0.5.3 基础 / 本地直播实验</b></span><a href="index.html">返回点播测试 ↗</a></footer>
+        <footer><span>Ambient light for Bilibili <b>· 0.5.4 / 本地直播检查</b></span><a href="index.html">返回点播测试 ↗</a></footer>
       </div>
     </main>
   </div>
   <video id="hidden-preview-video" class="hidden-preview-video" muted autoplay playsinline aria-hidden="true"></video>
-  <script src="../extension/shared.js?v=0.5.3.7"></script>
-  <script src="../extension/player.js?v=0.5.3.7"></script>
+  <script src="../extension/shared.js?v=0.5.4"></script>
+  <script src="../extension/player.js?v=0.5.4"></script>
   <script src="../extension/preview.js"></script>
   <script src="../extension/bars.js"></script>
   <script src="../extension/bar-effects.js"></script>
-  <script src="live.js?v=0.5.3.7"></script>
-  <script src="../extension/content.js?v=0.5.3.7"></script>
-  <script src="live-web-tests.js?v=0.5.3.7"></script>
+  <script src="live.js?v=0.5.4"></script>
+  <script src="../extension/content.js?v=0.5.4"></script>
+  <script src="live-web-tests.js?v=0.5.4"></script>
+  <script src="live-picture-tests.js?v=0.5.4-summary"></script>
 <script src="frame-tests.js"></script><script src="live-color-tests.js"></script></body>
 </html>

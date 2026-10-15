@@ -1,0 +1,290 @@
+{
+  "version": "0.5.4",
+  "verified_at_utc": "2026-10-15T14:35:42.458284+00:00",
+  "checks": {
+    "zip_crc_all_passed": true,
+    "zip_entries_are_safe_and_unique": true,
+    "manifest_versions_all_match": true,
+    "permissions_and_site_scope_unchanged_from_v0_5_3_17": true,
+    "runtime_files_match_repository": true,
+    "source_files_match_repository": true,
+    "source_rebuild_all_three_byte_identical": true
+  },
+  "rebuild": {
+    "command": "node scripts/package.cjs --browser all --out-dir <fresh-directory>",
+    "input": "fresh extraction of matching source ZIP",
+    "dependencies": "Node.js standard library only; no install or network access required"
+  },
+  "artifacts": [
+    {
+      "browser": "chromium",
+      "filename": "Ambient-light-for-Bilibili-0.5.4-chromium.zip",
+      "bytes": 217665,
+      "sha256": "eef626a2d27d7e02938b289219358aa3494305b023fc3799878d9e1a8409f185",
+      "entry_count": 18,
+      "crc_ok": true,
+      "entries": [
+        "LICENSE",
+        "_locales/zh_CN/messages.json",
+        "background.js",
+        "bar-effects.js",
+        "bars.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "manifest.json",
+        "page.css",
+        "player.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "preview.js",
+        "shared.js"
+      ],
+      "manifest": {
+        "manifest_version": 3,
+        "name": "__MSG_extensionName__",
+        "version": "0.5.4",
+        "description": "__MSG_extensionDescription__",
+        "minimum_chrome_version": "111",
+        "permissions": [
+          "storage"
+        ],
+        "icons": {
+          "16": "icons/16.png",
+          "32": "icons/32.png",
+          "48": "icons/48.png",
+          "128": "icons/128.png"
+        },
+        "action": {
+          "default_title": "Ambient light for Bilibili",
+          "default_popup": "popup.html"
+        },
+        "background": {
+          "service_worker": "background.js"
+        },
+        "commands": {
+          "toggle-ambient": {
+            "suggested_key": {
+              "default": "Alt+Shift+A"
+            },
+            "description": "开启 / 关闭 Bilibili 氛围光"
+          }
+        },
+        "content_scripts": [
+          {
+            "matches": [
+              "https://www.bilibili.com/*",
+              "https://live.bilibili.com/*"
+            ],
+            "js": [
+              "shared.js",
+              "player.js",
+              "preview.js",
+              "bars.js",
+              "bar-effects.js",
+              "content.js"
+            ],
+            "css": [
+              "page.css"
+            ],
+            "run_at": "document_idle"
+          }
+        ],
+        "default_locale": "zh_CN",
+        "version_name": "0.5.4"
+      },
+      "manifest_matches_expected": true,
+      "permissions_and_site_scope_unchanged_from": "v0.5.3.17",
+      "runtime_matches_repo": true,
+      "runtime_sha256": {
+        "_locales/zh_CN/messages.json": "9777119c18bc9e5f851e2108e3ba77acbcbd5ef133476a0b1541fef0c55ff67b",
+        "background.js": "33fadd4388ba7039e09b706d47b245054c6a2e86b8edd3e98251469dd80d47b1",
+        "bar-effects.js": "a18fc408e441511b449d2863b36ffc962a8c6bc87f1b73c851dfac1b592ee03b",
+        "bars.js": "651fdf6533a12e027b12ff7f4ccf4b5399a2c3effbe05b17c9554b747ef74594",
+        "content.js": "542dc0334d4b3b0bec4fe1999bcf93058a500d840fd71aa03d3f98a7743e9c0f",
+        "icons/128.png": "20d2de65527d1df969ba8a63344a70902273c8443a04d0065be47dd1ae44b118",
+        "icons/16.png": "046767ef550cfb0d4a551e6a4f04af6eb0eb7b3d8ae809d4ed5715a5ab37564f",
+        "icons/32.png": "3749e058c5d15838f909254c3916ed9c6ad379b9f33f88f59d804c12e14ad84e",
+        "icons/48.png": "8b959141ebfcce0924fab553f460dd1aada20579a9a765117581e959dec45014",
+        "page.css": "dd84760f75a1d2caf715bdafab59521ac85ed09d4ad445506a10d757bcdd3ecd",
+        "player.js": "a48095b02a7240c875a5a18121c430110126fd853c185d434e388c3518d247e0",
+        "popup.css": "fae64b1a5d2f2facce64a72ff7918c6633c9b2001147499e0e640a2b6abba828",
+        "popup.html": "930fc031ce4c4a31c141f72e9220bd532d871b73d4e89a24d5c76f5fb383c336",
+        "popup.js": "c58131b096b8de49fe4358f3f328a7046a1f7d8483b5f4555fa52d504b972f7f",
+        "preview.js": "acd4e8780d58221ad908f5d1df0b8008856946cd0fd1a1420e619e24c6415be0",
+        "shared.js": "86ea290984dafed423ab058a1f0a4ac8f429cd27331aa3c3d28fa9fca67b6a01"
+      },
+      "rebuild_bytes": 217665,
+      "rebuild_sha256": "eef626a2d27d7e02938b289219358aa3494305b023fc3799878d9e1a8409f185",
+      "rebuild_byte_identical": true
+    },
+    {
+      "browser": "firefox",
+      "filename": "Ambient-light-for-Bilibili-0.5.4-firefox.zip",
+      "bytes": 227458,
+      "sha256": "92e0074375e4f83cd45d1ce823b10c324437abfb62ca2b3e538e246dec90e096",
+      "entry_count": 19,
+      "crc_ok": true,
+      "entries": [
+        "LICENSE",
+        "_locales/zh_CN/messages.json",
+        "background.js",
+        "bar-effects.js",
+        "bars.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "manifest.json",
+        "page.css",
+        "player.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "preview.js",
+        "privacy.html",
+        "shared.js"
+      ],
+      "manifest": {
+        "manifest_version": 3,
+        "name": "__MSG_extensionName__",
+        "version": "0.5.4",
+        "description": "__MSG_extensionDescription__",
+        "permissions": [
+          "storage"
+        ],
+        "icons": {
+          "16": "icons/16.png",
+          "32": "icons/32.png",
+          "48": "icons/48.png",
+          "128": "icons/128.png"
+        },
+        "action": {
+          "default_title": "Ambient light for Bilibili",
+          "default_popup": "popup.html"
+        },
+        "background": {
+          "scripts": [
+            "background.js"
+          ]
+        },
+        "commands": {
+          "toggle-ambient": {
+            "suggested_key": {
+              "default": "Alt+Shift+A"
+            },
+            "description": "开启 / 关闭 Bilibili 氛围光"
+          }
+        },
+        "content_scripts": [
+          {
+            "matches": [
+              "https://www.bilibili.com/*",
+              "https://live.bilibili.com/*"
+            ],
+            "js": [
+              "shared.js",
+              "player.js",
+              "preview.js",
+              "bars.js",
+              "bar-effects.js",
+              "content.js"
+            ],
+            "css": [
+              "page.css"
+            ],
+            "run_at": "document_idle"
+          }
+        ],
+        "default_locale": "zh_CN",
+        "browser_specific_settings": {
+          "gecko": {
+            "id": "ambient-light-for-bilibili@tosya301",
+            "strict_min_version": "140.0",
+            "data_collection_permissions": {
+              "required": [
+                "none"
+              ]
+            }
+          }
+        },
+        "web_accessible_resources": [
+          {
+            "resources": [
+              "privacy.html"
+            ],
+            "matches": [
+              "https://www.bilibili.com/*",
+              "https://live.bilibili.com/*"
+            ]
+          }
+        ]
+      },
+      "manifest_matches_expected": true,
+      "permissions_and_site_scope_unchanged_from": "v0.5.3.17",
+      "runtime_matches_repo": true,
+      "runtime_sha256": {
+        "_locales/zh_CN/messages.json": "9777119c18bc9e5f851e2108e3ba77acbcbd5ef133476a0b1541fef0c55ff67b",
+        "background.js": "33fadd4388ba7039e09b706d47b245054c6a2e86b8edd3e98251469dd80d47b1",
+        "bar-effects.js": "a18fc408e441511b449d2863b36ffc962a8c6bc87f1b73c851dfac1b592ee03b",
+        "bars.js": "651fdf6533a12e027b12ff7f4ccf4b5399a2c3effbe05b17c9554b747ef74594",
+        "content.js": "542dc0334d4b3b0bec4fe1999bcf93058a500d840fd71aa03d3f98a7743e9c0f",
+        "icons/128.png": "20d2de65527d1df969ba8a63344a70902273c8443a04d0065be47dd1ae44b118",
+        "icons/16.png": "046767ef550cfb0d4a551e6a4f04af6eb0eb7b3d8ae809d4ed5715a5ab37564f",
+        "icons/32.png": "3749e058c5d15838f909254c3916ed9c6ad379b9f33f88f59d804c12e14ad84e",
+        "icons/48.png": "8b959141ebfcce0924fab553f460dd1aada20579a9a765117581e959dec45014",
+        "page.css": "dd84760f75a1d2caf715bdafab59521ac85ed09d4ad445506a10d757bcdd3ecd",
+        "player.js": "a48095b02a7240c875a5a18121c430110126fd853c185d434e388c3518d247e0",
+        "popup.css": "fae64b1a5d2f2facce64a72ff7918c6633c9b2001147499e0e640a2b6abba828",
+        "popup.html": "930fc031ce4c4a31c141f72e9220bd532d871b73d4e89a24d5c76f5fb383c336",
+        "popup.js": "c58131b096b8de49fe4358f3f328a7046a1f7d8483b5f4555fa52d504b972f7f",
+        "preview.js": "acd4e8780d58221ad908f5d1df0b8008856946cd0fd1a1420e619e24c6415be0",
+        "shared.js": "86ea290984dafed423ab058a1f0a4ac8f429cd27331aa3c3d28fa9fca67b6a01"
+      },
+      "rebuild_bytes": 227458,
+      "rebuild_sha256": "92e0074375e4f83cd45d1ce823b10c324437abfb62ca2b3e538e246dec90e096",
+      "rebuild_byte_identical": true
+    },
+    {
+      "browser": "source",
+      "filename": "Ambient-light-for-Bilibili-0.5.4-source.zip",
+      "bytes": 238306,
+      "sha256": "dda87bff1f0f74d67f726cb5f701e7b80213b1f2d184c0c2792d27f263fe037f",
+      "entry_count": 22,
+      "crc_ok": true,
+      "entries": [
+        "BUILDING.txt",
+        "LICENSE",
+        "docs/privacy-firefox.html",
+        "extension/_locales/zh_CN/messages.json",
+        "extension/background.js",
+        "extension/bar-effects.js",
+        "extension/bars.js",
+        "extension/content.js",
+        "extension/icons/128.png",
+        "extension/icons/16.png",
+        "extension/icons/32.png",
+        "extension/icons/48.png",
+        "extension/manifest.json",
+        "extension/page.css",
+        "extension/player.js",
+        "extension/popup.css",
+        "extension/popup.html",
+        "extension/popup.js",
+        "extension/preview.js",
+        "extension/shared.js",
+        "package.json",
+        "scripts/package.cjs"
+      ],
+      "source_matches_repo": true,
+      "source_file_count": 21,
+      "rebuild_bytes": 238306,
+      "rebuild_sha256": "dda87bff1f0f74d67f726cb5f701e7b80213b1f2d184c0c2792d27f263fe037f",
+      "rebuild_byte_identical": true
+    }
+  ]
+}

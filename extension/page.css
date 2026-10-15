@@ -32,6 +32,49 @@ html[data-biliglow-active] .bpx-player-video-area[data-biliglow-rounded][data-bi
 html[data-biliglow-active] .bpx-player-video-wrap[data-biliglow-picture-rounded] {
   clip-path: var(--biliglow-picture-clip) !important;
 }
+/* Live video is a direct player child. Round only its contained picture;
+   controls and native menus keep their original geometry and overflow. */
+html[data-biliglow-active] #live-player > video[data-biliglow-live-picture-rounded] {
+  clip-path: var(--biliglow-live-picture-clip) !important;
+}
+/* Native live messages and business notices otherwise fill the larger player,
+   including transparent letterboxing. Preserve their interaction/stacking
+   rules while giving these three observed content layers the picture bounds. */
+html[data-biliglow-active] #live-player > :is(.web-player-danmaku, #animation-mask-wrapper, .web-player-inject-wrap)[data-biliglow-live-bounds] {
+  position: absolute !important;
+  left: var(--biliglow-live-left) !important;
+  top: var(--biliglow-live-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--biliglow-live-width) !important;
+  height: var(--biliglow-live-height) !important;
+  box-sizing: border-box !important;
+  overflow: clip !important;
+  clip-path: inset(0px round var(--biliglow-live-radius)) !important;
+}
+/* Live uses the same native text renderer with direct track children.
+   Keep complete lines (including taller emoji) between the picture's top and
+   bottom edges without changing horizontal movement, font size or color. */
+html[data-biliglow-active] #live-player > .web-player-danmaku[data-biliglow-live-bounds] > .danmaku-item-container > .bili-danmaku-x-roll:not(.bili-danmaku-x-dm-rotate) {
+  top: var(--biliglow-live-track-top, clamp(var(--biliglow-live-track-gap), var(--top, 0px), max(var(--biliglow-live-track-gap), calc(var(--biliglow-live-height) - var(--biliglow-live-track-size, 1lh) - var(--biliglow-live-track-gap))))) !important;
+}
+html[data-biliglow-active] #live-player > .web-player-danmaku[data-biliglow-live-bounds] > .danmaku-item-container > .bili-danmaku-x-center:not(.bili-danmaku-x-dm-rotate) {
+  top: calc(var(--biliglow-live-track-top, clamp(var(--biliglow-live-track-gap), var(--translateY, 0px), max(var(--biliglow-live-track-gap), calc(var(--biliglow-live-height) - var(--biliglow-live-track-size, 1lh) - var(--biliglow-live-track-gap))))) - var(--translateY, 0px)) !important;
+}
+/* Match the bottom controller and its gradient to the actual picture.
+   Keep their native height and visible overflow for buttons and menus. */
+html[data-biliglow-active] #live-player > :is(.web-player-controller-bg, #web-player-controller-wrap-el)[data-biliglow-live-control-frame] {
+  left: var(--biliglow-live-control-left) !important;
+  right: auto !important;
+  width: var(--biliglow-live-control-width) !important;
+  bottom: var(--biliglow-live-control-bottom) !important;
+}
+/* The hover gradient is a separate, empty paint layer. Clip its native
+   background at the same picture edges; controls and popover overflow remain
+   untouched. The clip is ready even while the site hides the gradient. */
+html[data-biliglow-active] #live-player > .web-player-controller-bg[data-biliglow-live-control-shade] {
+  clip-path: var(--biliglow-live-shade-clip) !important;
+}
 /* Keep all native DOM/canvas danmaku inside the visible picture in normal,
    wide and fullscreen layouts. Controls, subtitles and sending UI are siblings.
    Clip also catches cached tracks during a resize, without a scroll container. */
@@ -258,10 +301,33 @@ html[data-biliglow-active][data-biliglow-live] :is(
   .link-navbar-ctnr, .link-navbar, #head-info-vm,
   #fullscreen-container,
   #live-player-ctnr, #live-player, .player-section,
-  #gift-control-vm, #aside-area-vm, #rank-list-vm, #rank-list-ctnr-box,
+  #gift-control-vm, #aside-area-vm, #rank-list-vm,
   .chat-history-panel, #chat-history-list, .chat-overlay-layer,
   #chat-control-panel-vm, .chat-input-ctnr
 ) { background: transparent !important; box-shadow: none !important; }
+/* Native ranking layouts reuse their container for the collapsed top-three
+   bar and expanded list. The simple audience list marks .tab-content itself;
+   the tabbed gift list marks its nested height, while guard uses .open. Keep the
+   collapsed bar transparent and preserve the native non-dark expanded skin. */
+html[data-biliglow-active][data-biliglow-live] #rank-list-ctnr-box:not(:has(
+  > .tab-content:is([style*="height: 100%"], [style*="height:100%"]),
+  > .tab-content > .gift-rank-cntr:is([style*="height: 100%"], [style*="height:100%"]),
+  > .tab-content > .guard-rank-cntr.open
+)) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* Expanded live ranking panels: an opaque smoke plate blocks the moving chat.
+   Inset edges preserve native dimensions, padding, scrolling and overflow. */
+html[data-biliglow-active][data-biliglow-live][data-biliglow-dark] #rank-list-vm > #rank-list-ctnr-box:has(
+  > .tab-content:is([style*="height: 100%"], [style*="height:100%"]),
+  > .tab-content > .gift-rank-cntr:is([style*="height: 100%"], [style*="height:100%"]),
+  > .tab-content > .guard-rank-cntr.open
+) {
+  background: linear-gradient(135deg, #ffffff06, transparent 68%), #191f29 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 28px #0005, 0 2px 5px #0003, inset 0 0 0 1px #ffffff1c, inset 0 1px 0 #ffffff07 !important;
+}
 /* Pseudo-elements must be separate: they are not valid within :is(). */
 html[data-biliglow-active][data-biliglow-live] #fullscreen-container::before {
   background: transparent !important;

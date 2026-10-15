@@ -372,7 +372,7 @@ test('ordinary rolling and centered line adapters are gated and leave native ani
   const rootSelector='html[data-biliglow-active] .bpx-player-render-dm-wrap[data-biliglow-danmaku-bounds]';
   const rootRule=rules.find(rule=>rule.selector===rootSelector);assert.ok(rootRule,'bounds CSS is gated by active state and owned root');
   assert.match(rootRule.declarations.get('--biliglow-danmaku-track-gap')||'',/^max\(\s*2px\s*,\s*var\(--biliglow-danmaku-radius\)\s*\)$/,'round corners reserve radius while straight corners retain shadow padding');
-  const adapters=rules.filter(rule=>rule.selector.includes('.bili-danmaku-x-'));
+  const adapters=rules.filter(rule=>rule.selector.startsWith(rootSelector)&&rule.selector.includes('.bili-danmaku-x-'));
   assert.equal(adapters.length,2,'ordinary rows are the only line adapters; advanced/BAS/cmd layers stay native');
   for(const [kind,position] of [['roll','--top'],['center','--translateY']]){
     const selector=`${rootSelector} .bpx-player-row-dm-wrap > .bili-danmaku-x-${kind}`;

@@ -1,3 +1,27 @@
+0.5.4 — 2026-10-15（发布候选验证）
+
+Scope: after confirming the r6 personal build fixed the live-player issue, the user authorized version 0.5.4, a GitHub update with Chromium, Firefox and matching-source packages, and a local personal-install update. This authorization supersedes the earlier personal-only scope. No 0.5.4 extension-store submission has been performed.
+
+Implementation:
+- Give expanded live audience/high-energy-rank and fleet/guard panels an opaque dark rounded base so page content does not show through them.
+- In ordinary and webpage modes, apply the existing 12px rounding option to the actual picture. Align the bottom hover shade and controls to the picture's left, right and bottom edges; preserve their native heights and upward menu interaction.
+- Constrain live danmaku, animation and system-notification layers to the actual picture. Keep complete ordinary danmaku lines and tall emoji within the vertical safe area in ordinary, webpage and native-fullscreen modes; preserve native font size, horizontal animation and native track variables.
+- Native fullscreen keeps the 0.5.3.15 baseline light effect, picture sizing and square corners; only live-message boundary constraints are added there.
+- Retain the smoke comment material and 16px horizontal spacing already released in 0.5.3.17. No new permissions or network transmission.
+
+Verified release candidate:
+- Final repository version 0.5.4 passed 172/172 Node tests, with 0 failures and 0 skips. Log: task work/release-0.5.4-tests.log.
+- Codex in-app browser, local synthetic media and production scripts: live-track 44/44, hover-shade/controls 28/28, native-fullscreen compatibility 19/19 and actual-picture boundaries 29/29. These are local fixture results, not a claim of signed extension-host installation or real-site coverage in every browser.
+- The installed Firefox app passed the same production-code local suites: actual-picture 29/29, native-fullscreen compatibility 19/19, hover-shade/controls 28/28 and live-track 44/44, all with 0 failures and 0 skips. Evidence: task outputs/release-0.5.4/firefox-live-checks.txt. Media are synthetic; no Firefox signed installation or upgrade validation is claimed.
+- Actual Chrome live pages were inspected for r5 rounded picture corners, bottom controls and audience/fleet panels. The user subsequently confirmed the r6 personal build was fixed. This confirmation is not a separate exhaustive real-site regression run.
+- Browser evidence: task outputs/live-web-personal/browser-checks-r6.json; actual Chrome screenshots: task outputs/live-web-personal/corners-real-r5.png and corners-and-bar-r5.png, task outputs/live-rank-personal/audience-real-r5.png and guard-real-r5.png. Personal installation record: task outputs/live-web-personal/install-r6.json.
+
+- Chromium, Firefox and matching-source packages passed ZIP CRC, safe/unique-entry, version 0.5.4, unchanged permissions/site-scope and repository runtime/source-file checks. A fresh extraction of the source ZIP rebuilt all three packages byte-for-byte. Evidence: qa/release-0.5.4-package-verification.json.
+- The local personal installation files are updated to 0.5.4-personal with byte comparison completed. Browser reload is still pending; file replacement does not establish that an already-open tab is running the updated extension.
+
+Pending release gates:
+- Publication status: release candidate, awaiting publication and independent public-download/hash verification. Store state below is dated history for earlier versions; no 0.5.4 store update is claimed.
+
 0.5.3.17 — 2026-10-14（GitHub 发布验证）
 
 Scope: user selected the original smoke material and requested a GitHub update including Firefox after testing the personal Chrome build. This release changes the dark pinned comment composer appearance and horizontal spacing. The user subsequently authorized updates to all three extension stores; submission and approval results are recorded below.

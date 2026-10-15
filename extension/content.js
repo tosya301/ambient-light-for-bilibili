@@ -7,6 +7,7 @@
   let status={text:'等待播放器',error:false},ui=null,panel=null,panelHost=null,launcher=null,root=null,canvas=null,ctx=null;
   let stage=null,backdrop=null,mode='normal',barEffect=null,frameEffect=null,barStatus='宽屏去边已关闭';
   const danmakuEffect=P.createDanmakuBounds();
+  const liveBoundsEffect=P.createLiveBounds();
   let launcherPosition=null,drag=null,suppressLauncherClick=false;
   const setBarStatus=text=>{barStatus=text;panel?.setBarStatus(text);};
   let kind=P.pageKind(location);
@@ -232,7 +233,7 @@
       root.style.display='block';root.style.visibility='visible';updatePlaybackStatus();
     }catch(error){
       blocked=true;root.style.display='none';cancelFrames();
-      if(kind==='live'){setStage(null);frameEffect?.clear();document.documentElement.removeAttribute('data-biliglow-active');document.documentElement.removeAttribute('data-biliglow-dark');}
+      if(kind==='live'){setStage(null);frameEffect?.clear();liveBoundsEffect.clear();document.documentElement.removeAttribute('data-biliglow-active');document.documentElement.removeAttribute('data-biliglow-dark');}
       setStatus('此视频暂时无法生成光效，播放不受影响',true);
       console.warn('[BiliGlow] Video frame unavailable:',error.name);
     }
@@ -287,7 +288,7 @@
     root.dataset.mode=mode;
     const parent=stage||document.body;
     if(root.parentNode!==parent)parent.append(root);
-    if(!active){frameEffect?.clear();danmakuEffect.clear();}
+    if(!active){frameEffect?.clear();danmakuEffect.clear();liveBoundsEffect.clear();}
     const uiParent=ownFullscreen?fs:document.documentElement;
     if(ui.parentNode!==uiParent){cancelLauncherDrag();uiParent.append(ui);positionLauncher();}
     ui.style.display=supported&&(!fs||Boolean(ownFullscreen))?'block':'none';
@@ -303,12 +304,14 @@
       // Rounding can change the frame's flex minimum. Measure bar geometry
       // again after that sizing rule, before clipping the actual picture.
       croppedRect=barEffect?.layout();return croppedRect;
-    });
+    },presentation);
     const r=video.getBoundingClientRect();
     const rect=croppedRect||B.contentRect({left:r.left,top:r.top,width:r.width,height:r.height},video.videoWidth,video.videoHeight,getComputedStyle(video).objectFit);
-    // Independent from rounded/shadow gates: fullscreen and square corners
-    // still constrain the native render layers to the current visible image.
+    // Independent from rounded/shadow gates: normal/webpage square corners
+    // still constrain render layers to the current visible image.
     danmakuEffect.update(video,{...settings,enabled:active},kind,mode,rect);
+    if(kind==='live')liveBoundsEffect.update(video,{...settings,enabled:active},mode,rect,presentation);
+    else liveBoundsEffect.clear();
     visible=r.width>=160&&r.height>=90&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth;
     if(!visible){root.style.display='none';cancelFrames();setStatus('播放器离开视野 · 已省电暂停');return;}
     const l=rect.left,t=rect.top,right=l+rect.width,bottom=t+rect.height;
@@ -329,7 +332,7 @@
   const modeObserver=new MutationObserver(()=>invalidate());
   function bind(next){
     if(next===video)return;
-    cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;frameEffect?.clear();danmakuEffect.clear();resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
+    cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;frameEffect?.clear();danmakuEffect.clear();liveBoundsEffect.clear();resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
     if(canvas){canvas.width=256;root.style.display='none';}
     if(!next){setStatus('等待播放器');return;}
     if(kind==='live')setBarStatus('直播保留完整画面 · 自动去边仅用于视频宽屏');
