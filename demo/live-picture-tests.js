@@ -27,7 +27,13 @@
   }
   const closeRect=(a,b)=>['left','top','width','height'].every(k=>Math.abs(a[k]-b[k])<1);
   const picture=()=>B.contentRect(F.video.getBoundingClientRect(),F.video.videoWidth,F.video.videoHeight,getComputedStyle(F.video).objectFit);
-  const bound=()=>layers().length===3&&layers().every(el=>el.hasAttribute('data-biliglow-live-bounds')&&closeRect(el.getBoundingClientRect(),picture()));
+  const layerBounds=el=>{
+    const p=picture(),host=$('#live-player').getBoundingClientRect();
+    // Ordinary messages use the player's width; decorative live layers keep
+    // the contained picture's width. All three share its vertical limits.
+    return el.matches('.web-player-danmaku')?{...p,left:host.left,width:host.width}:p;
+  };
+  const bound=()=>layers().length===3&&layers().every(el=>el.hasAttribute('data-biliglow-live-bounds')&&closeRect(el.getBoundingClientRect(),layerBounds(el)));
   const clipRadius=el=>getComputedStyle(el).borderRadius==='12px'||/round\s+12px/.test(getComputedStyle(el).clipPath);
   const targetAtCenter=el=>{
     const r=el.getBoundingClientRect();
@@ -90,7 +96,7 @@
       await until(()=>F.video?.readyState>=2&&(portrait?F.video.videoHeight>F.video.videoWidth:F.video.videoWidth>F.video.videoHeight)&&bound(),label+'叠加层');
       await until(()=>F.video.hasAttribute('data-biliglow-live-picture-rounded')&&shadow()?.style.display==='block',label+'圆角阴影');
       const p=picture(),videoBox=F.video.getBoundingClientRect(),videoStyle=getComputedStyle(F.video);
-      check(bound(),label+'：弹幕、动画和通知层均对齐有效视频画面');
+      check(bound(),label+'：弹幕覆盖播放器全宽，动画与通知贴合画面，三层保持画面上下边界');
       check(clipRadius(F.video)&&layers().every(clipRadius),label+'：视频和三层叠加内容均有 12px 圆角');
       check(closeRect(shadow().getBoundingClientRect(),p),label+'：阴影紧贴实际画面边缘');
       check(videoStyle.opacity==='1'&&videoStyle.filter==='none'&&videoStyle.objectFit==='contain'&&closeRect(videoBox,$('#live-player').getBoundingClientRect()),label+'：保留原视频尺寸、比例与颜色');
@@ -108,7 +114,7 @@
       const expected=picture();
       await B.storage.set({roundedCorners:false});
       await until(()=>!F.video.hasAttribute('data-biliglow-live-picture-rounded')&&layers().every(el=>!clipRadius(el)),'关闭圆角');
-      check(bound()&&closeRect(shadow().getBoundingClientRect(),expected),'关闭圆角后，叠加层边界与独立阴影仍贴合实际画面');
+      check(bound()&&closeRect(shadow().getBoundingClientRect(),expected),'关闭圆角后，弹幕仍覆盖全宽，装饰层与独立阴影仍贴合实际画面');
       check(getComputedStyle(F.video).clipPath==='none','关闭圆角恢复视频原生裁切样式');
       await B.storage.set({roundedCorners:true});
       await until(()=>F.video.hasAttribute('data-biliglow-live-picture-rounded'),'重新开启圆角');
@@ -182,7 +188,7 @@
       check(closeRect(stage.getBoundingClientRect(),viewport)&&closeRect(host.getBoundingClientRect(),viewport)&&closeRect(v,viewport),label+'：原生播放器和视频盒子使用完整全屏视口');
       check(s.objectFit==='contain'&&s.objectPosition==='50% 50%'&&s.transform==='none'&&s.clipPath==='none'&&fits&&maximum&&Math.abs(p.width/p.height-F.video.videoWidth/F.video.videoHeight)<.001,label+'：画面保持原比例、完整可见并放到最大，不裁切或拉伸');
       check(getComputedStyle(host).borderRadius==='0px'&&getComputedStyle(host).boxShadow==='none'&&getComputedStyle(host).borderTopWidth==='0px',label+'：保留直角，没有新增边框或圆角');
-      check(bound()&&layers().every(el=>!clipRadius(el)),label+'：消息层贴实际画面但保留直角，避免上下弹幕裁半行');
+      check(bound()&&layers().every(el=>!clipRadius(el)),label+'：弹幕覆盖全宽、装饰层贴画面，均保留直角与完整上下沿');
       const sr=shade().getBoundingClientRect();
       check(!shade().hasAttribute('data-biliglow-live-control-shade')&&!shade().style.getPropertyValue('--biliglow-live-shade-clip')&&getComputedStyle(shade()).clipPath==='none'&&controlFrames().every(el=>!el.hasAttribute('data-biliglow-live-control-frame')&&noControlFrameProperties(el)&&controlEdgesMatch(el,v))&&Math.abs(sr.height-56)<1&&controlWrap().getBoundingClientRect().height===0,label+'：底色和零高控制层恢复原生全宽、底边和直角，不加新裁切');
     };
@@ -220,7 +226,7 @@
         check(true,'Fullscreen API 已实际退出，并收到退出 fullscreenchange');
         F.setWeb(true,true);
         await until(()=>F.video.videoWidth>F.video.videoHeight&&bound()&&F.video.hasAttribute('data-biliglow-live-picture-rounded')&&shadow()?.style.display==='block','退出后恢复网页模式');
-        check(clipRadius(F.video)&&layers().every(clipRadius)&&closeRect(shadow().getBoundingClientRect(),picture()),'退出原生全屏后，网页模式恢复 12px 圆角、阴影与实际画面边界');
+        check(clipRadius(F.video)&&layers().every(clipRadius)&&closeRect(shadow().getBoundingClientRect(),picture()),'退出原生全屏后，网页模式恢复 12px 圆角、画面阴影与各层显示范围');
         check(root()?.dataset.mode==='fullscreen'&&Boolean($('[data-biliglow-backdrop]')),'网页模式恢复氛围光和原有遮挡底板');
       }
     }catch(error){check(false,'原生全屏回归中断',error.message);}
@@ -361,9 +367,10 @@
       check(hidden.hasAttribute('data-biliglow-live-track')&&tracksInside(gap),label+'：隐藏节点重新显示时完整落在顶部安全区');
       moving.style.setProperty('--top','-35px');$('[data-fixture-track="fixed-bottom"]').style.setProperty('--translateY','6600px');await nextFrame();
       check(tracksInside(gap)&&moving.style.getPropertyValue('--top')==='-35px'&&$('[data-fixture-track="fixed-bottom"]').style.getPropertyValue('--translateY')==='6600px',label+'：引擎更新缓存位置后即时重排，原生变量仍保留新值');
+      const emojiPeer=$('[data-fixture-track="emoji-peer"]'),peerTop=emojiPeer.getBoundingClientRect().top,peerNativeTop=emojiPeer.style.getPropertyValue('--top');
       emoji.style.height='76px';emoji.style.transform='translateY(-8px)';await nextFrame();await nextFrame();
       check(emoji.getBoundingClientRect().height===76&&tracksInside(gap),label+'：表情增高且向上溢出后仍完整可见，字体未缩小');
-      check($('[data-fixture-track="emoji-bottom"]').style.getPropertyValue('--biliglow-live-track-top')===$('[data-fixture-track="emoji-peer"]').style.getPropertyValue('--biliglow-live-track-top'),label+'：同一原生底轨的文字和高表情仍共享基线，不拆成两行');
+      check(Math.abs(emojiPeer.getBoundingClientRect().top-peerTop)<.8&&emojiPeer.style.getPropertyValue('--top')===peerNativeTop&&tracksInside(gap),label+'：同轨表情增高不移动已有文字，原生轨道与两者完整可见性保留');
       const rotate=$('[data-fixture-track="rotate-helper"]');
       check(!rotate.hasAttribute('data-biliglow-live-track')&&!rotate.style.getPropertyValue('--biliglow-live-track-top')&&Math.abs(parseFloat(getComputedStyle(rotate).top)+90)<.1,label+'：旋转辅助节点不被 JS 或 CSS fallback 改写原生位置');
       if(document.fullscreenElement===stage){

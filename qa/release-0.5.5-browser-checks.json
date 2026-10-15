@@ -1,0 +1,1568 @@
+{
+  "version": "0.5.5",
+  "runtime_note": "Player and page CSS match the locally confirmed fix; release version labels were subsequently updated.",
+  "node": {
+    "passed": 179,
+    "failed": 0,
+    "skipped": 0
+  },
+  "chrome_dynamic": {
+    "passed": 100,
+    "failed": 0,
+    "checks": [
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.54 / height 427.50"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 428.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：合成画面有可测量的左右留白",
+        "detail": "画面 240.75 px < 播放器 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 428.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：合成画面有可测量的左右留白",
+        "detail": "画面 428.00 px < 播放器 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 普通：横屏保留原有画面宽度",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.54 / height 427.50"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 普通：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 428.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：合成画面有可测量的左右留白",
+        "detail": "画面 240.75 px < 播放器 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1120.00 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1120.00 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：合成画面有可测量的左右留白",
+        "detail": "画面 292.50 px < 播放器 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -18.98 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1120.00 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：合成画面有可测量的左右留白",
+        "detail": "画面 520.00 px < 播放器 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 宽屏：横屏保留原有画面宽度",
+        "detail": "弹幕 924.44 px / 预期 924.44 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 宽屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1120.00 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：合成画面有可测量的左右留白",
+        "detail": "画面 292.50 px < 播放器 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1728.00 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 913.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -20.31 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1728.00 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 913.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：合成画面有可测量的左右留白",
+        "detail": "画面 513.56 px < 播放器 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1728.00 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 913.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：合成画面有可测量的左右留白",
+        "detail": "画面 913.00 px < 播放器 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 0.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 网页全屏：横屏保留原有画面宽度",
+        "detail": "弹幕 1623.11 px / 预期 1623.11 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 913.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 网页全屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1728.00 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 913.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：合成画面有可测量的左右留白",
+        "detail": "画面 513.56 px < 播放器 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "结束后清理生产适配器的边界、轨道标记与变量",
+        "detail": ""
+      }
+    ]
+  },
+  "chrome_baseline_0_5_4": {
+    "passed": 62,
+    "failed": 38,
+    "checks": [
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.54 / height 427.50"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 普通：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 普通：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 普通：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 普通：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 240.75 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 428.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：合成画面有可测量的左右留白",
+        "detail": "画面 240.75 px < 播放器 760.00 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 普通：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 普通：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 普通：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 普通：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 428.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 428.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：合成画面有可测量的左右留白",
+        "detail": "画面 428.00 px < 播放器 760.00 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 普通：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 普通：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 普通：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 普通：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 普通：横屏保留原有画面宽度",
+        "detail": "弹幕 760.00 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.54 / height 427.50"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 普通：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": false,
+        "label": "点播 / 竖屏 / 普通：弹幕宽度覆盖播放器",
+        "detail": "弹幕 240.75 px / 预期 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 428.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：合成画面有可测量的左右留白",
+        "detail": "画面 240.75 px < 播放器 760.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 普通：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 924.44 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 宽屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 宽屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 宽屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 宽屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 292.50 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：合成画面有可测量的左右留白",
+        "detail": "画面 292.50 px < 播放器 1120.00 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 宽屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 宽屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 宽屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 宽屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 520.00 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：合成画面有可测量的左右留白",
+        "detail": "画面 520.00 px < 播放器 1120.00 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 宽屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 宽屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 宽屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 宽屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 宽屏：横屏保留原有画面宽度",
+        "detail": "弹幕 924.44 px / 预期 924.44 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 宽屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": false,
+        "label": "点播 / 竖屏 / 宽屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 292.50 px / 预期 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 201.29 / height 520.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：合成画面有可测量的左右留白",
+        "detail": "画面 292.50 px < 播放器 1120.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 宽屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 1523.55 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 857.00"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 网页全屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 网页全屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 横屏 / 网页全屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 横屏 / 网页全屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 482.06 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 857.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：合成画面有可测量的左右留白",
+        "detail": "画面 482.06 px < 播放器 1728.00 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 网页全屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 网页全屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 竖屏 / 网页全屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -18.98 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 竖屏 / 网页全屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 857.00 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 857.00"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：合成画面有可测量的左右留白",
+        "detail": "画面 857.00 px < 播放器 1728.00 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 网页全屏：高密度弹幕出生、离场时已有弹幕不跳动",
+        "detail": "逐帧最大 Y 漂移 243.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 网页全屏：同轨首次出现高表情时已有文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": false,
+        "label": "直播 / 电台方形封面 / 网页全屏：同轨高表情离场、再次出现时文字不跳动",
+        "detail": "最大 Y 漂移 46.000 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：原生 --top / --translateY、字号与横向动画保留",
+        "detail": "滚动 X 变化 -21.69 px"
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：固定弹幕原生 translateY 未被替换",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "直播 / 电台方形封面 / 网页全屏：高表情与已有完整行仍处于上下边界内",
+        "detail": "无整行裁切"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 网页全屏：横屏保留原有画面宽度",
+        "detail": "弹幕 1523.55 px / 预期 1523.56 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 857.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 横屏 / 网页全屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": false,
+        "label": "点播 / 竖屏 / 网页全屏：弹幕宽度覆盖播放器",
+        "detail": "弹幕 482.06 px / 预期 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：保留有效画面的上下边界",
+        "detail": "弹幕 top 0.00 / height 857.00"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：合成画面有可测量的左右留白",
+        "detail": "画面 482.06 px < 播放器 1728.00 px"
+      },
+      {
+        "passed": true,
+        "label": "点播 / 竖屏 / 网页全屏：竖屏宽度修复保留原生滚动和固定弹幕",
+        "detail": ""
+      },
+      {
+        "passed": true,
+        "label": "结束后清理生产适配器的边界、轨道标记与变量",
+        "detail": ""
+      }
+    ]
+  },
+  "chrome_integration": {
+    "live-picture-results": {
+      "state": "complete",
+      "passed": 29,
+      "total": 29,
+      "skipped": null,
+      "checks": [
+        {
+          "passed": true,
+          "label": "普通横屏：弹幕覆盖播放器全宽，动画与通知贴合画面，三层保持画面上下边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：视频和三层叠加内容均有 12px 圆角",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：阴影紧贴实际画面边缘",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：保留原视频尺寸、比例与颜色",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：叠加层不挡住播放器控制区",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式保留聊天：弹幕覆盖播放器全宽，动画与通知贴合画面，三层保持画面上下边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式保留聊天：视频和三层叠加内容均有 12px 圆角",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式保留聊天：阴影紧贴实际画面边缘",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式保留聊天：保留原视频尺寸、比例与颜色",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式保留聊天：叠加层不挡住播放器控制区",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式保留聊天：聊天输入区仍可命中且保持原透明度",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式继续使用原有光效和遮挡底板",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：弹幕覆盖播放器全宽，动画与通知贴合画面，三层保持画面上下边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：视频和三层叠加内容均有 12px 圆角",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：阴影紧贴实际画面边缘",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：保留原视频尺寸、比例与颜色",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：叠加层不挡住播放器控制区",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：聊天输入区仍可命中且保持原透明度",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "竖屏网页模式：确实包含两侧留白，边界检查不是满框巧合",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭圆角后，弹幕仍覆盖全宽，装饰层与独立阴影仍贴合实际画面",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭圆角恢复视频原生裁切样式",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "替换视频后清理旧视频并重绑新视频",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "原生重建叠加层后重新对齐并清理旧层",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "重建后仅有一个阴影层",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭后，三层恢复原生满播放器尺寸、裁切和事件行为",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭后移除全部新增边界与圆角变量",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭后清理阴影与网页模式底板",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式重新开启后恢复圆角与画面边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "自检后完整恢复原有设置",
+          "detail": ""
+        }
+      ]
+    },
+    "live-track-results": {
+      "state": "partial",
+      "passed": 33,
+      "total": 33,
+      "skipped": "1",
+      "checks": [
+        {
+          "passed": true,
+          "label": "普通模式：缓存越界的滚动、固定顶/底弹幕均完整落在画面安全上下沿",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：保留引擎原始 --top / --translateY，不篡改缓存轨道",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：整行与高表情保持原尺寸，不靠缩小字体或裁掉行高适配",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：横向滚动继续，固定弹幕原生 transform 保持不变",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：新插入弹幕在首个绘制帧已完整进入画面",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：隐藏节点重新显示时完整落在顶部安全区",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：引擎更新缓存位置后即时重排，原生变量仍保留新值",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：表情增高且向上溢出后仍完整可见，字体未缩小",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：同轨表情增高不移动已有文字，原生轨道与两者完整可见性保留",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通模式：旋转辅助节点不被 JS 或 CSS fallback 改写原生位置",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：缓存越界的滚动、固定顶/底弹幕均完整落在画面安全上下沿",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：保留引擎原始 --top / --translateY，不篡改缓存轨道",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：整行与高表情保持原尺寸，不靠缩小字体或裁掉行高适配",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：横向滚动继续，固定弹幕原生 transform 保持不变",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：新插入弹幕在首个绘制帧已完整进入画面",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：隐藏节点重新显示时完整落在顶部安全区",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：引擎更新缓存位置后即时重排，原生变量仍保留新值",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：表情增高且向上溢出后仍完整可见，字体未缩小",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：同轨表情增高不移动已有文字，原生轨道与两者完整可见性保留",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页模式：旋转辅助节点不被 JS 或 CSS fallback 改写原生位置",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：缓存越界的滚动、固定顶/底弹幕均完整落在画面安全上下沿",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：保留引擎原始 --top / --translateY，不篡改缓存轨道",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：整行与高表情保持原尺寸，不靠缩小字体或裁掉行高适配",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：横向滚动继续，固定弹幕原生 transform 保持不变",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：新插入弹幕在首个绘制帧已完整进入画面",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：隐藏节点重新显示时完整落在顶部安全区",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：引擎更新缓存位置后即时重排，原生变量仍保留新值",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：表情增高且向上溢出后仍完整可见，字体未缩小",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：同轨表情增高不移动已有文字，原生轨道与两者完整可见性保留",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：旋转辅助节点不被 JS 或 CSS fallback 改写原生位置",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭圆角后仍保证整行完整，滚动与固定动画不变",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭氛围光后清理全部轨道变量并交回原生布局",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "弹幕测试后完整恢复原有设置与样例轨道",
+          "detail": ""
+        }
+      ]
+    },
+    "live-control-shade-results": {
+      "state": "complete",
+      "passed": 28,
+      "total": 28,
+      "skipped": null,
+      "checks": [
+        {
+          "passed": true,
+          "label": "普通横屏：底色隐藏时已经准备好裁切，无需先显示测量",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：刚显示的第一帧即沿实际视频画面裁切",
+          "detail": "inset(calc(100% - 581.625px) 0px 0px round 0px 0px 12px 12px)"
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：只保留两个 12px 下圆角，上沿保持直线",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：底色和零高控制层左右及底边均贴实际画面，保留各自原生高度",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：反复显示隐藏无需等待下一帧恢复边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "普通横屏：按钮和向上展开的菜单仍可命中，零高容器保持可见溢出和原生事件",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页横屏：底色隐藏时已经准备好裁切，无需先显示测量",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页横屏：刚显示的第一帧即沿实际视频画面裁切",
+          "detail": "inset(calc(100% - 773px) 0px 0px round 0px 0px 12px 12px)"
+        },
+        {
+          "passed": true,
+          "label": "网页横屏：只保留两个 12px 下圆角，上沿保持直线",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页横屏：底色和零高控制层左右及底边均贴实际画面，保留各自原生高度",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页横屏：反复显示隐藏无需等待下一帧恢复边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页横屏：按钮和向上展开的菜单仍可命中，零高容器保持可见溢出和原生事件",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：底色隐藏时已经准备好裁切，无需先显示测量",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：刚显示的第一帧即沿实际视频画面裁切",
+          "detail": "inset(calc(100% - 482.855px) 0px 0px round 0px 0px 12px 12px)"
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：只保留两个 12px 下圆角，上沿保持直线",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：底色和零高控制层左右及底边均贴实际画面，保留各自原生高度",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：确有上下留白，整条控制栏跟随画面底边向上对齐",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：反复显示隐藏无需等待下一帧恢复边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页上下留白：按钮和向上展开的菜单仍可命中，零高容器保持可见溢出和原生事件",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：底色隐藏时已经准备好裁切，无需先显示测量",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：刚显示的第一帧即沿实际视频画面裁切",
+          "detail": "inset(calc(100% - 773px) 0px 0px round 0px 0px 12px 12px)"
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：只保留两个 12px 下圆角，上沿保持直线",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：底色和零高控制层左右及底边均贴实际画面，保留各自原生高度",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：反复显示隐藏无需等待下一帧恢复边界",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "网页竖屏：按钮和向上展开的菜单仍可命中，零高容器保持可见溢出和原生事件",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭圆角后底栏恢复直角，控制层和底色仍贴实际画面",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "关闭氛围光移除新增裁切和对齐变量，恢复原生满宽控制栏与渐变",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "label": "底栏测试后完整恢复原有设置",
+          "detail": ""
+        }
+      ]
+    }
+  },
+  "chrome_real_portrait_modes": [
+    {
+      "area": {
+        "height": 539,
+        "left": 157,
+        "top": 172,
+        "width": 958
+      },
+      "danmaku": {
+        "height": 539,
+        "left": 157,
+        "top": 172,
+        "width": 958
+      },
+      "mode": "normal",
+      "video": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "area": {
+        "height": 714,
+        "left": 219.5,
+        "top": 172,
+        "width": 1274
+      },
+      "danmaku": {
+        "height": 714,
+        "left": 219.5,
+        "top": 172,
+        "width": 1274
+      },
+      "mode": "wide",
+      "video": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "area": {
+        "height": 857,
+        "left": 0,
+        "top": 0,
+        "width": 1728
+      },
+      "danmaku": {
+        "height": 857,
+        "left": 0,
+        "top": 0,
+        "width": 1728
+      },
+      "mode": "web",
+      "video": [
+        1080,
+        1920
+      ]
+    }
+  ],
+  "firefox_dynamic": {
+    "passed": 100,
+    "failed": 0,
+    "media": "local Canvas-generated video with production player.js and page.css",
+    "maximum_existing_message_y_drift_px": 0,
+    "installation": "standalone local production-script fixture, not signed extension installation"
+  },
+  "limitations": [
+    "Native system fullscreen was not granted by Chrome Fullscreen API and was not counted as a pass.",
+    "No signed Firefox installation or upgrade test.",
+    "No new high-density real live-room or BewlyCat combination test."
+  ]
+}

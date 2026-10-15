@@ -1,0 +1,185 @@
+{
+  "version": "0.5.5",
+  "verified_at_utc": "2026-10-15T18:30:00.547783+00:00",
+  "verification_type": "independent read-only package audit; trusted packaging script run only in scratch directory",
+  "baseline_tag": "v0.5.4",
+  "checks": [
+    {
+      "name": "chromium: zip CRC",
+      "passed": true
+    },
+    {
+      "name": "chromium: unique names",
+      "passed": true
+    },
+    {
+      "name": "chromium: safe regular relative paths",
+      "passed": true
+    },
+    {
+      "name": "chromium: metadata file allowlist",
+      "passed": true
+    },
+    {
+      "name": "chromium: metadata SHA-256",
+      "passed": true
+    },
+    {
+      "name": "firefox: zip CRC",
+      "passed": true
+    },
+    {
+      "name": "firefox: unique names",
+      "passed": true
+    },
+    {
+      "name": "firefox: safe regular relative paths",
+      "passed": true
+    },
+    {
+      "name": "firefox: metadata file allowlist",
+      "passed": true
+    },
+    {
+      "name": "firefox: metadata SHA-256",
+      "passed": true
+    },
+    {
+      "name": "source: zip CRC",
+      "passed": true
+    },
+    {
+      "name": "source: unique names",
+      "passed": true
+    },
+    {
+      "name": "source: safe regular relative paths",
+      "passed": true
+    },
+    {
+      "name": "source: metadata file allowlist",
+      "passed": true
+    },
+    {
+      "name": "source: metadata SHA-256",
+      "passed": true
+    },
+    {
+      "name": "versions: source/Chromium/Firefox manifests",
+      "passed": true
+    },
+    {
+      "name": "versions: source package.json",
+      "passed": true
+    },
+    {
+      "name": "versions: shared settings UI in both browsers",
+      "passed": true
+    },
+    {
+      "name": "source manifest equals Chromium manifest",
+      "passed": true
+    },
+    {
+      "name": "source includes exactly reviewed package script",
+      "passed": true
+    },
+    {
+      "name": "package script unchanged from v0.5.4",
+      "passed": true
+    },
+    {
+      "name": "source runtime matches repository",
+      "passed": true
+    },
+    {
+      "name": "Chromium runtime matches source byte-for-byte",
+      "passed": true
+    },
+    {
+      "name": "Firefox and Chromium same runtime bytes",
+      "passed": true
+    },
+    {
+      "name": "Firefox privacy page from source",
+      "passed": true
+    },
+    {
+      "name": "privacy page unchanged from v0.5.4",
+      "passed": true
+    },
+    {
+      "name": "MIT LICENSE consistent across packages",
+      "passed": true
+    },
+    {
+      "name": "Firefox gecko and no data declaration",
+      "passed": true
+    },
+    {
+      "name": "Firefox background and privacy resource",
+      "passed": true
+    },
+    {
+      "name": "Chromium entire manifest unchanged except version",
+      "passed": true
+    },
+    {
+      "name": "no permission expansion from v0.5.4",
+      "passed": true
+    },
+    {
+      "name": "Firefox entire manifest unchanged except version",
+      "passed": true
+    },
+    {
+      "name": "fresh independent extraction directory",
+      "passed": true
+    },
+    {
+      "name": "source packaging script completed",
+      "passed": true
+    },
+    {
+      "name": "chromium: exact byte-for-byte rebuild",
+      "passed": true
+    },
+    {
+      "name": "firefox: exact byte-for-byte rebuild",
+      "passed": true
+    },
+    {
+      "name": "source: exact byte-for-byte rebuild",
+      "passed": true
+    }
+  ],
+  "packages": [
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.5-chromium.zip",
+      "bytes": 220950,
+      "sha256": "276b4eca0a0fe9f0f2fafb7ea4b0cd4110f44ab51c54aa36cc2efe25263181f7",
+      "file_count": 18
+    },
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.5-firefox.zip",
+      "bytes": 230743,
+      "sha256": "c1cae28130d58d53914c5a0473b151feaaf6ab6de56e903983ffa15f82025fc2",
+      "file_count": 19
+    },
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.5-source.zip",
+      "bytes": 241591,
+      "sha256": "44cd23f0165f182e487624cb272ccb862582765e71e06ae84eaeff11cc73f7d3",
+      "file_count": 22
+    }
+  ],
+  "runtime_diff_review": {
+    "blocking_findings": [],
+    "conclusion": "No blocking bug found in the changed runtime. Existing live tracks retain their baseline while additions/deletions only allocate changed tracks; native track/geometry changes invalidate the cached baseline. Portrait VOD now widens the danmaku root horizontally, and ordinary live messages use full player width while retaining vertical picture bounds. Cleanup removes owned cached track state.",
+    "limitations": [
+      "This independent audit did not run Chrome/Firefox or reproduce a high-density live room. Browser evidence is supplied by the primary task (179 Node tests, 100 dynamic checks, 90 integration checks, real VOD in three modes).",
+      "When the native live renderer overfills all available vertical space, new messages may overlap rather than shifting existing lines; this is an explicit fallback in the code and is not a release blocker for the requested stability fix."
+    ]
+  },
+  "passed": true
+}

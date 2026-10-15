@@ -1,6 +1,6 @@
 /* Standalone browser fixture for the production danmaku boundary adapter.
-   The old static zero-height root renders against video-area, reproducing
-   spill into letterboxing without copying any proposed extension fix. */
+   The native zero-height root renders against video-area. Ordinary media
+   keeps picture bounds; portrait media uses player width and picture height. */
 (() => {
   'use strict';
   const B=globalThis.BiliGlow,$=selector=>document.querySelector(selector);
@@ -32,7 +32,10 @@
     }
     return B.contentRect(r,video.videoWidth,video.videoHeight,css.objectFit);
   }
-  const targetRect=()=>intersection(pictureRect(),rect(area));
+  const targetRect=()=>{
+    const picture=pictureRect(),host=rect(area);
+    return intersection(video.videoHeight>video.videoWidth?{...picture,left:host.left,width:host.width}:picture,host);
+  };
   function makeRenderer(){
     const root=document.createElement('div');root.className='bpx-player-render-dm-wrap';root.dataset.fixtureDanmaku='';root.setAttribute('aria-label','本地测试弹幕渲染层');
     root.innerHTML='<div class="bpx-player-dm-svg-mask-wrap"></div><div class="bpx-player-dm-mask-wrap"><div class="bpx-player-dm-mask"><div class="bpx-player-row-dm-wrap"><span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show dm-line top" data-native-track="roll-top" style="--top:-10px">顶部滚动弹幕应完整显示</span><span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show dm-line middle" style="--top:80px">滚动弹幕跟随当前画面尺寸</span><span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show dm-line bottom" data-native-track="roll-bottom" style="--top:710px">底部滚动弹幕第一轨完整</span><span class="bili-danmaku-x-dm bili-danmaku-x-roll bili-danmaku-x-show dm-line bottom second" data-native-track="roll-bottom-2" style="--top:740px">底部滚动弹幕第二轨完整</span><span class="bili-danmaku-x-dm bili-danmaku-x-center bili-danmaku-x-show dm-fixed top" data-native-track="fixed-top" style="--translateY:-10px">顶部固定弹幕完整</span><span class="bili-danmaku-x-dm bili-danmaku-x-center bili-danmaku-x-show dm-fixed bottom" data-native-track="fixed-bottom" style="--translateY:710px">底部固定弹幕第一轨</span><span class="bili-danmaku-x-dm bili-danmaku-x-center bili-danmaku-x-show dm-fixed bottom second" data-native-track="fixed-bottom-2" style="--translateY:740px">底部固定弹幕第二轨</span></div><div class="bpx-player-adv-dm-wrap"><span class="dm-advanced">高级弹幕上下越界测试</span></div></div></div><div class="bpx-player-bas-dm-wrap"><canvas class="dm-grid" width="1024" height="640"></canvas><span class="dm-bas">BAS 弹幕从左侧越界</span></div><div class="bpx-player-cmd-dm-wrap"><button class="dm-command" type="button">互动弹幕</button></div>';
@@ -118,13 +121,13 @@
   async function visible(){if(player.dataset.screen!=='web'&&player.dataset.screen!=='mini')area.scrollIntoView({block:'center',behavior:'instant'});await wait(60);}
   async function inspectBoundary(label,check,cases,rounded=true){
     await settle();await visible();updateNativeTracks();await wait(20);const state=snapshot(),radius=rounded&&state.mode!=='web'?12:0,probe=await probeClipping(radius);
-    check(state.owned&&state.rendererPosition==='absolute'&&sameRect(state.renderer,state.target)&&state.layers.every(layer=>sameRect(layer.rect,state.renderer)),`${label}：弹幕根与四层画布准确跟随当前有效画面`);
+    check(state.owned&&state.rendererPosition==='absolute'&&sameRect(state.renderer,state.target)&&state.layers.every(layer=>sameRect(layer.rect,state.renderer)),`${label}：${state.metadata.height>state.metadata.width?'竖屏弹幕根覆盖播放器全宽并保留画面上下边界，四层同步':'弹幕根与四层画布准确跟随当前有效画面'}`);
     check(state.rendererOverflow==='clip'&&state.rendererClip?.startsWith('inset('),`${label}：仅弹幕渲染根裁切，子层保持 100% 布局`);
     check(probe.passed,`${label}：四边内部探针可命中，越界探针实际被裁切`);
     check(probe.cornerPassed,`${label}：${radius?'圆角':'直角'}的实际命中区域正确`);
     check(hit($('#play-control'))&&(state.mode==='mini'||hit($('#sending-input'))),`${label}：播放器控件与发送框仍可命中`);
     const margin=radius||2;
-    check(state.normalLines.length===6&&state.normalLines.every(line=>line.rect.top>=state.target.top+margin-.8&&line.rect.bottom<=state.target.bottom-margin+.8&&line.rect.bottom<=state.controls.top-margin+.8&&close(line.rect.height,parseFloat(line.lineHeight))),`${label}：六条普通／固定顶部底部弹幕整行保持在安全画面内，底部避开控制条`);
+    check(state.normalLines.length===6&&state.normalLines.every(line=>line.rect.top>=state.target.top+margin-.8&&line.rect.bottom<=state.target.bottom-margin+.8&&line.rect.bottom<=state.controls.top-margin+.8&&close(line.rect.height,parseFloat(line.lineHeight))),`${label}：六条普通／固定顶部底部弹幕整行保持在画面安全上下沿内，底部避开控制条`);
     const packing=Object.fromEntries(['roll-','fixed-'].map(type=>{
       const tracks=state.normalLines.filter(line=>line.id.startsWith(type)).sort((a,b)=>a.rect.top-b.rect.top);
       return [type,{tracks:tracks.map(line=>({id:line.id,top:line.rect.top,bottom:line.rect.bottom,nativeCoordinate:line.nativeTop||line.nativeTranslateY,ownedTrackTop:line.ownedTrackTop})),

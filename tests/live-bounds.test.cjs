@@ -120,10 +120,11 @@ test('live webpage mode keeps the fullscreen rendering contract but clips only t
   assert.equal(h.video.style.getPropertyValue('clip-path'),'inset(1px)','native video clipping is not overwritten inline');
 });
 
-test('live normal and webpage overlays share the actual picture',()=>{
+test('live normal and webpage text spans the player while decorative overlays follow the picture',()=>{
   for(const [mode,view,radius] of [['normal',{native:false},12],['fullscreen',{native:false},12]]){
     const h=fixture(),picture=h.picture();h.update({mode,view});
-    for(const layer of h.layers)assertBounds(layer,{left:picture.left,top:0,width:picture.width,height:773,radius});
+    assertBounds(h.layers[0],{left:0,top:0,width:1428,height:773,radius});
+    for(const layer of h.layers.slice(1))assertBounds(layer,{left:picture.left,top:0,width:picture.width,height:773,radius});
     assert.equal(h.controls.hasAttribute('data-biliglow-live-bounds'),false);assert.equal(h.menu.hasAttribute('data-biliglow-live-bounds'),false);assert.equal(h.nested.hasAttribute('data-biliglow-live-bounds'),false,'only direct renderer siblings are bounded');
     h.updateFrame({mode,view});assert.equal(h.video.hasAttribute('data-biliglow-live-picture-rounded'),radius===12);
   }
@@ -133,7 +134,7 @@ test('native live fullscreen bounds only messages while restoring native control
   const h=fixture(),view=h.P.presentation(h.video,'live',h.stage);
   assert.equal(view.native,true);assert.equal(view.mode,'fullscreen');assert.equal(view.stage,h.stage);
   h.update({view});
-  for(const layer of h.layers){assertBounds(layer,{width:h.picture().width,height:773,radius:0});assertNative(layer,h.native);}
+  for(const layer of h.layers){assertBounds(layer,{width:layer===h.layers[0]?1428:h.picture().width,height:773,radius:0});assertNative(layer,h.native);}
   assertControlCleared(h.controls,h.controlNative);assertControlCleared(h.shade,h.shadeNative);assert.equal(h.controls.writes,0);assert.equal(h.shade.writes,0);
   h.update();h.updateFrame();
   for(const layer of h.layers)assertBounds(layer,{radius:12});
@@ -149,7 +150,8 @@ test('native live fullscreen bounds only messages while restoring native control
   assert.deepEqual(h.layers.map(layer=>layer.writes),writes);assert.equal(replacement.writes,replacementWrites);
   assertCleared(h.layers[1],h.native);assertBounds(replacement,{radius:0});
   h.update();h.updateFrame();const picture=h.picture();
-  for(const layer of [h.layers[0],h.layers[2],replacement])assertBounds(layer,{left:picture.left,top:0,width:picture.width,height:773,radius:12});
+  assertBounds(h.layers[0],{left:0,top:0,width:1428,height:773,radius:12});
+  for(const layer of [h.layers[2],replacement])assertBounds(layer,{left:picture.left,top:0,width:picture.width,height:773,radius:12});
   assertCleared(h.layers[1],h.native);
   assert.equal(h.video.hasAttribute('data-biliglow-live-picture-rounded'),true);
 });
@@ -192,6 +194,82 @@ test('text and overflowing images on the same live track retain one shared basel
   for(const node of [text,emoji,tall])assert.equal(node.style.getPropertyValue('--top'),'740px');
   const other=h.makeTrack('roll',710);h.trackContainer.append(other);h.update();
   assert.ok(trackTop(other)+30.602+1<=trackTop(tall)-20,'different native tracks stay separated despite upper image overflow');
+});
+
+test('arriving and departing live tracks never move an already scrolling message in any mode',()=>{
+  for(const [mode,view,gap] of [['normal',{native:false},12],['fullscreen',{native:false},12],['fullscreen',{native:true},2]]){
+    const h=fixture(),first=h.makeTrack('roll',680),last=h.makeTrack('roll',740),arriving=h.makeTrack('roll',710);
+    h.trackContainer.append(first,last);h.update({mode,view});
+    const baseline=[trackTop(first),trackTop(last)],native=[styleText(first),styleText(last)];
+    near(baseline[0],680);near(baseline[1],Math.min(740,773-gap-30.602));
+    for(let cycle=0;cycle<4;cycle++){
+      h.trackContainer.append(arriving);h.mutations([{type:'childList',target:h.trackContainer}]);
+      near(trackTop(first),baseline[0],'the old algorithm moved this message to 667.194px');
+      near(trackTop(last),baseline[1]);
+      assert.ok(trackTop(arriving)>=gap&&trackTop(arriving)+30.602<=773-gap,'the new track is also a complete line');
+      h.update({mode,view});h.resized();
+      near(trackTop(first),baseline[0],'unchanged layout and ResizeObserver deliveries preserve the allocation');
+      near(trackTop(last),baseline[1]);
+      arriving.remove();h.mutations([{type:'childList',target:h.trackContainer}]);
+      assertTrackCleared(arriving);near(trackTop(first),baseline[0]);near(trackTop(last),baseline[1]);
+    }
+    assert.deepEqual([styleText(first),styleText(last)],native,'native and owned styles of existing messages remain stable');
+  }
+});
+
+test('a later tall emoji on the same native track cannot displace existing live text',()=>{
+  for(const [mode,view] of [['normal',{native:false}],['fullscreen',{native:false}],['fullscreen',{native:true}]]){
+    const h=fixture(),text=h.makeTrack('roll',740),emoji=h.makeTrack('roll',740);
+    const image=h.makeImage(720,60);emoji.append(image);h.trackContainer.append(text);h.update({mode,view});
+    const baseline=trackTop(text),gap=view.native?2:12;
+    h.trackContainer.append(emoji);h.mutations([{type:'childList',target:h.trackContainer}]);
+    near(trackTop(text),baseline,'same native track does not make a new emoji rewrite existing text');
+    assert.ok(trackTop(emoji)-20>=gap&&trackTop(emoji)-20+60<=773-gap,'the new emoji fits by its own visual bounds');
+    image.box=rect(200,710,49,90);h.resized();
+    near(trackTop(text),baseline,'loading the other message image only reflows that message');
+    assert.ok(trackTop(emoji)-30>=gap&&trackTop(emoji)-30+90<=773-gap);
+    emoji.remove();h.mutations([{type:'childList',target:h.trackContainer}]);
+    assertTrackCleared(emoji);near(trackTop(text),baseline,'emoji departure cannot move old text back down');
+  }
+});
+
+test('live cached node reuse clears the old allocation and follows its own native track changes',()=>{
+  const h=fixture(),node=h.makeTrack('roll',740),peer=h.makeTrack('roll',680);
+  h.trackContainer.append(node,peer);h.update();const peerTop=trackTop(peer);
+  node.className=node.className.replace(' bili-danmaku-x-show','');
+  h.mutations([{type:'attributes',attributeName:'class',target:node}]);assertTrackCleared(node);near(trackTop(peer),peerTop);
+  node.style.setProperty('--top','120px');node.box=rect(200,120,300,30.602);node.className+=' bili-danmaku-x-show';
+  h.mutations([{type:'attributes',attributeName:'class',target:node}]);near(trackTop(node),120);near(trackTop(peer),peerTop);
+  let oldValue=styleText(node);node.style.setProperty('--top','200px');node.box=rect(200,200,300,30.602);
+  h.mutations([{type:'attributes',attributeName:'style',target:node,oldValue}]);near(trackTop(node),200);near(trackTop(peer),peerTop);
+  oldValue=styleText(node);node.className=node.className.replace('bili-danmaku-x-roll','bili-danmaku-x-center');node.style.setProperty('--translateY','300px');
+  node.box=rect(200,300,300,30.602);h.mutations([{type:'attributes',attributeName:'class',target:node,oldValue}]);
+  near(trackTop(node),300);near(trackTop(peer),peerTop);
+  node.remove();h.mutations([{type:'childList',target:h.trackContainer}]);assertTrackCleared(node);
+  node.style.setProperty('--translateY','90px');node.box=rect(200,90,300,30.602);h.trackContainer.append(node);
+  h.mutations([{type:'childList',target:h.trackContainer}]);near(trackTop(node),90);near(trackTop(peer),peerTop);
+  h.update({nextSettings:{...h.settings,enabled:false}});assertTrackCleared(node);assertTrackCleared(peer);
+  node.style.setProperty('--translateY','260px');node.box=rect(200,260,300,30.602);h.update();near(trackTop(node),260);
+});
+
+test('releasing a live message discards its old crowded allocation even when its native top is reused',()=>{
+  for(const release of ['hide','remove','disable','clear']){
+    const h=fixture(),node=h.makeTrack('roll',710),bottom=h.makeTrack('roll',740);
+    h.trackContainer.append(node,bottom);h.update();
+    assert.ok(trackTop(node)<710,'both initial tracks fit without overlap near the bottom edge');
+    if(release==='hide'){
+      node.className=node.className.replace(' bili-danmaku-x-show','');
+      h.mutations([{type:'attributes',attributeName:'class',target:node}]);
+    }else if(release==='remove'){
+      node.remove();h.mutations([{type:'childList',target:h.trackContainer}]);
+    }else if(release==='disable')h.update({nextSettings:{...h.settings,enabled:false}});
+    else h.effect.clear();
+    assertTrackCleared(node);bottom.remove();
+    if(release==='hide')node.className+=' bili-danmaku-x-show';
+    if(release==='remove')h.trackContainer.append(node);
+    h.update();near(trackTop(node),710,release+' recycles the same native position without its stale packed baseline');
+    assert.equal(node.style.getPropertyValue('--top'),'710px');
+  }
 });
 
 test('new and newly visible live tracks are fitted by the mutation observer without waiting for layout',()=>{
@@ -279,14 +357,22 @@ test('live bottom control roots release owned geometry on replacement, fullscree
   h.update();h.effect.clear();assertShadeCleared(next,h.shadeNative);assertControlCleared(next,h.shadeNative);assertControlCleared(nextControls,h.controlNative);
 });
 
-test('portrait and horizontally letterboxed live streams use their contained picture, including square-corner mode',()=>{
-  for(const [vw,vh] of [[1080,1920],[2560,1080],[1080,1080]]){
-    const h=fixture();h.video.videoWidth=vw;h.video.videoHeight=vh;const picture=h.picture();
-    h.update({nextSettings:{...h.settings,roundedCorners:false}});
-    for(const layer of h.layers)assertBounds(layer,{left:picture.left,top:picture.top,width:picture.width,height:picture.height,radius:0});
-    const frame=h.updateFrame({nextSettings:{...h.settings,roundedCorners:false}});
-    for(const k of ['left','top','width','height'])near(frame.rect[k],picture[k]);
-    assert.equal(h.video.hasAttribute('data-biliglow-live-picture-rounded'),false);assert.equal(h.shadow.style.borderRadius,'0px');
+test('portrait, radio and letterboxed live text keep full player width in all three modes',()=>{
+  for(const [vw,vh] of [[1920,1080],[1080,1920],[2560,1080],[1080,1080]]){
+    for(const [mode,view] of [['normal',{native:false}],['fullscreen',{native:false}],['fullscreen',{native:true}]]){
+      const h=fixture();h.video.videoWidth=vw;h.video.videoHeight=vh;const picture=h.picture();
+      h.update({mode,view,nextSettings:{...h.settings,roundedCorners:false}});
+      assertBounds(h.layers[0],{left:0,top:picture.top,width:1428,height:picture.height,radius:0});
+      for(const layer of h.layers.slice(1))assertBounds(layer,{left:picture.left,top:picture.top,width:picture.width,height:picture.height,radius:0});
+      if(!view.native){
+        const controls=controlGeometry(h.controls);
+        near(controls.left,picture.left);near(controls.width,picture.width);near(controls.bottom,773-picture.top-picture.height);
+        const frame=h.updateFrame({mode,view,nextSettings:{...h.settings,roundedCorners:false}});
+        for(const k of ['left','top','width','height'])near(frame.rect[k],picture[k]);
+        assert.equal(h.shadow.style.borderRadius,'0px');
+      }
+      assert.equal(h.video.hasAttribute('data-biliglow-live-picture-rounded'),false);
+    }
   }
 });
 
@@ -303,7 +389,8 @@ test('scaled border boxes and content-box dimensions map to native local overlay
     if(sizing==='content-box'){h.area.css.width='460px';h.area.css.height='276px';}
     h.area.scrollLeft=7;h.area.scrollTop=11;
     h.update({picture:rect(148,96,800,460)});
-    for(const layer of h.layers)assertBounds(layer,{left:27,top:31,width:400,height:230,radius:6});
+    assertBounds(h.layers[0],{left:7,top:31,width:490,height:230,radius:6});
+    for(const layer of h.layers.slice(1))assertBounds(layer,{left:27,top:31,width:400,height:230,radius:6});
   }
 });
 
@@ -318,7 +405,8 @@ test('live overlay clipping intersects the player padding box and preserves nati
   const h=fixture();h.area.css={...h.area.css,borderLeftWidth:'2px',borderRightWidth:'3px',borderTopWidth:'4px',borderBottomWidth:'5px'};
   h.update({picture:rect(-100,-100,2000,1000)});
   for(const layer of h.layers){assertBounds(layer,{left:0,top:0,width:1423,height:764,radius:12});assertNative(layer,h.native);}
-  h.update({picture:rect(1600,0,100,100)});for(const layer of h.layers)assertBounds(layer,{width:0});
+  h.update({picture:rect(1600,0,100,100)});
+  for(const layer of h.layers)assertBounds(layer,{width:0});
 });
 
 test('renderer replacement and repeated layouts adopt only current direct children without redundant writes',()=>{

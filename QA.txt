@@ -1,4 +1,25 @@
-0.5.4 — 2026-10-15（GitHub 正式版）
+0.5.5 — 2026-10-15（GitHub 发布准备）
+
+范围：用户报告直播弹幕在飘动中反复上下跳动，以及竖屏视频、电台直播的弹幕区域过窄。已先在本地修复并重载个人版 0.5.4-personal-danmaku-fix；用户随后确认“OK好了”，授权更新 GitHub。此次版本递增为 0.5.5，提供 Chromium、Firefox 未签名临时体验包及匹配源码包；本轮未授权或执行扩展商店提交。此前 0.5.4 商店状态保留为带日期的历史记录。
+
+根因与修复：
+- 0.5.4 在弹幕进入、退出和高表情变化时，按当前可见消息重新挤压全部轨道，使原生 --top 未变的既有弹幕也被上下移动。修复后缓存活动消息已分配的纵向位置，新轨道寻找可用空间，不推动旧轨道；仅消息自身的原生位置、尺寸、类型或舞台几何变化时重新适配。隐藏、移除、替换与关闭时清理缓存。
+- 直播普通文字弹幕、竖屏点播弹幕改用播放器完整宽度，同时保留有效画面的上下安全边界，覆盖普通、宽屏及网页全屏。视频比例、圆角、装饰动画、业务通知与底部控制栏仍以实际画面为边界。
+- 不增加权限、依赖或数据传输。
+
+已执行验证：
+- 本地修复版 Node 全套 179/179 通过，0 失败、0 跳过。
+- Chrome 使用生产脚本和真实 DOM/CSS 的动态合成场景 100/100 通过。高密度弹幕进出及同轨高表情出生、退出时，已有弹幕逐帧最大 Y 漂移为 0px。相同场景对照 0.5.4 为 62/100 通过，38 项按新验收失败；已有弹幕可复现最高 243px 漂移，同轨高表情可复现 46px 漂移。
+- 原生 Firefox 应用通过 CUA 打开包含生产 shared.js、player.js 和 page.css 的本地合成媒体页面，动态检查 100/100 通过，所有高密度弹幕与同轨高表情场景的已有弹幕 Y 漂移均为 0px。证据：本次任务 outputs/release-0.5.5/firefox-dynamic-checks.txt 与 firefox-dynamic-checks.jpg。此项不是签名安装、升级或真实 B 站页面验证。
+- 完整 content.js 集成检查：画面边界 29/29、普通/网页/竖屏弹幕 33/33、控制栏 28/28，共 90/90 项已执行检查通过。浏览器未授予 Fullscreen API，原生系统全屏组明确跳过，不计为通过。
+- 已加载个人版的 Chrome 真实 B 站 1080×1920 竖屏视频，普通、宽屏、网页全屏的弹幕区域与播放器分别同宽 958px、1274px、1728px，位置一致。扩展管理页已确认个人版重新加载；用户随后确认本地修复可用。
+- 证据位于本次任务 outputs/：local-fix-notes.txt、danmaku-fixed-browser.json、danmaku-0.5.4-baseline-browser.json、integrated-regression.json、real-portrait-three-modes.json、local-install.json 和 personal-extension-reloaded.jpg。
+
+验证限制：本轮未验证 Firefox 签名安装、升级或真实 B 站页面；没有新增 Edge 宿主、Windows/Linux、真实高密度直播或与 BewlyCat 同时启用的专项测试。动态稳定性来自生产代码的合成场景对照；用户确认可用不等同于所有直播房间和扩展组合均通过。0.5.4 的 Firefox 120 项测试属于历史版本，不能当作 0.5.5 新测试。原生系统全屏本轮被跳过。
+
+发布检查：0.5.5 的 Chromium、Firefox 与匹配源码包通过 37 项独立检查，包含版本一致性、权限未扩张、ZIP CRC、安全路径及文件一致性。新解压的匹配源码独立重建的三份 ZIP 均与已验证原包逐字节相同。证据：本次任务 outputs/release-0.5.5/package-verification.json。GitHub 发布与匿名公开下载核对仍待本轮发布流程完成，在记录结果前不宣称已通过。Firefox ZIP 面向桌面 Firefox 140+，未签名，仅可临时加载，完全退出并重启后需重新载入。
+
+0.5.4 — 2026-10-15（GitHub 正式版，历史）
 
 Scope: after confirming the r6 personal build fixed the live-player issue, the user authorized version 0.5.4, a GitHub update with Chromium, Firefox and matching-source packages, and a local personal-install update. This authorization supersedes the earlier personal-only scope. The user subsequently authorized store updates. Chrome was completed in a separate session at the user's request; all three store results are recorded below.
 

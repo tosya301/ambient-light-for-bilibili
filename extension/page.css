@@ -37,9 +37,9 @@ html[data-biliglow-active] .bpx-player-video-wrap[data-biliglow-picture-rounded]
 html[data-biliglow-active] #live-player > video[data-biliglow-live-picture-rounded] {
   clip-path: var(--biliglow-live-picture-clip) !important;
 }
-/* Native live messages and business notices otherwise fill the larger player,
-   including transparent letterboxing. Preserve their interaction/stacking
-   rules while giving these three observed content layers the picture bounds. */
+/* Preserve native interaction/stacking. Ordinary live text keeps the player's
+   full width and the picture's vertical bounds, including portrait/radio;
+   decorative animation and business notices retain the picture rectangle. */
 html[data-biliglow-active] #live-player > :is(.web-player-danmaku, #animation-mask-wrapper, .web-player-inject-wrap)[data-biliglow-live-bounds] {
   position: absolute !important;
   left: var(--biliglow-live-left) !important;
@@ -75,8 +75,9 @@ html[data-biliglow-active] #live-player > :is(.web-player-controller-bg, #web-pl
 html[data-biliglow-active] #live-player > .web-player-controller-bg[data-biliglow-live-control-shade] {
   clip-path: var(--biliglow-live-shade-clip) !important;
 }
-/* Keep all native DOM/canvas danmaku inside the visible picture in normal,
-   wide and fullscreen layouts. Controls, subtitles and sending UI are siblings.
+/* Bound native DOM/canvas danmaku vertically in normal, wide and fullscreen
+   layouts. Portrait media keeps the landscape player's horizontal range.
+   Controls, subtitles and sending UI are siblings.
    Clip also catches cached tracks during a resize, without a scroll container. */
 html[data-biliglow-active] .bpx-player-render-dm-wrap[data-biliglow-danmaku-bounds] {
   position: absolute !important;

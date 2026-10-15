@@ -312,11 +312,55 @@ test('normal, wide and fullscreen follow the image rectangle with fullscreen squ
 
 test('portrait and 4:3 source switches recalculate the existing root without resizing native engines',()=>{
   const h=fixture();
-  for(const [sourceWidth,sourceHeight,left,width] of [[1440,1080,120,720],[540,960,328.125,303.75],[810,1080,277.5,405],[1920,1080,0,960],[1080,1080,210,540]]){
+  for(const [sourceWidth,sourceHeight,left,width] of [[1440,1080,120,720],[540,960,0,960],[810,1080,0,960],[1920,1080,0,960],[1080,1080,210,540]]){
     h.video.videoWidth=sourceWidth;h.video.videoHeight=sourceHeight;h.update();
     assertBounds(h.root,{left,top:0,width,height:540,radius:12},`${sourceWidth}:${sourceHeight}`);
     assert.equal(h.root.offsetHeight,0,'native DOM dimensions are not assigned by JavaScript');
   }
+});
+
+test('portrait videos have the same horizontal danmaku range as landscape in normal, wide and webpage modes',()=>{
+  for(const [mode,screen,width,height,radius] of [
+    ['normal','normal',960,540,12],['theater','wide',1280,720,12],['fullscreen','web',1600,900,0]
+  ]){
+    const h=fixture();h.container.setAttribute('data-screen',screen);h.box(100,50,width,height);
+    h.controls.box=rect(100,50+height-55,width,55);
+    h.video.videoWidth=1920;h.video.videoHeight=1080;h.update({mode});
+    const landscape=[...h.root.properties].filter(([name])=>ownedVariables.includes(name));
+    h.video.videoWidth=540;h.video.videoHeight=960;
+    const picture=h.picture();assert.ok(picture.width<width/2,'the video remains a narrow contained portrait picture');
+    const native=[...h.video.properties],rows=h.root.children.map(node=>[...node.properties]);
+    h.update({mode});
+    assertBounds(h.root,{left:0,top:0,width,height,radius,trackHeight:height-55},mode);
+    assert.deepEqual([...h.root.properties].filter(([name])=>ownedVariables.includes(name)),landscape,'portrait and landscape expose the same horizontal message range');
+    assert.deepEqual([...h.video.properties],native,'widening messages does not resize, crop or transform portrait video');
+    assert.deepEqual(h.root.children.map(node=>[...node.properties]),rows,'native render engines keep their own declarations');
+  }
+});
+
+test('portrait widening only changes horizontal bounds and square or landscape sources retain picture clipping',()=>{
+  const h=fixture(),picture=rect(310,80,304,440);
+  h.video.videoWidth=540;h.video.videoHeight=960;h.update({picture});
+  assertBounds(h.root,{left:0,top:30,width:960,height:440,radius:12});
+  h.video.videoWidth=1080;h.video.videoHeight=1080;h.update({picture});
+  assertBounds(h.root,{left:210,top:30,width:304,height:440,radius:12});
+  h.video.videoWidth=1920;h.video.videoHeight=1080;h.update({picture});
+  assertBounds(h.root,{left:210,top:30,width:304,height:440,radius:12});
+  h.video.videoWidth=540;h.video.videoHeight=960;
+  h.update({picture,nextSettings:{...h.settings,roundedCorners:false}});
+  assertBounds(h.root,{left:0,top:30,width:960,height:440,radius:0});
+});
+
+test('portrait full-width bounds preserve local coordinates through scaling, scrolling and mode switches',()=>{
+  const h=fixture();h.video.videoWidth=540;h.video.videoHeight=960;
+  h.box(20,30,1920,1080,960,540);h.area.computedStyles={width:'960px',height:'540px',boxSizing:'border-box'};
+  h.area.scrollLeft=11;h.area.scrollTop=9;
+  for(const [mode,radius] of [['normal',12],['theater',12],['fullscreen',0]]){
+    h.update({mode,picture:rect(600,100,600,800)});
+    assertBounds(h.root,{left:11,top:44,width:960,height:400,radius},mode);
+  }
+  assert.equal(h.area.scrollLeft,11);assert.equal(h.area.scrollTop,9);
+  h.effect.clear();assertCleared(h.root);
 });
 
 test('scrolling both player and image leaves stable local bounds',()=>{

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>弹幕稳定性与竖屏宽度回归 · 本地合成测试</title>
+  <link rel="stylesheet" href="../extension/page.css">
+  <link rel="stylesheet" href="live.css">
+  <style>
+    body{margin:0;background:#111827;color:#e5e7eb;font:14px/1.6 system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:24px}h1{font-size:23px;margin:0 0 8px}p{color:#b7c4d7}button,select{padding:8px 12px;border:1px solid #657593;border-radius:6px;background:#26344b;color:white;font:inherit}button:disabled{opacity:.5}header{margin-bottom:18px}.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}#fixture-wrapper{width:min(760px,calc(100vw - 48px));height:428px;margin:0 auto 22px;background:#020617;position:relative;overflow:hidden}#fixture-wrapper[data-mode="theater"]{width:min(1120px,calc(100vw - 48px));height:520px}#fixture-wrapper[data-mode="web"]{position:fixed;inset:0;z-index:500;width:100vw;height:100vh;margin:0}#fixture-wrapper>section{height:100%}#fixture-wrapper[data-kind="live"] #vod-fixture,#fixture-wrapper[data-kind="video"] #live-fixture{display:none}#fullscreen-container,.player-section,#live-player-ctnr,#live-player,.bpx-player-container,.bpx-player-video-area,.bpx-player-video-wrap{width:100%;height:100%;position:relative;aspect-ratio:auto;overflow:hidden;background:transparent}#live-player>video,.bpx-player-video-wrap>video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 50%;transform:none}#live-player>.web-player-controller-bg{position:absolute;left:0;bottom:0;width:100%;height:40px;background:linear-gradient(transparent,#0008);pointer-events:none}.bpx-player-render-dm-wrap{position:static;height:0;width:100%}.bpx-player-row-dm-wrap,.bpx-player-dm-mask-wrap{position:absolute;inset:0;overflow:hidden}.bpx-player-control-wrap{position:absolute;bottom:0;left:0;width:100%;height:40px;background:linear-gradient(transparent,#0008);pointer-events:none}.bili-danmaku-x-dm{font-size:22px;line-height:26px}.bili-danmaku-x-center{font-size:19px;line-height:25px}.fixture-tall-emoji{width:64px;height:64px;transform:translateY(-8px)}#fixture-badge{position:absolute;left:14px;bottom:11px;z-index:20;pointer-events:none;font-size:11px;color:#d6e7ff}#exit-preview{position:fixed;right:16px;top:16px;z-index:700;display:none}body[data-preview="true"] #exit-preview{display:block}#stability-results{white-space:pre-wrap;font:12px/1.7 ui-monospace,monospace;border:1px solid #43536b;background:#192338;border-radius:8px;padding:16px;overflow-wrap:anywhere;display:block}#stability-summary{font-weight:600;color:#e5e7eb}#stability-results[data-passed="false"]{border-color:#f87171}#stability-results[data-passed="true"]{border-color:#34d399}.note{font-size:12px;color:#9aaec9}#error-note{color:#ffb8b8}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>弹幕稳定性与竖屏宽度回归</h1>
+    <p>本页调用生产版 <code>player.js</code> 和 <code>page.css</code>，使用 Canvas 生成本地视频，并模拟 B 站原生弹幕 DOM。逐帧测量已有弹幕的上下位置及各模式下的显示宽度。</p>
+    <div class="actions">
+      <button id="run-stability-tests" type="button">运行全部回归</button>
+      <button id="download-stability-report" type="button" disabled>下载 JSON 报告</button>
+      <label>预览类型 <select id="preview-kind"><option value="live">直播</option><option value="video">网页点播</option></select></label>
+      <label>画面 <select id="preview-shape"><option value="landscape">横屏</option><option value="portrait">竖屏</option><option value="radio">电台 / 方形封面</option></select></label>
+      <label>模式 <select id="preview-mode"><option value="normal">普通</option><option value="theater">宽屏</option><option value="web">网页全屏</option></select></label>
+      <button id="apply-preview" type="button">打开合成预览</button>
+    </div>
+    <p class="note">仅在本页使用合成媒体，不读取 B 站、账号或扩展存储。测试期间会自动切换普通、宽屏和网页全屏；最终恢复普通横屏。测试覆盖适配器、真实布局和 CSS 动画，不代表真实直播线路或 BewlyCat 宿主已实测。</p>
+    <p id="error-note" role="alert"></p>
+  </header>
+  <div id="fixture-wrapper" data-kind="live" data-mode="normal">
+    <section id="live-fixture"><div id="fullscreen-container"><div class="player-section"><div id="live-player-ctnr" class="normal" data-screen="normal"><div id="live-player">
+      <video id="stability-live-video" autoplay muted playsinline aria-label="本地合成直播"></video>
+      <div class="web-player-danmaku"><div class="danmaku-item-container"></div></div>
+      <div id="animation-mask-wrapper"><div id="move-wrapper"></div></div>
+      <div class="web-player-inject-wrap"><div id="businessContainerElement"></div></div>
+      <div class="web-player-controller-bg"></div>
+      <div id="web-player-controller-wrap-el" style="position:absolute;bottom:0;left:0;width:100%;height:0"></div>
+    </div></div></div></div></section>
+    <section id="vod-fixture"><div class="bpx-player-container" data-screen="normal"><div class="bpx-player-video-area">
+      <div class="bpx-player-video-wrap"><video id="stability-vod-video" autoplay muted playsinline aria-label="本地合成点播"></video></div>
+      <div class="bpx-player-render-dm-wrap"><div class="bpx-player-dm-mask-wrap"><div class="bpx-player-row-dm-wrap"></div></div></div>
+      <div class="bpx-player-control-wrap"></div>
+    </div></div></section>
+    <div id="fixture-badge">本地合成视频 · 等待测试</div>
+  </div>
+  <p id="stability-summary" role="status">等待运行</p>
+  <output id="stability-results" data-state="idle">点击“运行全部回归”开始。自动化可调用 window.liveStabilityFixture.run()，或读取本节点的 data-results。</output>
+</main>
+<button id="exit-preview" type="button">退出预览 / Esc</button>
+<script src="../extension/shared.js"></script>
+<script src="../extension/player.js"></script>
+<script src="live-stability-tests.js"></script>
+</body>
+</html>

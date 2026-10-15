@@ -196,13 +196,13 @@
     }
     return {update,clear};
   }
-  // Live messages use separate direct siblings of the video. Bound those
-  // three roots, then align the two bottom-control roots with the picture.
+  // Live messages use separate direct siblings of the video. Keep ordinary
+  // text full-width; bound decorative roots and bottom controls to the picture.
   // Only the decorative shade is clipped; menus keep their native overflow.
   // Re-query on layout to adopt roots replaced by the site.
   function createLiveBounds(){
     let layers=new Set(),controls=new Set(),shades=new Set(),tracks=new Set(),resizeTargets=new Set();
-    const stages=new Map(),trackProperties=['top','size'];
+    const stages=new Map(),trackStates=new Map(),trackProperties=['top','size'];
     const properties=['left','top','width','height','radius','track-gap'];
     const controlProperties=['left','width','bottom'];
     const mutationObserver=typeof MutationObserver==='function'?new MutationObserver(records=>{
@@ -221,6 +221,7 @@
     }):null;
     const resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(syncTracks):null;
     function restoreTrack(node){
+      trackStates.delete(node);
       node.removeAttribute('data-biliglow-live-track');
       for(const name of trackProperties)node.style.removeProperty(`--biliglow-live-track-${name}`);
     }
@@ -246,7 +247,11 @@
             const before=(box.top-visualTop)/stage.scaleY;
             const height=Math.max((visualBottom-visualTop)/stage.scaleY,parseFloat(style.lineHeight)||0);
             nextResize.add(node);
-            if(Number.isFinite(height)&&height>0&&height<=stage.height){entries.push({node,type,top,height,before});}
+            if(Number.isFinite(height)&&height>0&&height<=stage.height){
+              const key=[type,top,height,before,stage.height,stage.gap,stage.scaleY].join(':');
+              const cached=trackStates.get(node);
+              entries.push({node,type,top,height,before,key,fixed:cached?.key===key?cached.baseline:null});
+            }
           }
         }
         // Group by the engine's baseline, not each item's visual top. Emoji
@@ -265,16 +270,54 @@
         const gap=Math.min(stage.gap,...groups.map(group=>Math.max(0,(stage.height-group.height)/2)));
         for(const type of new Set(groups.map(group=>group.type))){
           const ordered=groups.filter(group=>group.type===type);
-          for(let index=0;index<ordered.length;index++){
-            const group=ordered[index],previous=ordered[index-1];
-            group.top=Math.max(gap,Math.min(group.native-group.before,stage.height-gap-group.height),previous?previous.top+previous.height+1:gap);
+          const fitBaseline=(entry,baseline)=>Math.max(gap+entry.before,Math.min(baseline,stage.height-gap-entry.height+entry.before));
+          const anchored=ordered.filter(group=>group.members.some(entry=>entry.fixed!==null));
+          const occupied=[];
+          function place(group,baseline){
+            // A new item can need more headroom than its native lane mates.
+            // Fit that item without moving text already crossing the screen.
+            for(const entry of group.members)entry.baseline=entry.fixed??fitBaseline(entry,baseline);
+            occupied.push({top:Math.min(...group.members.map(entry=>entry.baseline-entry.before)),
+              bottom:Math.max(...group.members.map(entry=>entry.baseline-entry.before+entry.height))});
           }
-          for(let index=ordered.length-1;index>=0;index--){
-            const group=ordered[index],nextGroup=ordered[index+1];
-            group.top=Math.min(group.top,nextGroup?nextGroup.top-group.height-1:stage.height-gap-group.height);
-            const baseline=Math.max(gap,Math.min(group.top,stage.height-gap-group.height))+group.before;
+          for(const group of anchored)place(group,group.members.find(entry=>entry.fixed!==null).fixed);
+          if(anchored.length){
+            // Allocate only newly visible/changed lanes around active ones.
+            // Repacking all visible lanes on every birth/death made even an
+            // unchanged native --top jump up and down in a busy live room.
+            for(const group of ordered.filter(group=>!anchored.includes(group))){
+              const desired=Math.max(gap,Math.min(group.native-group.before,stage.height-gap-group.height));
+              let start=gap,best=null;
+              const consider=end=>{
+                if(end-start<group.height)return;
+                const top=Math.max(start,Math.min(desired,end-group.height));
+                if(best===null||Math.abs(top-desired)<Math.abs(best-desired))best=top;
+              };
+              for(const slot of occupied.slice().sort((a,b)=>a.top-b.top)){
+                consider(slot.top-1);start=Math.max(start,slot.bottom+1);
+              }
+              consider(stage.height-gap);
+              // An overfull native renderer cannot fit every full-size row.
+              // Keep the new line inside; never shift an existing line for it.
+              place(group,(best??desired)+group.before);
+            }
+          }else{
+            // Initial placement and a real geometry change may fit all rows
+            // together. Afterwards, births/deaths must leave them anchored.
+            for(let index=0;index<ordered.length;index++){
+              const group=ordered[index],previous=ordered[index-1];
+              group.top=Math.max(gap,Math.min(group.native-group.before,stage.height-gap-group.height),previous?previous.top+previous.height+1:gap);
+            }
+            for(let index=ordered.length-1;index>=0;index--){
+              const group=ordered[index],nextGroup=ordered[index+1];
+              group.top=Math.min(group.top,nextGroup?nextGroup.top-group.height-1:stage.height-gap-group.height);
+              place(group,Math.max(gap,Math.min(group.top,stage.height-gap-group.height))+group.before);
+            }
+          }
+          for(const group of ordered){
             for(const entry of group.members){
-              const values=[`${baseline}px`,`${entry.height}px`];next.add(entry.node);
+              trackStates.set(entry.node,{key:entry.key,baseline:entry.baseline});
+              const values=[`${entry.baseline}px`,`${entry.height}px`];next.add(entry.node);
               trackProperties.forEach((name,i)=>{
                 const property=`--biliglow-live-track-${name}`;
                 if(entry.node.style.getPropertyValue(property)!==values[i])entry.node.style.setProperty(property,values[i]);
@@ -329,11 +372,16 @@
       const values=[`${(left-local.left)/local.scaleX+(area.scrollLeft||0)}px`,`${(top-local.top)/local.scaleY+(area.scrollTop||0)}px`,
         `${width/local.scaleX}px`,`${height/local.scaleY}px`,localRadius(radius,local),`${gap}px`];
       for(const layer of layers){
-        if(layer.matches('.web-player-danmaku'))stages.set(layer,{height:height/local.scaleY,gap,scaleY:local.scaleY});
+        const textLayer=layer.matches('.web-player-danmaku');
+        if(textLayer)stages.set(layer,{height:height/local.scaleY,gap,scaleY:local.scaleY});
         else stages.delete(layer);
+        // A portrait or radio picture must not squeeze rolling text into its
+        // narrow image. Keep the native horizontal stage; bound only its Y.
+        // Gift/animation surfaces and controls still follow the actual image.
+        const layerValues=textLayer?[`${area.scrollLeft||0}px`,values[1],`${width>0&&height>0?(local.right-local.left)/local.scaleX:0}px`,...values.slice(3)]:values;
         properties.forEach((name,index)=>{
           const property=`--biliglow-live-${name}`;
-          if(layer.style.getPropertyValue(property)!==values[index])layer.style.setProperty(property,values[index]);
+          if(layer.style.getPropertyValue(property)!==layerValues[index])layer.style.setProperty(property,layerValues[index]);
         });
         if(!layer.hasAttribute('data-biliglow-live-bounds'))layer.setAttribute('data-biliglow-live-bounds','');
       }
@@ -399,8 +447,8 @@
   }
   // The site's render root is a zero-height, static sibling of the video.
   // Its absolutely positioned DOM/canvas layers otherwise fill the player,
-  // including transparent letterboxing. Give only that root the actual
-  // picture's containing block; native tracks then start inside the picture.
+  // including transparent letterboxing. Keep the picture's vertical limits,
+  // but give portrait media the same horizontal stage as landscape playback.
   function createDanmakuBounds(){
     let layers=new Set(),tracks=new Set();
     const stages=new Map(),trackProperty='--biliglow-danmaku-track-top';
@@ -458,8 +506,9 @@
       const localHeight=localSize('height',['Top','Bottom'],area.offsetHeight||box.height);
       const scaleX=box.width/localWidth,scaleY=box.height/localHeight;
       const originLeft=box.left+(area.clientLeft||0)*scaleX,originTop=box.top+(area.clientTop||0)*scaleY;
-      const left=Math.max(originLeft,rect.left),top=Math.max(originTop,rect.top);
-      const right=Math.min(box.right,rect.left+rect.width),bottom=Math.min(box.bottom,rect.top+rect.height);
+      const portrait=video.videoHeight>video.videoWidth;
+      const left=portrait?originLeft:Math.max(originLeft,rect.left),top=Math.max(originTop,rect.top);
+      const right=portrait?box.right:Math.min(box.right,rect.left+rect.width),bottom=Math.min(box.bottom,rect.top+rect.height);
       const width=Math.max(0,right-left),height=Math.max(0,bottom-top);
       // Reserve the native control strip even while auto-hidden: revealing it
       // must not obscure an otherwise complete bottom comment. The render root
