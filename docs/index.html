@@ -4,7 +4,7 @@
 <p><a href="https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.6">GitHub 0.5.6 最新正式版</a>已于 2026-10-15 发布，提供：<a href="https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-chromium.zip">Chrome / Edge 包</a> · <a href="https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-firefox.zip">Firefox 临时体验包</a> · <a href="https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.6/Ambient-light-for-Bilibili-0.5.6-source.zip">匹配源码包</a>。Chrome / Edge 包解压后，在扩展管理页通过开发者模式选择「加载已解压的扩展」，再刷新 B 站播放页面。Firefox 步骤见下方。</p>
 <p>本地修复版通过 181/181 项 Node 测试；Chrome 与 Firefox 各通过 188/188 项生产代码合成场景检查。已在 Chrome 真实直播的普通与网页模式中实际将鼠标停在底栏检查，用户确认修复完成。Firefox 本轮使用原生应用与本地合成媒体验证，未验证签名安装／升级或真实 B 站 Firefox 页面；本轮未新增原生系统全屏验证。详细范围见仓库 <a href="https://github.com/tosya301/ambient-light-for-bilibili/blob/main/QA.txt">QA 记录</a>。</p>
 <p>三包通过 38 项独立检查，匹配源码可逐字节重建三份 ZIP。三份附件的匿名公开下载均返回 HTTP 200，大小、SHA-256、完整内容和 ZIP CRC 均与已验证本地包一致，GitHub 附件摘要一致；见<a href="https://github.com/tosya301/ambient-light-for-bilibili/blob/main/qa/release-0.5.6-public-download-verification.json">公开下载验证记录</a>。</p>
-<p>保留 0.5.5 的弹幕跳动与竖屏弹幕全宽修复，不新增权限或数据传输。本轮仅更新 GitHub，未提交扩展商店。下方商店状态均为附日期的历史记录，当前可安装版本以各商店页面为准。</p>
+<p>保留 0.5.5 的弹幕跳动与竖屏弹幕全宽修复，不新增权限或数据传输。2026-10-15 商店更新：Chrome 0.5.6 已提交审核（Pending review，通过后自动发布），提交时公开版为 0.5.3.17；Edge 0.5.6 为 In review，提交时在线版为 0.5.4；Firefox 后台显示 0.5.6 已通过审核且为上架版本。Chrome 与 Edge 提交审核不代表新版已公开上架，当前可安装版本以各商店页面为准。</p>
 <h2>历史版本与商店记录</h2>
 <p><strong>0.5.5：直播弹幕不再上下跳动，竖屏弹幕扩展为全宽。</strong>新弹幕进入、旧弹幕离场或同轨出现高表情时，保留已经在屏幕上的弹幕纵向位置，继续使用原生字号、横向动画和上下安全边界。</p>
 <p>直播文字弹幕和竖屏点播弹幕使用与横屏相同的播放器完整宽度，覆盖普通、宽屏及网页全屏。视频比例、圆角、装饰动画、系统通知和底部控制栏仍按实际画面处理；不新增权限或数据传输。</p>

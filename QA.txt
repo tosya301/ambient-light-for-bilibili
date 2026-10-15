@@ -1,6 +1,6 @@
 0.5.6 — 2026-10-15（GitHub 最新正式版）
 
-范围：用户补充直播鼠标划过画面／停在底栏后，黑色渐变出现尖角，以及普通与网页模式圆角边缘露出细白线。先在本地个人版修复，用户最终确认“OKOK 修复完成”，授权更新 GitHub。版本递增为 0.5.6，发布同版本 Chromium、Firefox 未签名临时体验包和匹配源码包；保留已发布 0.5.5 原产物，本轮不提交扩展商店。
+范围：用户补充直播鼠标划过画面／停在底栏后，黑色渐变出现尖角，以及普通与网页模式圆角边缘露出细白线。先在本地个人版修复，用户最终确认“OKOK 修复完成”，授权更新 GitHub。版本递增为 0.5.6，发布同版本 Chromium、Firefox 未签名临时体验包和匹配源码包；保留已发布 0.5.5 原产物。GitHub 发布时尚未提交扩展商店；用户随后授权更新三家商店，结果见下方。
 
 根因与修复：
 - 原生悬停控件会替换节点或整段改写样式。将画面几何与底栏圆角保存在稳定的播放器父层，由 CSS 直接应用到当前渐变节点，避免重建后等待下一轮布局的空档。
@@ -28,7 +28,15 @@
 - Ambient-light-for-Bilibili-0.5.6-firefox.zip：232913 bytes；SHA-256 34e456637e10d414f21a6e45f5e6634bf7afd6824df8998b1a05e7057d6f2ffb。
 - Ambient-light-for-Bilibili-0.5.6-source.zip：243761 bytes；SHA-256 fe8ed9cb1b2d49ba35f64edc86c46521894d8c280c9006c46e07f2b6328e0f02。
 
-证据：qa/release-0.5.6-public-download-verification.json；原始副本位于本次任务 outputs/release-0.5.6/public-download-verification.json。本轮没有向 Chrome、Edge 或 Firefox 商店提交 0.5.6；Firefox ZIP 仍为未签名临时体验包，所有上述宿主与安装验证限制仍适用。既有 0.5.5 Release 与归档未改写。
+证据：qa/release-0.5.6-public-download-verification.json；原始副本位于本次任务 outputs/release-0.5.6/public-download-verification.json。GitHub 发布时尚未向 Chrome、Edge 或 Firefox 商店提交 0.5.6；随后提交结果见下方。Firefox ZIP 仍为未签名临时体验包，所有上述宿主与安装验证限制仍适用。既有 0.5.5 Release 与归档未改写。
+
+0.5.6 商店更新 — 2026-10-15
+
+- Chrome：先撤回待审的 0.5.4，再上传已验证的 0.5.6 Chromium ZIP。提交后页面确认 “Your extension was submitted for review” 和 “Status: Pending review”，保留审核通过后自动发布；提交时公开版为 0.5.3.17。更新说明和审核备注已保存。证据：本次任务 outputs/release-0.5.6/chrome-submitted.jpg。
+- Edge：上传同一份已验证的 0.5.6 Chromium ZIP，后台确认 Version 0.5.6 / In review；提交时旧版 0.5.4 仍为 Live。中文商店说明和审核备注已保存。证据：本次任务 outputs/release-0.5.6/edge-submitted.txt/.jpg。
+- Firefox：AMO 版本 6582127、文件 5126259，后台确认 0.5.6 已通过审核且为上架版本。匹配源码 ZIP、中文版本说明和 2396 字符的英文审核构建备注已保存。在线校验为 0 错误、3 项警告。证据：本次任务 outputs/release-0.5.6/firefox-submitted.txt/.jpg、firefox-approved.txt/.jpg 和 firefox-upload-validation.txt。
+
+Chrome 与 Edge 提交审核不等于新版已经公开上架。Firefox 的 AMO 审核和上架状态不代表已实测签名包安装或升级；GitHub Firefox ZIP 仍为未签名临时体验包，安装方式和上述验证限制不变。商店更新复用已验证的发行包，没有改动运行代码、版本标签或 GitHub 附件。
 
 0.5.5 — 2026-10-15（GitHub 历史正式版）
 
