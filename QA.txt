@@ -1,4 +1,4 @@
-0.5.4 — 2026-10-15（发布候选验证）
+0.5.4 — 2026-10-15（GitHub 正式版）
 
 Scope: after confirming the r6 personal build fixed the live-player issue, the user authorized version 0.5.4, a GitHub update with Chromium, Firefox and matching-source packages, and a local personal-install update. This authorization supersedes the earlier personal-only scope. No 0.5.4 extension-store submission has been performed.
 
@@ -9,7 +9,7 @@ Implementation:
 - Native fullscreen keeps the 0.5.3.15 baseline light effect, picture sizing and square corners; only live-message boundary constraints are added there.
 - Retain the smoke comment material and 16px horizontal spacing already released in 0.5.3.17. No new permissions or network transmission.
 
-Verified release candidate:
+Verified release:
 - Final repository version 0.5.4 passed 172/172 Node tests, with 0 failures and 0 skips. Log: task work/release-0.5.4-tests.log.
 - Codex in-app browser, local synthetic media and production scripts: live-track 44/44, hover-shade/controls 28/28, native-fullscreen compatibility 19/19 and actual-picture boundaries 29/29. These are local fixture results, not a claim of signed extension-host installation or real-site coverage in every browser.
 - The installed Firefox app passed the same production-code local suites: actual-picture 29/29, native-fullscreen compatibility 19/19, hover-shade/controls 28/28 and live-track 44/44, all with 0 failures and 0 skips. Evidence: task outputs/release-0.5.4/firefox-live-checks.txt. Media are synthetic; no Firefox signed installation or upgrade validation is claimed.
@@ -19,8 +19,9 @@ Verified release candidate:
 - Chromium, Firefox and matching-source packages passed ZIP CRC, safe/unique-entry, version 0.5.4, unchanged permissions/site-scope and repository runtime/source-file checks. A fresh extraction of the source ZIP rebuilt all three packages byte-for-byte. Evidence: qa/release-0.5.4-package-verification.json.
 - The local personal installation files are updated to 0.5.4-personal with byte comparison completed. Browser reload is still pending; file replacement does not establish that an already-open tab is running the updated extension.
 
-Pending release gates:
-- Publication status: release candidate, awaiting publication and independent public-download/hash verification. Store state below is dated history for earlier versions; no 0.5.4 store update is claimed.
+0.5.4 publication — 2026-10-15
+
+Published v0.5.4 as the latest formal GitHub release at https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.4. Code/tag commit: 15eb505. Chromium, Firefox and matching-source assets are uploaded, and GitHub asset digests match the validated local packages. Independent downloads without Authorization or Cookie headers returned HTTP 200 for all three assets. Downloaded sizes, SHA-256, ZIP CRCs and full bytes match the validated local archives and GitHub asset digests. Both the public latest redirect and anonymous API confirm v0.5.4 with draft=false and prerelease=false. Evidence: qa/release-0.5.4-public-download-verification.json and task outputs/release-0.5.4/public-download-verification.json. Local personal files remain installed as 0.5.4-personal with manual browser reload unconfirmed. No 0.5.4 extension-store submission was performed; older store states below remain dated history.
 
 0.5.3.17 — 2026-10-14（GitHub 发布验证）
 

@@ -1,16 +1,16 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.4（待发布）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.4（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.4：直播画面边界与榜单底板（待发布）
+## 0.5.4：直播画面边界与榜单底板（正式版）
 
 直播观众／高能榜及大航海展开面板使用深色不透明圆角底板，避免后方页面内容透入。开启圆角后，普通与网页模式的 12px 圆角贴合实际视频画面；底部悬停遮罩和控制栏同步对齐画面的左右边及底边，保留按钮与上拉菜单交互。
 
 直播弹幕、动画及系统通知层跟随实际画面边界。普通、网页和原生全屏模式中，普通弹幕整行及表情在上下安全范围内完整显示，保留原字号和横向动画。原生全屏继续沿用既有光效、画面尺寸及直角外观，仅增加消息边界约束。保留 0.5.3.17 已发布的烟灰磨砂评论栏及左右 16px 留白；不新增权限或网络传输。
 
-- 发布状态：待发布。计划同时提供 [Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-chromium.zip)、[Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-firefox.zip) 和 [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-source.zip)；以上 0.5.4 链接在发布完成后可用。
+- 2026-10-15：[GitHub 0.5.4](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.4) 已发布为最新正式版，提供 [Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-chromium.zip)、[Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-firefox.zip) 和 [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-source.zip)。三份附件的匿名公开下载均返回 HTTP 200，大小、SHA-256、ZIP CRC 与文件内容均通过核对，与已验证本地包一致；见[公开下载验证记录](qa/release-0.5.4-public-download-verification.json)。
 - 172/172 项 Node 测试通过；Firefox 与内置浏览器各通过 120/120 项本地生产代码检查。Chrome 真实直播页面的圆角、底栏和榜单已核验；Firefox 使用本地合成媒体与生产代码检查，未验证签名安装或升级。详细范围见 [QA.txt](QA.txt)。
 - 0.5.4 尚未提交扩展商店。本次范围为 GitHub 三份发行包和本地个人版更新；下方 0.5.3.17 商店状态为附日期的历史记录。
 
@@ -75,7 +75,7 @@
 
 ## Firefox 提前体验
 
-使用 **Firefox 桌面版 140 或更高版本**。0.5.4 待发布，完成后可下载 [Firefox 0.5.4 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-firefox.zip)。包含本次直播榜单、圆角、控制栏和消息边界修复，并保留此前点播与评论栏功能，无需自行构建。
+使用 **Firefox 桌面版 140 或更高版本**。下载 [Firefox 0.5.4 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-firefox.zip)。包含本次直播榜单、圆角、控制栏和消息边界修复，并保留此前点播与评论栏功能，无需自行构建。
 
 1. 解压 `Ambient-light-for-Bilibili-0.5.4-firefox.zip`。
 2. 在 Firefox 地址栏打开 `about:debugging#/runtime/this-firefox`。
@@ -173,7 +173,7 @@
 
 ## 安装与使用
 
-0.5.4 待发布。完成后可下载 [GitHub 0.5.4](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.4) 的 `Ambient-light-for-Bilibili-0.5.4-chromium.zip`，解压后本地加载。包含本次直播榜单底板、实际画面圆角与控制栏对齐、消息边界修复，保留点播、稍后再看、普通与 `/blanc/` 直播间及原有外观设置。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
+下载 [GitHub 0.5.4](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.4) 的 `Ambient-light-for-Bilibili-0.5.4-chromium.zip`，解压后本地加载。包含本次直播榜单底板、实际画面圆角与控制栏对齐、消息边界修复，保留点播、稍后再看、普通与 `/blanc/` 直播间及原有外观设置。商店版本受审核进度影响，可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看当前可用版本。
 
 Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 请下载上方的专用体验包，按「Firefox 提前体验」步骤临时加载。
 

@@ -1,0 +1,79 @@
+{
+  "version": "0.5.4",
+  "verified_at_utc": "2026-10-15T14:45:28.011134+00:00",
+  "transport": {
+    "authentication": "none",
+    "authorization_header_sent": false,
+    "cookie_header_sent": false,
+    "download_method": "public HTTPS release URLs; downloaded bytes checked in memory"
+  },
+  "latest": {
+    "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/latest",
+    "http_status": 200,
+    "resolved_url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.4",
+    "api_url": "https://api.github.com/repos/tosya301/ambient-light-for-bilibili/releases/latest",
+    "api_http_status": 200,
+    "tag": "v0.5.4",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-10-15T14:44:41Z",
+    "target_commitish": "main",
+    "asset_count": 3
+  },
+  "checks": {
+    "all_downloads_http_200": true,
+    "all_sizes_match": true,
+    "all_sha256_match": true,
+    "all_zip_crc_pass": true,
+    "all_bytes_match_local_archives": true,
+    "all_github_asset_digests_match": true,
+    "github_latest_is_v0_5_4": true
+  },
+  "artifacts": [
+    {
+      "browser": "chromium",
+      "filename": "Ambient-light-for-Bilibili-0.5.4-chromium.zip",
+      "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-chromium.zip",
+      "http_status": 200,
+      "redirected_host": "release-assets.githubusercontent.com",
+      "bytes": 217665,
+      "sha256": "eef626a2d27d7e02938b289219358aa3494305b023fc3799878d9e1a8409f185",
+      "matches_package_verification": true,
+      "matches_local_archive_bytes": true,
+      "zip_crc_ok": true,
+      "github_asset_id": 644168615,
+      "github_asset_digest": "sha256:eef626a2d27d7e02938b289219358aa3494305b023fc3799878d9e1a8409f185",
+      "github_asset_size_matches": true
+    },
+    {
+      "browser": "firefox",
+      "filename": "Ambient-light-for-Bilibili-0.5.4-firefox.zip",
+      "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-firefox.zip",
+      "http_status": 200,
+      "redirected_host": "release-assets.githubusercontent.com",
+      "bytes": 227458,
+      "sha256": "92e0074375e4f83cd45d1ce823b10c324437abfb62ca2b3e538e246dec90e096",
+      "matches_package_verification": true,
+      "matches_local_archive_bytes": true,
+      "zip_crc_ok": true,
+      "github_asset_id": 644168608,
+      "github_asset_digest": "sha256:92e0074375e4f83cd45d1ce823b10c324437abfb62ca2b3e538e246dec90e096",
+      "github_asset_size_matches": true
+    },
+    {
+      "browser": "source",
+      "filename": "Ambient-light-for-Bilibili-0.5.4-source.zip",
+      "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.4/Ambient-light-for-Bilibili-0.5.4-source.zip",
+      "http_status": 200,
+      "redirected_host": "release-assets.githubusercontent.com",
+      "bytes": 238306,
+      "sha256": "dda87bff1f0f74d67f726cb5f701e7b80213b1f2d184c0c2792d27f263fe037f",
+      "matches_package_verification": true,
+      "matches_local_archive_bytes": true,
+      "zip_crc_ok": true,
+      "github_asset_id": 644168612,
+      "github_asset_digest": "sha256:dda87bff1f0f74d67f726cb5f701e7b80213b1f2d184c0c2792d27f263fe037f",
+      "github_asset_size_matches": true
+    }
+  ]
+}
