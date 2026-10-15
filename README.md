@@ -1,19 +1,19 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.5**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.5（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.5：直播弹幕不再上下跳动，竖屏弹幕扩展为全宽
+## 0.5.5：直播弹幕不再上下跳动，竖屏弹幕扩展为全宽（正式版）
 
 修复直播弹幕在飘动时反复上下跳动的问题。新弹幕进入、旧弹幕离场或同轨出现高表情时，保留已经在屏幕上的弹幕纵向位置；继续保留原生字号、横向动画和上下安全边界。
 
 直播文字弹幕，以及竖屏点播视频的弹幕，使用与横屏相同的播放器完整宽度，不再被限制在窄竖屏画面内。覆盖普通、宽屏和网页全屏模式；视频比例、圆角、装饰动画、系统通知与底部控制栏仍按实际画面处理。不新增权限或数据传输。
 
-- 2026-10-15：[GitHub 0.5.5](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.5) 发布准备中，公开发布及匿名下载待核验：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.5/Ambient-light-for-Bilibili-0.5.5-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.5/Ambient-light-for-Bilibili-0.5.5-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.5/Ambient-light-for-Bilibili-0.5.5-source.zip)。
+- 2026-10-15：[GitHub 0.5.5](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.5) 已发布为最新正式版，提供：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.5/Ambient-light-for-Bilibili-0.5.5-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.5/Ambient-light-for-Bilibili-0.5.5-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.5/Ambient-light-for-Bilibili-0.5.5-source.zip)。
 - 本地修复版通过 179/179 项 Node 测试；Chrome 与 Firefox 使用本地合成媒体，各通过 100/100 项动态浏览器检查，另有 90/90 项 Chrome 集成检查通过。动态场景中旧版可复现跳动，修复版已有弹幕的最大纵向漂移为 0px。真实 B 站竖屏视频的普通、宽屏、网页全屏三种模式已核验，用户随后确认修复可用。
 - Firefox 本轮使用生产脚本与本地合成媒体，未验证签名安装、升级或真实 B 站页面；原生系统全屏因浏览器未授予 Fullscreen API 而跳过，不计为通过。真实高密度直播及与 BewlyCat 同时启用的组合尚未专项复测。详细范围见 [QA.txt](QA.txt)。
-- 本地 Chromium、Firefox 和匹配源码包通过 37 项独立检查，从源码包重新构建的三份 ZIP 均与原包逐字节相同。
+- Chromium、Firefox 和匹配源码包通过 37 项独立检查，从源码包重新构建的三份 ZIP 均与原包逐字节相同。三份附件的匿名公开下载均返回 HTTP 200，大小、SHA-256、完整文件内容与 ZIP CRC 均核对通过，GitHub 附件摘要与已验证本地包一致；见[公开下载验证记录](qa/release-0.5.5-public-download-verification.json)。
 - 本轮仅更新 GitHub，未提交 0.5.5 到扩展商店；下方商店状态均为附日期的历史记录。
 
 ## 0.5.4：直播画面边界与榜单底板（历史正式版）

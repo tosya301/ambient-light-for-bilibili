@@ -1,4 +1,4 @@
-0.5.5 — 2026-10-15（GitHub 发布准备）
+0.5.5 — 2026-10-15（GitHub 最新正式版）
 
 范围：用户报告直播弹幕在飘动中反复上下跳动，以及竖屏视频、电台直播的弹幕区域过窄。已先在本地修复并重载个人版 0.5.4-personal-danmaku-fix；用户随后确认“OK好了”，授权更新 GitHub。此次版本递增为 0.5.5，提供 Chromium、Firefox 未签名临时体验包及匹配源码包；本轮未授权或执行扩展商店提交。此前 0.5.4 商店状态保留为带日期的历史记录。
 
@@ -17,7 +17,18 @@
 
 验证限制：本轮未验证 Firefox 签名安装、升级或真实 B 站页面；没有新增 Edge 宿主、Windows/Linux、真实高密度直播或与 BewlyCat 同时启用的专项测试。动态稳定性来自生产代码的合成场景对照；用户确认可用不等同于所有直播房间和扩展组合均通过。0.5.4 的 Firefox 120 项测试属于历史版本，不能当作 0.5.5 新测试。原生系统全屏本轮被跳过。
 
-发布检查：0.5.5 的 Chromium、Firefox 与匹配源码包通过 37 项独立检查，包含版本一致性、权限未扩张、ZIP CRC、安全路径及文件一致性。新解压的匹配源码独立重建的三份 ZIP 均与已验证原包逐字节相同。证据：本次任务 outputs/release-0.5.5/package-verification.json。GitHub 发布与匿名公开下载核对仍待本轮发布流程完成，在记录结果前不宣称已通过。Firefox ZIP 面向桌面 Firefox 140+，未签名，仅可临时加载，完全退出并重启后需重新载入。
+发布检查：0.5.5 的 Chromium、Firefox 与匹配源码包通过 37 项独立检查，包含版本一致性、权限未扩张、ZIP CRC、安全路径及文件一致性。新解压的匹配源码独立重建的三份 ZIP 均与已验证原包逐字节相同。证据：本次任务 outputs/release-0.5.5/package-verification.json。Firefox ZIP 面向桌面 Firefox 140+，未签名，仅可临时加载，完全退出并重启后需重新载入。
+
+0.5.5 发布与公开下载核验 — 2026-10-15
+
+已将 main 与 v0.5.5 标签推送到 GitHub，代码/标签提交为 81009d9。Release 为最新正式版，draft=false、prerelease=false：https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.5 。Chromium、Firefox 与匹配源码三份附件的 GitHub SHA-256 摘要与独立验证的本地包一致。
+
+不携带 Authorization 或 Cookie 的独立匿名下载三份附件均返回 HTTP 200；下载大小、SHA-256、完整文件字节及 ZIP CRC 均核对通过：
+- Ambient-light-for-Bilibili-0.5.5-chromium.zip：220950 bytes；SHA-256 276b4eca0a0fe9f0f2fafb7ea4b0cd4110f44ab51c54aa36cc2efe25263181f7。
+- Ambient-light-for-Bilibili-0.5.5-firefox.zip：230743 bytes；SHA-256 c1cae28130d58d53914c5a0473b151feaaf6ab6de56e903983ffa15f82025fc2。
+- Ambient-light-for-Bilibili-0.5.5-source.zip：241591 bytes；SHA-256 44cd23f0165f182e487624cb272ccb862582765e71e06ae84eaeff11cc73f7d3。
+
+证据：qa/release-0.5.5-public-download-verification.json；原始副本位于本次任务 outputs/release-0.5.5/public-download-verification.json。本轮没有向 Chrome、Edge 或 Firefox 商店提交 0.5.5；Firefox ZIP 仍为未签名临时体验包，所有上述宿主与安装验证限制仍适用。
 
 0.5.4 — 2026-10-15（GitHub 正式版，历史）
 
