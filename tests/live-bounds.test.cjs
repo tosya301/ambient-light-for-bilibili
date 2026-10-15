@@ -90,7 +90,7 @@ function assertBounds(layer,expected){
 }
 function assertNative(layer,native){for(const [name,value] of Object.entries(native))assert.equal(layer.style.getPropertyValue(name),value,name);}
 function assertCleared(layer,native){assert.equal(layer.hasAttribute('data-biliglow-live-bounds'),false);for(const name of names)assert.equal(layer.style.getPropertyValue(`--biliglow-live-${name}`),'');assertNative(layer,native);}
-function assertShadeCleared(shade,native){assert.equal(shade.hasAttribute('data-biliglow-live-control-shade'),false);assert.equal(shade.style.getPropertyValue('--biliglow-live-shade-clip'),'');assertNative(shade,native);}
+function assertShadeCleared(shade,native){assert.equal(shade.hasAttribute('data-biliglow-live-control-shade'),false);for(const name of ['radius','clip'])assert.equal(shade.style.getPropertyValue(`--biliglow-live-shade-${name}`),'');assertNative(shade,native);}
 function trackTop(node){assert.equal(node.hasAttribute('data-biliglow-live-track'),true);return parseFloat(node.style.getPropertyValue('--biliglow-live-track-top'));}
 function assertTrackCleared(node){assert.equal(node.hasAttribute('data-biliglow-live-track'),false);for(const name of ['top','size'])assert.equal(node.style.getPropertyValue(`--biliglow-live-track-${name}`),'');}
 const styleText=node=>[...node.properties].map(([name,value])=>`${name}: ${value}`).join(';');
@@ -101,10 +101,12 @@ function controlGeometry(control){
 }
 function shadeGeometry(shade,width=controlGeometry(shade).width,height=56){
   assert.equal(shade.hasAttribute('data-biliglow-live-control-shade'),true);
-  const clip=shade.style.getPropertyValue('--biliglow-live-shade-clip');
-  const values=clip.match(/^inset\(calc\(100% - ([\d.e+-]+)px\) ([\d.e+-]+)px ([\d.e+-]+)px ([\d.e+-]+)px round 0px 0px ([\d.e+-]+)px ([\d.e+-]+)px \/ 0px 0px ([\d.e+-]+)px ([\d.e+-]+)px\)$/);
-  assert.ok(values,clip);const [aboveTop,right,bottom,left,rx,rx2,ry,ry2]=values.slice(1).map(Number);
-  near(rx,rx2);near(ry,ry2);return {left,top:height-aboveTop,right:width-right,bottom:height-bottom,rx,ry};
+  const radius=shade.style.getPropertyValue('--biliglow-live-shade-radius');
+  const values=radius.match(/^0px 0px ([\d.e+-]+)px ([\d.e+-]+)px \/ 0px 0px ([\d.e+-]+)px ([\d.e+-]+)px$/);
+  assert.ok(values,radius);const [rx,rx2,ry,ry2]=values.slice(1).map(Number);
+  near(rx,rx2);near(ry,ry2);
+  assert.equal(shade.style.getPropertyValue('--biliglow-live-shade-clip'),'','the shade must not receive an additional clip path');
+  return {left:0,top:0,right:width,bottom:height,rx,ry};
 }
 
 test('live webpage mode keeps the fullscreen rendering contract but clips only the actual video picture',()=>{
@@ -292,35 +294,54 @@ test('live track ownership skips rotation helpers and releases removed, replaced
   h.update();h.effect.clear();assertTrackCleared(line);
 });
 
-test('live bottom controls and shade align with the picture while only the shade is clipped',()=>{
+test('live bottom controls align with the picture and only the native shade background is rounded',()=>{
   for(const mode of ['normal','fullscreen']){
     const h=fixture(),picture=h.picture();h.update({mode});const clip=shadeGeometry(h.shade);
     for(const element of [h.controls,h.shade]){
       const geometry=controlGeometry(element);near(geometry.left,picture.left);near(geometry.width,picture.width);near(geometry.bottom,0);
     }
     near(clip.left,0);near(clip.right,picture.width);
-    near(clip.top+717,picture.top);near(clip.bottom+717,picture.top+picture.height);near(clip.rx,12);near(clip.ry,12);
+    const expectedRadius=10;
+    near(clip.top,0);near(clip.bottom,56);near(clip.rx,expectedRadius);near(clip.ry,expectedRadius);
     assertNative(h.shade,h.shadeNative);assertNative(h.controls,h.controlNative);
     for(const e of [h.controls,h.menu,h.nestedShade])assert.equal(e.hasAttribute('data-biliglow-live-control-shade'),false);
     for(const e of [h.menu,h.nestedShade,h.nestedControls,h.otherControls,h.giftbar])assert.equal(e.hasAttribute('data-biliglow-live-control-frame'),false,'only the two direct control roots are aligned');
-    h.shade.style.setProperty('display','block');const before=h.shade.style.getPropertyValue('--biliglow-live-shade-clip');h.update({mode});
-    assert.equal(h.shade.style.getPropertyValue('--biliglow-live-shade-clip'),before);assert.equal(h.shade.style.getPropertyValue('display'),'block');
+    h.shade.style.setProperty('display','block');const before=h.shade.style.getPropertyValue('--biliglow-live-shade-radius');h.update({mode});
+    assert.equal(h.shade.style.getPropertyValue('--biliglow-live-shade-radius'),before);assert.equal(h.shade.style.getPropertyValue('display'),'block');
     h.update({mode,nextSettings:{...h.settings,roundedCorners:false}});const square=shadeGeometry(h.shade);near(square.rx,0);near(square.ry,0);near(square.left,0);
+  }
+});
+
+test('all live shade modes cover the physical-pixel fringe at DPR 1, 2 and 3 while video corners remain twelve pixels',()=>{
+  for(const devicePixelRatio of [1,2,3]){
+    const h=fixture();h.sandbox.devicePixelRatio=devicePixelRatio;
+    for(const mode of ['normal','theater','fullscreen']){
+      h.update({mode});const frame=h.updateFrame({mode}),shade=shadeGeometry(h.shade);
+      const expected=12-2/devicePixelRatio;
+      near(shade.rx,expected,`${mode} DPR ${devicePixelRatio} horizontal shade radius`);
+      near(shade.ry,expected,`${mode} DPR ${devicePixelRatio} vertical shade radius`);
+      near(frame.radius,12,'the video picture stays twelve pixels');
+      assert.match(h.video.style.getPropertyValue('--biliglow-live-picture-clip'),/round 12px\)$/);
+      for(const layer of h.layers)assertBounds(layer,{radius:12});
+      assertNative(h.shade,h.shadeNative);assertNative(h.controls,h.controlNative);
+    }
   }
 });
 
 test('live bottom controls rise above horizontal letterboxing without resizing the picture or gradient',()=>{
   const h=fixture();
   h.update({picture:rect(20,20,1388,705)});const thin=shadeGeometry(h.shade);
-  near(controlGeometry(h.controls).bottom,48);near(thin.bottom,56);near(thin.bottom-thin.top,705);near(thin.rx,12);near(thin.ry,12);
-  const shallow=shadeGeometry(h.shade,1388,8);near(shallow.bottom,8);near(shallow.bottom-shallow.top,705);near(shallow.ry,12);
+  near(controlGeometry(h.controls).bottom,48);near(thin.bottom,56);near(thin.bottom-thin.top,56);near(thin.rx,10);near(thin.ry,10);
+  const shallow=shadeGeometry(h.shade,1388,8);near(shallow.bottom,8);near(shallow.bottom-shallow.top,8);near(shallow.ry,10);
+  // This adapter only declares the requested radius. For a native strip
+  // shorter than that radius, CSS reduces it to fit the strip's own height.
   h.video.videoWidth=2560;const picture=h.picture();h.update();const letterbox=shadeGeometry(h.shade);
   const frame=controlGeometry(h.shade),shadeTop=773-frame.bottom-56;
   near(frame.bottom,773-picture.top-picture.height);near(controlGeometry(h.controls).bottom,frame.bottom);
-  near(letterbox.top+shadeTop,picture.top);near(letterbox.bottom+shadeTop,picture.top+picture.height);
+  near(letterbox.top+shadeTop,picture.top+picture.height-56);near(letterbox.bottom+shadeTop,picture.top+picture.height);
   assert.ok(frame.bottom>56,'the whole control bar is lifted to the picture bottom instead of left in the letterbox');
   assert.deepEqual(h.video.getBoundingClientRect(),rect(0,0,1428,773));assert.deepEqual(h.area.getBoundingClientRect(),rect(0,0,1428,773));
-  h.update({picture:rect(1600,0,100,100)});assert.equal(h.shade.style.getPropertyValue('--biliglow-live-shade-clip'),'inset(50%)');
+  h.update({picture:rect(1600,0,100,100)});assert.equal(h.shade.style.getPropertyValue('--biliglow-live-shade-clip'),'');
   near(controlGeometry(h.controls).width,0);assertNative(h.shade,h.shadeNative);assertNative(h.controls,h.controlNative);
 });
 
@@ -331,13 +352,13 @@ test('a normal aspect-matched player keeps the native control footprint and medi
   assertNative(h.controls,h.controlNative);assertNative(h.shade,h.shadeNative);
 });
 
-test('live shade uses scaled padding-box coordinates and preserves a twelve-pixel viewport radius',()=>{
+test('live shade uses scaled padding-box coordinates and keeps a physical-pixel overlap on the media corner',()=>{
   const h=fixture();h.geometry(rect(100,50,1000,600),500,600);
   h.area.css={...h.area.css,borderLeftWidth:'4px',borderRightWidth:'6px',borderTopWidth:'3px',borderBottomWidth:'5px'};
   h.area.scrollLeft=7;h.area.scrollTop=11;
   h.update({picture:rect(148,96,800,460)});const clip=shadeGeometry(h.shade);
   for(const element of [h.controls,h.shade])assert.deepEqual(controlGeometry(element),{left:27,width:400,bottom:78});
-  near(clip.left,0);near(clip.right,400);near(clip.bottom,56);near(clip.top,-404);near(clip.rx*2,12);near(clip.ry,12);
+  near(clip.left,0);near(clip.right,400);near(clip.bottom,56);near(clip.top,0);near(clip.rx*2,10);near(clip.ry,10);
   assertNative(h.shade,h.shadeNative);
 });
 
@@ -355,6 +376,30 @@ test('live bottom control roots release owned geometry on replacement, fullscree
     assertShadeCleared(next,h.shadeNative);assertControlCleared(next,h.shadeNative);assertControlCleared(nextControls,h.controlNative);
   }
   h.update();h.effect.clear();assertShadeCleared(next,h.shadeNative);assertControlCleared(next,h.shadeNative);assertControlCleared(nextControls,h.controlNative);
+});
+
+test('the stable live parent retains hover geometry when native control styles and roots are replaced',()=>{
+  const h=fixture();h.geometry(rect(100,50,1000,600),500,600);
+  h.area.style.setProperty('--site-player-token','keep');h.update({picture:rect(140,90,800,460)});
+  const inherited=Object.fromEntries(['control-left','control-width','control-bottom','shade-radius'].map(name=>
+    [name,h.area.style.getPropertyValue(`--biliglow-live-${name}`)]));
+  assert.equal(h.area.hasAttribute('data-biliglow-live-control-surface'),true);
+  assert.equal(inherited['control-left'],'20px');assert.equal(inherited['control-width'],'400px');
+  assert.equal(inherited['control-bottom'],'100px');assert.match(inherited['shade-radius'],/^0px 0px 5px 5px \/ 0px 0px 10px 10px$/);
+  assert.equal(h.area.style.getPropertyValue('--biliglow-live-shade-clip'),'');
+  h.shade.properties=new Map(Object.entries(h.shadeNative));h.shade.attrs.clear();
+  h.controls.properties=new Map(Object.entries(h.controlNative));h.controls.attrs.clear();
+  h.shade.remove();h.controls.remove();h.area.append(h.makeShade(),h.makeControls());
+  // No layout call here: the new native roots already inherit their geometry.
+  for(const [name,value] of Object.entries(inherited))assert.equal(h.area.style.getPropertyValue(`--biliglow-live-${name}`),value);
+  const assertReleased=()=>{
+    assert.equal(h.area.hasAttribute('data-biliglow-live-control-surface'),false);
+    for(const name of Object.keys(inherited))assert.equal(h.area.style.getPropertyValue(`--biliglow-live-${name}`),'');
+    assert.equal(h.area.style.getPropertyValue('--site-player-token'),'keep');
+  };
+  h.update({view:{native:true}});assertReleased();
+  h.update();h.update({nextSettings:{...h.settings,enabled:false}});assertReleased();
+  h.update();h.effect.clear();assertReleased();
 });
 
 test('portrait, radio and letterboxed live text keep full player width in all three modes',()=>{

@@ -57,25 +57,17 @@
     shadePinned=!shadePinned;shadeToggle.setAttribute('aria-pressed',String(shadePinned));
     shadeToggle.textContent=shadePinned?'取消固定控制栏底色':'固定显示控制栏底色';showShade(shadePinned);
   });
-  // Read the browser's resolved clip, including calc(100% - Npx). Keeping the
-  // entire picture's shape can deliberately put its top above the 56px strip.
-  const cssTerms=text=>text.match(/calc\([^)]*\)|[^\s]+/g)||[];
-  const four=values=>values.length===1?[values[0],values[0],values[0],values[0]]:values.length===2?[values[0],values[1],values[0],values[1]]:values.length===3?[values[0],values[1],values[2],values[1]]:values;
-  const cssLength=(text,basis)=>{
-    const expression=text.replace(/^calc\((.*)\)$/,'$1').replace(/\s/g,'');
-    const terms=[...expression.matchAll(/([+-]?\d*\.?\d+)(px|%)/g)];
-    if(!terms.length||terms.map(term=>term[0]).join('')!==expression)return NaN;
-    return terms.reduce((sum,term)=>sum+Number(term[1])*(term[2]==='%'?basis/100:1),0);
-  };
+  // Read the native 56px background's own radius. Adding a second clip path
+  // antialiases the same edge twice and can expose a bright hairline.
   const shadeShape=()=>{
-    const text=getComputedStyle(shade()).clipPath,r=shade().getBoundingClientRect();
-    if(!text.startsWith('inset(')||!text.endsWith(')'))return null;
-    const [offsetText,roundText='0px']=text.slice(6,-1).split(/\s+round\s+/);
-    const offsets=four(cssTerms(offsetText)).map((term,i)=>cssLength(term,i%2?r.width:r.height));
-    const radii=four(cssTerms(roundText.split('/')[0])).map(term=>cssLength(term,r.width));
-    if(offsets.length!==4||radii.length!==4||[...offsets,...radii].some(value=>!Number.isFinite(value)))return null;
-    return {rect:{left:r.left+offsets[3],top:r.top+offsets[0],width:r.width-offsets[1]-offsets[3],height:r.height-offsets[0]-offsets[2]},radii};
+    const css=getComputedStyle(shade()),r=shade().getBoundingClientRect();
+    const corners=['borderTopLeftRadius','borderTopRightRadius','borderBottomRightRadius','borderBottomLeftRadius'].map(name=>css[name].split(/\s+/).map(parseFloat));
+    if(corners.some(values=>values.some(value=>!Number.isFinite(value))))return null;
+    return {rect:{left:r.left,top:r.top,width:r.width,height:r.height},radii:corners.map(values=>values[0]),radiiY:corners.map(values=>values[1]??values[0]),clipPath:css.clipPath};
   };
+  const shadeMatchesPicture=shape=>Boolean(shape)&&controlEdgesMatch(shade(),picture())&&Math.abs(shape.rect.height-56)<1&&shape.clipPath==='none';
+  const expectedShadeRadius=()=>Math.max(0,12-2/(Number.isFinite(devicePixelRatio)&&devicePixelRatio>0?devicePixelRatio:1));
+  const noShadeProperties=()=>[shade(),$('#live-player')].every(el=>!el.style.getPropertyValue('--biliglow-live-shade-radius')&&!el.style.getPropertyValue('--biliglow-live-shade-clip'));
   const cleanLiveProperties=el=>{
     el.removeAttribute('data-biliglow-live-bounds');
     for(const key of ['left','top','width','height','radius'])el.style.removeProperty('--biliglow-live-'+key);
@@ -190,7 +182,7 @@
       check(getComputedStyle(host).borderRadius==='0px'&&getComputedStyle(host).boxShadow==='none'&&getComputedStyle(host).borderTopWidth==='0px',label+'：保留直角，没有新增边框或圆角');
       check(bound()&&layers().every(el=>!clipRadius(el)),label+'：弹幕覆盖全宽、装饰层贴画面，均保留直角与完整上下沿');
       const sr=shade().getBoundingClientRect();
-      check(!shade().hasAttribute('data-biliglow-live-control-shade')&&!shade().style.getPropertyValue('--biliglow-live-shade-clip')&&getComputedStyle(shade()).clipPath==='none'&&controlFrames().every(el=>!el.hasAttribute('data-biliglow-live-control-frame')&&noControlFrameProperties(el)&&controlEdgesMatch(el,v))&&Math.abs(sr.height-56)<1&&controlWrap().getBoundingClientRect().height===0,label+'：底色和零高控制层恢复原生全宽、底边和直角，不加新裁切');
+      check(!shade().hasAttribute('data-biliglow-live-control-shade')&&noShadeProperties()&&getComputedStyle(shade()).clipPath==='none'&&controlFrames().every(el=>!el.hasAttribute('data-biliglow-live-control-frame')&&noControlFrameProperties(el)&&controlEdgesMatch(el,v))&&Math.abs(sr.height-56)<1&&controlWrap().getBoundingClientRect().height===0,label+'：底色和零高控制层恢复原生全宽、底边和直角，不加新裁切');
     };
     try{
       F.setWeb(false);F.setPortrait(false);
@@ -263,18 +255,19 @@
     const checkScene=async(label,{web=false,portrait=false,letterbox=false}={})=>{
       F.setWeb(false);F.setPortrait(portrait);F.setWeb(web,web);window.scrollTo({top:0,behavior:'instant'});showShade(false);
       if(letterbox){const host=$('#live-player').getBoundingClientRect();F.source.width=Math.max(960,Math.ceil(540*host.width/host.height*1.6));F.source.height=540;}
-      await until(()=>F.video.readyState>=2&&F.video.videoWidth===F.source.width&&F.video.videoHeight===F.source.height&&(portrait?F.video.videoHeight>F.video.videoWidth:F.video.videoWidth>F.video.videoHeight)&&bound()&&shade().hasAttribute('data-biliglow-live-control-shade')&&controlFrames().every(el=>el.hasAttribute('data-biliglow-live-control-frame'))&&getComputedStyle(shade()).clipPath!=='none',label+'隐藏时准备底栏裁切');
-      check(shade().style.display==='none'&&Boolean(shade().style.getPropertyValue('--biliglow-live-shade-clip')),label+'：底色隐藏时已经准备好裁切，无需先显示测量');
+      const expectedRadius=expectedShadeRadius();
+      await until(()=>F.video.readyState>=2&&F.video.videoWidth===F.source.width&&F.video.videoHeight===F.source.height&&(portrait?F.video.videoHeight>F.video.videoWidth:F.video.videoWidth>F.video.videoHeight)&&bound()&&shade().hasAttribute('data-biliglow-live-control-shade')&&controlFrames().every(el=>el.hasAttribute('data-biliglow-live-control-frame'))&&shadeShape()?.radii.slice(2).every(radius=>Math.abs(radius-expectedRadius)<.1),label+'隐藏时准备底栏圆角');
+      check(shade().style.display==='none'&&Boolean(shade().style.getPropertyValue('--biliglow-live-shade-radius'))&&getComputedStyle(shade()).clipPath==='none',label+'：底色隐藏时已准备圆角，保留原生 clip-path');
       showShade(true);
       // Intentionally no await: this is the first style/layout read after the
       // native display:none -> block transition, before a later video frame.
       const shape=shadeShape(),p=picture(),sr=shade().getBoundingClientRect(),vr=F.video.getBoundingClientRect();
-      check(Boolean(shape)&&closeRect(shape.rect,p),label+'：刚显示的第一帧即沿实际视频画面裁切',getComputedStyle(shade()).clipPath);
-      check(Boolean(shape)&&shape.radii.every((r,i)=>Math.abs(r-(i<2?0:12))<.1),label+'：只保留两个 12px 下圆角，上沿保持直线');
+      check(shadeMatchesPicture(shape),label+'：刚显示的第一帧保留原生 56px 高度并贴合画面底边',getComputedStyle(shade()).borderRadius);
+      check(Boolean(shape)&&[shape.radii,shape.radiiY].every(radii=>radii.every((r,i)=>Math.abs(r-(i<2?0:expectedRadius))<.1))&&shape.clipPath==='none',label+'：背景使用本模式的下圆角，不叠加裁切',`预期 ${expectedRadius.toFixed(3)}px；视频圆角仍为 12px`);
       check(controlFrames().every(el=>controlEdgesMatch(el,p))&&Math.abs(sr.height-56)<1&&controlWrap().getBoundingClientRect().height===0,label+'：底色和零高控制层左右及底边均贴实际画面，保留各自原生高度');
       if(letterbox)check(p.top>vr.top+20&&p.top+p.height<vr.bottom-20&&controlWrap().getBoundingClientRect().bottom<vr.bottom-20,label+'：确有上下留白，整条控制栏跟随画面底边向上对齐');
       let immediate=true;
-      for(let i=0;i<4;i++){showShade(false);showShade(true);const current=shadeShape();immediate=immediate&&Boolean(current)&&closeRect(current.rect,picture());}
+      for(let i=0;i<4;i++){showShade(false);showShade(true);immediate=immediate&&shadeMatchesPicture(shadeShape());}
       check(immediate,label+'：反复显示隐藏无需等待下一帧恢复边界');
       $('.fixture-controller-menu').open=true;
       check(targetAtCenter($('.fixture-controller-menu summary'))&&targetAtCenter($('.fixture-controller-menu-panel button'))&&getComputedStyle($('.player-toolbar')).clipPath==='none'&&getComputedStyle(controlWrap()).clipPath==='none'&&getComputedStyle(controlWrap()).overflow==='visible'&&getComputedStyle(controlWrap()).pointerEvents==='auto'&&!$('.player-toolbar').hasAttribute('data-biliglow-live-control-shade'),label+'：按钮和向上展开的菜单仍可命中，零高容器保持可见溢出和原生事件');
@@ -289,10 +282,10 @@
       await checkScene('网页竖屏',{web:true,portrait:true});
       await B.storage.set({roundedCorners:false});
       await until(()=>{const s=shadeShape();return s&&s.radii.every(r=>r===0);},'关闭底栏圆角');
-      check(closeRect(shadeShape().rect,picture())&&controlFrames().every(el=>controlEdgesMatch(el,picture())),'关闭圆角后底栏恢复直角，控制层和底色仍贴实际画面');
+      check(shadeMatchesPicture(shadeShape())&&controlFrames().every(el=>controlEdgesMatch(el,picture())),'关闭圆角后底栏恢复直角，控制层和底色仍贴实际画面');
       await B.storage.set({enabled:false});
       await until(()=>!shade().hasAttribute('data-biliglow-live-control-shade')&&controlFrames().every(el=>!el.hasAttribute('data-biliglow-live-control-frame')),'关闭后清理底栏');
-      check(getComputedStyle(shade()).clipPath==='none'&&!shade().style.getPropertyValue('--biliglow-live-shade-clip')&&Math.abs(shade().getBoundingClientRect().height-56)<1&&controlFrames().every(el=>noControlFrameProperties(el)&&controlEdgesMatch(el,F.video.getBoundingClientRect()))&&controlWrap().getBoundingClientRect().height===0,'关闭氛围光移除新增裁切和对齐变量，恢复原生满宽控制栏与渐变');
+      check(getComputedStyle(shade()).clipPath==='none'&&noShadeProperties()&&Math.abs(shade().getBoundingClientRect().height-56)<1&&controlFrames().every(el=>noControlFrameProperties(el)&&controlEdgesMatch(el,F.video.getBoundingClientRect()))&&controlWrap().getBoundingClientRect().height===0,'关闭氛围光移除新增圆角和对齐变量，恢复原生满宽控制栏与渐变');
     }catch(error){check(false,'底栏圆角回归中断',error.message);}
     finally{
       try{

@@ -1,0 +1,188 @@
+{
+  "version": "0.5.6",
+  "verified_at_utc": "2026-10-15T18:49:52.859373+00:00",
+  "verification_type": "independent read-only package audit; trusted packaging script run only in scratch directory",
+  "baseline_tag": "v0.5.5",
+  "checks": [
+    {
+      "name": "chromium: zip CRC",
+      "passed": true
+    },
+    {
+      "name": "chromium: unique names",
+      "passed": true
+    },
+    {
+      "name": "chromium: safe regular relative paths",
+      "passed": true
+    },
+    {
+      "name": "chromium: metadata file allowlist",
+      "passed": true
+    },
+    {
+      "name": "chromium: metadata SHA-256",
+      "passed": true
+    },
+    {
+      "name": "firefox: zip CRC",
+      "passed": true
+    },
+    {
+      "name": "firefox: unique names",
+      "passed": true
+    },
+    {
+      "name": "firefox: safe regular relative paths",
+      "passed": true
+    },
+    {
+      "name": "firefox: metadata file allowlist",
+      "passed": true
+    },
+    {
+      "name": "firefox: metadata SHA-256",
+      "passed": true
+    },
+    {
+      "name": "source: zip CRC",
+      "passed": true
+    },
+    {
+      "name": "source: unique names",
+      "passed": true
+    },
+    {
+      "name": "source: safe regular relative paths",
+      "passed": true
+    },
+    {
+      "name": "source: metadata file allowlist",
+      "passed": true
+    },
+    {
+      "name": "source: metadata SHA-256",
+      "passed": true
+    },
+    {
+      "name": "versions: source/Chromium/Firefox manifests",
+      "passed": true
+    },
+    {
+      "name": "versions: Chromium and source version_name",
+      "passed": true
+    },
+    {
+      "name": "versions: source package.json",
+      "passed": true
+    },
+    {
+      "name": "versions: shared settings UI in both browsers",
+      "passed": true
+    },
+    {
+      "name": "source manifest equals Chromium manifest",
+      "passed": true
+    },
+    {
+      "name": "source includes exactly reviewed package script",
+      "passed": true
+    },
+    {
+      "name": "package script unchanged from v0.5.5",
+      "passed": true
+    },
+    {
+      "name": "source runtime matches repository",
+      "passed": true
+    },
+    {
+      "name": "Chromium runtime matches source byte-for-byte",
+      "passed": true
+    },
+    {
+      "name": "Firefox and Chromium same runtime bytes",
+      "passed": true
+    },
+    {
+      "name": "Firefox privacy page from source",
+      "passed": true
+    },
+    {
+      "name": "privacy page unchanged from v0.5.5",
+      "passed": true
+    },
+    {
+      "name": "MIT LICENSE consistent across packages",
+      "passed": true
+    },
+    {
+      "name": "Firefox gecko and no data declaration",
+      "passed": true
+    },
+    {
+      "name": "Firefox background and privacy resource",
+      "passed": true
+    },
+    {
+      "name": "Chromium entire manifest unchanged except version",
+      "passed": true
+    },
+    {
+      "name": "no permission expansion from v0.5.5",
+      "passed": true
+    },
+    {
+      "name": "Firefox entire manifest unchanged except version",
+      "passed": true
+    },
+    {
+      "name": "fresh independent extraction directory",
+      "passed": true
+    },
+    {
+      "name": "source packaging script completed",
+      "passed": true
+    },
+    {
+      "name": "chromium: exact byte-for-byte rebuild",
+      "passed": true
+    },
+    {
+      "name": "firefox: exact byte-for-byte rebuild",
+      "passed": true
+    },
+    {
+      "name": "source: exact byte-for-byte rebuild",
+      "passed": true
+    }
+  ],
+  "packages": [
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.6-chromium.zip",
+      "bytes": 223120,
+      "sha256": "2822587543c1b047b1663ef43a712e45014aa1e800a6959c5e326ffd012913da",
+      "file_count": 18
+    },
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.6-firefox.zip",
+      "bytes": 232913,
+      "sha256": "34e456637e10d414f21a6e45f5e6634bf7afd6824df8998b1a05e7057d6f2ffb",
+      "file_count": 19
+    },
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.6-source.zip",
+      "bytes": 243761,
+      "sha256": "fe8ed9cb1b2d49ba35f64edc86c46521894d8c280c9006c46e07f2b6328e0f02",
+      "file_count": 22
+    }
+  ],
+  "runtime_diff_review": {
+    "blocking_findings": [],
+    "conclusion": "The changed live hover surface uses a parent-owned geometry and bottom radius to survive delayed mounting or inline style replacement. Only the gradient background receives the radius; menu overflow stays visible. The small DPR-scaled radius overlap does not change video geometry. Parent state is removed when native fullscreen starts or cleanup runs.",
+    "limitations": [
+      "This independent package audit did not execute browsers. Actual hover behavior and visual fringe checks are supplied by the primary task."
+    ]
+  },
+  "passed": true
+}

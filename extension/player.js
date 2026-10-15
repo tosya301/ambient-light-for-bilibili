@@ -198,13 +198,21 @@
   }
   // Live messages use separate direct siblings of the video. Keep ordinary
   // text full-width; bound decorative roots and bottom controls to the picture.
-  // Only the decorative shade is clipped; menus keep their native overflow.
+  // Only the decorative shade's background is rounded; menus keep overflow.
   // Re-query on layout to adopt roots replaced by the site.
   function createLiveBounds(){
     let layers=new Set(),controls=new Set(),shades=new Set(),tracks=new Set(),resizeTargets=new Set();
+    let controlArea=null;
     const stages=new Map(),trackStates=new Map(),trackProperties=['top','size'];
     const properties=['left','top','width','height','radius','track-gap'];
     const controlProperties=['left','width','bottom'];
+    function restoreControlArea(){
+      if(!controlArea)return;
+      controlArea.removeAttribute('data-biliglow-live-control-surface');
+      for(const name of controlProperties)controlArea.style.removeProperty(`--biliglow-live-control-${name}`);
+      for(const name of ['clip','radius'])controlArea.style.removeProperty(`--biliglow-live-shade-${name}`);
+      controlArea=null;
+    }
     const mutationObserver=typeof MutationObserver==='function'?new MutationObserver(records=>{
       // Horizontal animation and our own custom-property writes do not need
       // another measurement. Native vertical tracks can change on cached nodes.
@@ -339,12 +347,14 @@
     function restoreShade(shade){
       shade.removeAttribute('data-biliglow-live-control-shade');
       shade.style.removeProperty('--biliglow-live-shade-clip');
+      shade.style.removeProperty('--biliglow-live-shade-radius');
     }
     function restoreControl(control){
       control.removeAttribute('data-biliglow-live-control-frame');
       for(const name of controlProperties)control.style.removeProperty(`--biliglow-live-control-${name}`);
     }
     function clear(){
+      restoreControlArea();
       mutationObserver?.disconnect();resizeObserver?.disconnect();stages.clear();resizeTargets.clear();
       for(const node of tracks)restoreTrack(node);tracks.clear();
       for(const layer of layers)restore(layer);layers.clear();
@@ -402,16 +412,33 @@
       const nextShades=new Set([...controls].filter(layer=>layer.matches('.web-player-controller-bg')));
       for(const shade of shades)if(!nextShades.has(shade))restoreShade(shade);
       shades=nextShades;
-      // Both bottom roots now share the picture's width and bottom edge, so
-      // do not apply the player's letterbox insets a second time to the shade.
-      // Its hidden-before-hover height remains native. A negative clip top
-      // preserves the full picture's corner geometry for shallow gradients.
-      const rx=radius/local.scaleX,ry=radius/local.scaleY;
-      const shadeClip=width>0&&height>0
-        ?`inset(calc(100% - ${height/local.scaleY}px) 0px 0px 0px round 0px 0px ${rx}px ${rx}px / 0px 0px ${ry}px ${ry}px)`
-        :'inset(50%)';
+      // The shade already shares the picture's width and bottom edge. Round
+      // its own background instead of a clip extended far above the strip:
+      // that clip can leave square paint when the hover layer is composited.
+      // Border radius needs no second mask and never clips the menu siblings.
+      // The video and its translucent shade are separate antialiased
+      // surfaces. A tiny overlap covers the bright media fringe: reducing the
+      // radius by two device pixels expands the diagonal by less than one.
+      // This does not resize either surface or change the video's 12px edge.
+      const pixelRatio=Number.isFinite(globalThis.devicePixelRatio)&&globalThis.devicePixelRatio>0?globalThis.devicePixelRatio:1;
+      const shadeCorner=Math.max(0,radius-2/pixelRatio);
+      const rx=shadeCorner/local.scaleX,ry=shadeCorner/local.scaleY;
+      const shadeRadius=`0px 0px ${rx}px ${rx}px / 0px 0px ${ry}px ${ry}px`;
+      // The site's hover controller can replace its root or rewrite cssText.
+      // Keep the geometry on its stable parent as well, so the replacement's
+      // very first paint is clipped instead of waiting for the next layout.
+      if(controlArea&&(controlArea!==area||view?.native))restoreControlArea();
+      if(!view?.native){
+        controlArea=area;
+        const inherited={...Object.fromEntries(controlProperties.map((name,index)=>[`--biliglow-live-control-${name}`,controlValues[index]])),
+          '--biliglow-live-shade-radius':shadeRadius};
+        if(area.style.getPropertyValue('--biliglow-live-shade-clip'))area.style.removeProperty('--biliglow-live-shade-clip');
+        for(const [name,value] of Object.entries(inherited))if(area.style.getPropertyValue(name)!==value)area.style.setProperty(name,value);
+        if(!area.hasAttribute('data-biliglow-live-control-surface'))area.setAttribute('data-biliglow-live-control-surface','');
+      }
       for(const shade of shades){
-        if(shade.style.getPropertyValue('--biliglow-live-shade-clip')!==shadeClip)shade.style.setProperty('--biliglow-live-shade-clip',shadeClip);
+        if(shade.style.getPropertyValue('--biliglow-live-shade-clip'))shade.style.removeProperty('--biliglow-live-shade-clip');
+        if(shade.style.getPropertyValue('--biliglow-live-shade-radius')!==shadeRadius)shade.style.setProperty('--biliglow-live-shade-radius',shadeRadius);
         if(!shade.hasAttribute('data-biliglow-live-control-shade'))shade.setAttribute('data-biliglow-live-control-shade','');
       }
       return {left,top,width,height};

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>直播悬停底栏圆角 · 生命周期回归</title>
+  <link rel="stylesheet" href="../extension/page.css">
+  <style>
+    body{margin:0;background:#101827;color:#e4edff;font:14px/1.6 system-ui,sans-serif}main{max-width:1120px;margin:24px auto;padding:0 24px}h1{font-size:24px;margin-bottom:4px}p{color:#b8c8df}button,select{font:inherit;padding:8px 12px;border:1px solid #8194b0;border-radius:6px;background:#233650;color:white}button:disabled{opacity:.5}.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}#fixture-shell{width:800px;height:450px;max-width:calc(100vw - 48px);margin:24px auto;background:#ff4f90;position:relative}#fixture-shell[data-mode="web"]{position:fixed;inset:0;width:100vw!important;height:100vh!important;max-width:none;z-index:1000;margin:0}body[data-running="true"] #fixture-shell:not([data-mode="web"]){position:fixed;left:50%;top:32px;transform:translateX(-50%);margin:0;z-index:1000}#fullscreen-container,.player-section,#live-player-ctnr,#live-player{position:relative;width:100%;height:100%;overflow:visible;background:transparent}#live-player>video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}#live-player>.web-player-controller-bg{pointer-events:auto}#live-player:hover>.web-player-controller-bg,#live-player[data-fixture-native-hover]>.web-player-controller-bg{border-radius:0;--fixture-hover-style-active:1}#web-player-controller-wrap-el{pointer-events:none;overflow:visible}#web-player-controller-wrap-el button{position:absolute;pointer-events:auto;bottom:10px;left:24px;padding:3px 10px;font-size:12px}#web-player-controller-wrap-el .quality-button{left:auto;right:24px}#web-player-controller-wrap-el .quality-menu{position:absolute;right:24px;bottom:52px;width:148px;padding:12px;background:#172d4b;border:2px solid #72e5ff;border-radius:8px;pointer-events:auto;color:#fff}#web-player-controller-wrap-el .quality-menu button{position:static;display:block;width:100%;margin:4px 0}#fixture-label{position:absolute;left:16px;top:14px;z-index:30;pointer-events:none;background:#12223bcc;padding:6px 10px;border-radius:6px}#hover-summary{font-weight:600}#hover-results{display:block;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;padding:16px;background:#19263b;border:1px solid #51627a;border-radius:8px}#hover-results[data-passed="true"]{border-color:#54d9a9}#hover-results[data-passed="false"]{border-color:#ff8a97}#exit-preview{display:none;position:fixed;top:12px;right:16px;z-index:2000}body[data-preview="true"] #exit-preview{display:block}#error-note{color:#ff9daa}.note{font-size:12px}#frame-host{position:fixed;inset:0;pointer-events:none;z-index:999}
+  </style>
+</head>
+<body>
+<main>
+  <h1>直播悬停底栏圆角 · 生命周期回归</h1>
+  <p>生产版 <code>player.js</code> 和 <code>page.css</code>，配合本地 Canvas 视频。模拟控制栏显示、整段 style 改写及节点重建，检查修复能否在下一次布局测量前保持圆角。</p>
+  <div class="actions">
+    <button id="run-hover-tests" type="button">运行全部回归</button>
+    <button id="download-hover-report" type="button" disabled>下载 JSON 报告</button>
+    <label>预览 <select id="preview-mode"><option value="normal">普通 800 × 450</option><option value="wide">宽屏 1000 × 562.5</option><option value="letterbox">上下留白 1000 × 600</option><option value="web">网页全屏</option></select></label>
+    <button id="preview-hover" type="button">显示悬停后的底栏</button>
+    <button id="preview-rebuild" type="button">预览原生控制栏重建</button>
+  </div>
+  <p class="note">粉色区域是圆角外侧，蓝色区域是视频。自动化仅改写本页模拟播放器；不读取账号、扩展存储或任何直播。为检测实际裁切，本页渐变背景可以被命中；控制按钮和向上展开菜单分别检查。测试期间会临时覆盖页面，完成后恢复。</p>
+  <p id="error-note" role="alert"></p>
+  <div id="fixture-shell" data-mode="normal">
+    <div id="fullscreen-container"><div class="player-section"><div id="live-player-ctnr" class="normal"><div id="live-player">
+      <video id="hover-video" autoplay muted playsinline aria-label="本地合成直播"></video>
+      <div class="web-player-controller-bg web-player-controller-wrap"></div>
+      <div id="web-player-controller-wrap-el" class="web-player-controller-wrap"></div>
+      <div id="fixture-label">本地合成画面</div>
+    </div></div></div></div>
+  </div>
+  <p id="hover-summary" role="status">等待运行</p>
+  <output id="hover-results" data-state="idle">点击“运行全部回归”开始。结果也写入本节点的 data-results。</output>
+</main>
+<div id="frame-host" aria-hidden="true"></div>
+<button id="exit-preview" type="button">退出预览 / Esc</button>
+<script src="../extension/shared.js"></script>
+<script src="../extension/player.js"></script>
+<script src="live-hover-tests.js"></script>
+</body>
+</html>

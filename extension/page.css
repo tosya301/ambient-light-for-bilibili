@@ -63,17 +63,19 @@ html[data-biliglow-active] #live-player > .web-player-danmaku[data-biliglow-live
 }
 /* Match the bottom controller and its gradient to the actual picture.
    Keep their native height and visible overflow for buttons and menus. */
-html[data-biliglow-active] #live-player > :is(.web-player-controller-bg, #web-player-controller-wrap-el)[data-biliglow-live-control-frame] {
+html[data-biliglow-active] #live-player[data-biliglow-live-control-surface] > :is(.web-player-controller-bg, #web-player-controller-wrap-el) {
   left: var(--biliglow-live-control-left) !important;
   right: auto !important;
   width: var(--biliglow-live-control-width) !important;
   bottom: var(--biliglow-live-control-bottom) !important;
 }
-/* The hover gradient is a separate, empty paint layer. Clip its native
-   background at the same picture edges; controls and popover overflow remain
-   untouched. The clip is ready even while the site hides the gradient. */
-html[data-biliglow-active] #live-player > .web-player-controller-bg[data-biliglow-live-control-shade] {
-  clip-path: var(--biliglow-live-shade-clip) !important;
+/* Round the hover gradient's own background. Do not extend a clip-path above
+   this shallow strip: hover compositing can expose square background corners.
+   The parent supplies the radius before native controls mount or rewrite their
+   inline styles. One native background edge avoids a double-mask hairline;
+   the adjacent controller and its upward menus keep visible overflow. */
+html[data-biliglow-active] #live-player[data-biliglow-live-control-surface] > .web-player-controller-bg {
+  border-radius: var(--biliglow-live-shade-radius) !important;
 }
 /* Bound native DOM/canvas danmaku vertically in normal, wide and fullscreen
    layouts. Portrait media keeps the landscape player's horizontal range.

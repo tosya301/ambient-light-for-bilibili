@@ -1,0 +1,820 @@
+{
+  "version": "0.5.6",
+  "date": "2026-10-15",
+  "node": {
+    "passed": 181,
+    "failed": 0
+  },
+  "chromium_synthetic": {
+    "passed": 188,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "普通：原生渐变初始隐藏",
+        "passed": true
+      },
+      {
+        "name": "普通 / 首次显示：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 首次显示：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 首次显示：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 首次显示：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 首次显示：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 整段 style 重写后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通 / 原生 class 和属性重写：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 原生 class 和属性重写：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 原生 class 和属性重写：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 原生 class 和属性重写：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 原生 class 和属性重写：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通：模拟控制栏节点已重建",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 节点重建后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通：已启用与 :hover 共用的模拟原生样式",
+        "passed": true
+      },
+      {
+        "name": "普通 / 模拟原生 hover 组合样式：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 模拟原生 hover 组合样式：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 模拟原生 hover 组合样式：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 模拟原生 hover 组合样式：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 模拟原生 hover 组合样式：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通 / 停留 1500 ms 后：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "普通 / 停留 1500 ms 后：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "普通 / 停留 1500 ms 后：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "普通 / 停留 1500 ms 后：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "普通 / 停留 1500 ms 后：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "普通：8px 原生浅条由 CSS 自动缩减圆角，无额外裁切",
+        "passed": true
+      },
+      {
+        "name": "普通：关闭圆角恢复原生方角",
+        "passed": true
+      },
+      {
+        "name": "普通：原生全屏清除控制栏适配",
+        "passed": true
+      },
+      {
+        "name": "普通：关闭适配清理根与子节点的样式和标记",
+        "passed": true
+      },
+      {
+        "name": "宽屏：原生渐变初始隐藏",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 首次显示：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 首次显示：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 首次显示：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 首次显示：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 首次显示：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 整段 style 重写后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 原生 class 和属性重写：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 原生 class 和属性重写：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 原生 class 和属性重写：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 原生 class 和属性重写：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 原生 class 和属性重写：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏：模拟控制栏节点已重建",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 节点重建后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏：已启用与 :hover 共用的模拟原生样式",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 模拟原生 hover 组合样式：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 模拟原生 hover 组合样式：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 模拟原生 hover 组合样式：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 模拟原生 hover 组合样式：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 模拟原生 hover 组合样式：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 停留 1500 ms 后：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 停留 1500 ms 后：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 停留 1500 ms 后：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 停留 1500 ms 后：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "宽屏 / 停留 1500 ms 后：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "宽屏：8px 原生浅条由 CSS 自动缩减圆角，无额外裁切",
+        "passed": true
+      },
+      {
+        "name": "宽屏：关闭圆角恢复原生方角",
+        "passed": true
+      },
+      {
+        "name": "宽屏：原生全屏清除控制栏适配",
+        "passed": true
+      },
+      {
+        "name": "宽屏：关闭适配清理根与子节点的样式和标记",
+        "passed": true
+      },
+      {
+        "name": "上下留白：原生渐变初始隐藏",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 首次显示：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 首次显示：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 首次显示：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 首次显示：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 首次显示：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 整段 style 重写后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 原生 class 和属性重写：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 原生 class 和属性重写：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 原生 class 和属性重写：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 原生 class 和属性重写：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 原生 class 和属性重写：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白：模拟控制栏节点已重建",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 节点重建后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白：已启用与 :hover 共用的模拟原生样式",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 模拟原生 hover 组合样式：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 模拟原生 hover 组合样式：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 模拟原生 hover 组合样式：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 模拟原生 hover 组合样式：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 模拟原生 hover 组合样式：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 停留 1500 ms 后：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 停留 1500 ms 后：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 停留 1500 ms 后：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 停留 1500 ms 后：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "上下留白 / 停留 1500 ms 后：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "上下留白：8px 原生浅条由 CSS 自动缩减圆角，无额外裁切",
+        "passed": true
+      },
+      {
+        "name": "上下留白：关闭圆角恢复原生方角",
+        "passed": true
+      },
+      {
+        "name": "上下留白：原生全屏清除控制栏适配",
+        "passed": true
+      },
+      {
+        "name": "上下留白：关闭适配清理根与子节点的样式和标记",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：原生渐变初始隐藏",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 首次显示：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 首次显示：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 首次显示：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 首次显示：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 首次显示：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 整段 style 重写后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 原生 class 和属性重写：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 原生 class 和属性重写：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 原生 class 和属性重写：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 原生 class 和属性重写：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 原生 class 和属性重写：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：模拟控制栏节点已重建",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后同步：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后同步：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后同步：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后同步：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后同步：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后的首帧：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后的首帧：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后的首帧：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后的首帧：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 节点重建后的首帧：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：已启用与 :hover 共用的模拟原生样式",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 模拟原生 hover 组合样式：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 模拟原生 hover 组合样式：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 模拟原生 hover 组合样式：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 模拟原生 hover 组合样式：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 模拟原生 hover 组合样式：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 停留 1500 ms 后：左右下角均被实际裁掉",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 停留 1500 ms 后：背景下角匹配本模式，不叠加 clip-path",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 停留 1500 ms 后：中央渐变仍完整显示",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 停留 1500 ms 后：底栏贴合真实画面",
+        "passed": true
+      },
+      {
+        "name": "网页全屏 / 停留 1500 ms 后：播放、画质及向上展开菜单均可命中",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：8px 原生浅条由 CSS 自动缩减圆角，无额外裁切",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：关闭圆角恢复原生方角",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：原生全屏清除控制栏适配",
+        "passed": true
+      },
+      {
+        "name": "网页全屏：关闭适配清理根与子节点的样式和标记",
+        "passed": true
+      }
+    ]
+  },
+  "firefox_synthetic": {
+    "passed": 188,
+    "failed": 0,
+    "method": "Native Firefox app, local Canvas stream and production shared.js/player.js/page.css; native app accessibility results and screenshot inspected."
+  },
+  "real_chrome": {
+    "normal": {
+      "hover": [
+        "live-web-player-controller svelte-4rgwwa",
+        "control-area svelte-4rgwwa",
+        "right-area svelte-4rgwwa"
+      ],
+      "mode": "supportWebp",
+      "shade": {
+        "border": "0px 0px 11px 11px / 0px 0px 11px 11px",
+        "clip": "none",
+        "display": "block"
+      },
+      "videoClip": "inset(0px 0.00434028px round 12px / 12px)"
+    },
+    "web": {
+      "hover": [
+        "live-web-player-controller svelte-4rgwwa",
+        "control-area svelte-4rgwwa",
+        "right-area svelte-4rgwwa"
+      ],
+      "mode": "supportWebp player-full-win over-hidden",
+      "shade": {
+        "border": "0px 0px 11px 11px",
+        "clip": "none",
+        "display": "block",
+        "rect": {
+          "bottom": 755,
+          "height": 56,
+          "left": 26.8828125,
+          "right": 1401.1015625,
+          "top": 699,
+          "width": 1374.21875,
+          "x": 26.8828125,
+          "y": 699
+        }
+      },
+      "videoClip": "inset(0px 26.8889px round 12px)"
+    },
+    "user_confirmed": true
+  },
+  "runtime_sha256": {
+    "player.js": "3961f745b6640755bc60bee755f71099be2f72170e27a759732284df5bd75f80",
+    "page.css": "44d64f017da49c0ea1dc5923f2eaf65a9af104bb34ca1c640b5cbfcc69e48aef"
+  },
+  "limitations": [
+    "Synthetic Firefox check is not a signed installation, upgrade, or live Bilibili check.",
+    "No new system-fullscreen, Edge, Windows/Linux or BewlyCat-combination host check."
+  ]
+}
