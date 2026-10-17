@@ -1,4 +1,4 @@
-0.5.7 — 2026-10-16（GitHub 发布候选；发布结果见核验记录）
+0.5.7 — 2026-10-16（GitHub 最新正式版）
 
 用户授权把已在本地修复与测试的版本更新到 GitHub，并同步个人版版本号；0.5.6 为上一个正式版，本次升为 0.5.7。以下较早的“仅本地／未发布”条目是当时状态，发布授权以本条为准。本轮不向扩展商店提交。
 
@@ -9,6 +9,17 @@
 产物独立审计 48/48 通过：ZIP CRC、安全路径、白名单、版本及权限未扩张；独立提取匹配源码可逐字节重建 Chromium、Firefox 与源码三份 ZIP。记录：qa/release-0.5.7-package-verification.json；Chrome 专项证据：qa/release-0.5.7-browser-verification.json。本地个人版数值版本、version_name、设置 UI 均为 0.5.7，运行文件与 Chromium 包一致，保留既有设置；用户手动重载仍待执行。
 
 发行包要求：同版本 Chromium、Firefox 未签名临时体验包及匹配源码包；桌面 Firefox 140+，使用 about:debugging#/runtime/this-firefox 临时载入 manifest.json，完全退出重启需重新载入。产物独立审计与公开下载结果将记入 qa/release-0.5.7-*.json。
+
+0.5.7 发布与公开下载核验 — 2026-10-16
+
+GitHub main 与 v0.5.7 标签已推送，发行代码提交为 392b467001e57c3dce41c3f515fd53a173b42ab4。Release 为最新正式版，draft=false、prerelease=false：https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.7 。
+
+三份附件的 GitHub SHA-256 摘要、无 Authorization／Cookie 的匿名公开下载均与独立验证的本地包相同，HTTP 200，完整字节及 ZIP CRC 通过：
+- Ambient-light-for-Bilibili-0.5.7-chromium.zip：231374 bytes；SHA-256 9908634550555483a71a1c937f39b7c787d1d944aef50576c5e8e6bf50b10056。
+- Ambient-light-for-Bilibili-0.5.7-firefox.zip：241858 bytes；SHA-256 0b86bae550ef20b97fcdca27dc8e44240570fe5a5709bfdd4dc8fdddb1fa47b3。
+- Ambient-light-for-Bilibili-0.5.7-source.zip：252706 bytes；SHA-256 1c75699dfdfae54add2143dab9742b6fe28b7c656bac0cc10599193d368427b4。
+
+记录：qa/release-0.5.7-public-download-verification.json。个人版版本号和运行文件已同步 0.5.7，需用户手动重新加载扩展并刷新 B 站后激活；未把文件更新计为运行时加载验证。本次未提交扩展商店，历史 Release 与附件保持。
 
 清晰全屏背景与水印黑边补充 — 2026-10-16（仅本地，未发布）
 

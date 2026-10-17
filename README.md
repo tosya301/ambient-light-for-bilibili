@@ -13,6 +13,7 @@
 - 2026-10-16：[GitHub 0.5.7](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.7) 提供：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.7/Ambient-light-for-Bilibili-0.5.7-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.7/Ambient-light-for-Bilibili-0.5.7-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.7/Ambient-light-for-Bilibili-0.5.7-source.zip)。Firefox 包须按下方临时加载步骤使用。
 - 最终功能源码通过 223/223 项 Node 测试。新功能及相关回归已在 Chrome 中使用生产脚本、本地合成视频检查；窄留白和片源黑边专项包含网页与原生全屏。后续水印与清晰背景组合检查未完成原生全屏重测，不将早期结果作为最终组合的全屏证明。详细证据与范围见 [QA.txt](QA.txt)。
 - 三包通过 [48 项独立检查](qa/release-0.5.7-package-verification.json)，匹配源码独立重建的三份 ZIP 与发行包逐字节一致，权限未扩张。
+- 三份附件的匿名公开下载均为 HTTP 200，大小、SHA-256、完整内容与 ZIP CRC 核对通过；见[公开下载核验记录](qa/release-0.5.7-public-download-verification.json)。
 - 当前组合未验证真实 B 站重新加载扩展后的效果、Firefox／Edge 宿主、签名安装／升级或 Windows／Linux。黑边初次识别需连续确认；复杂字幕、暗场或像素读取限制可能延后识别并保留光效。
 - 不增加权限、依赖或网络传输。本轮更新 GitHub，未向扩展商店提交 0.5.7；下方 0.5.6 等商店状态均为附日期的历史记录，各商店安装版本独立审核。
 
