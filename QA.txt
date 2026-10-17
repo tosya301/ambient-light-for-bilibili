@@ -1,6 +1,6 @@
 0.5.7 — 2026-10-16（GitHub 最新正式版）
 
-用户授权把已在本地修复与测试的版本更新到 GitHub，并同步个人版版本号；0.5.6 为上一个正式版，本次升为 0.5.7。以下较早的“仅本地／未发布”条目是当时状态，发布授权以本条为准。本轮不向扩展商店提交。
+用户授权把已在本地修复与测试的版本更新到 GitHub，并同步个人版版本号；0.5.6 为上一个正式版，本次升为 0.5.7。以下较早的“仅本地／未发布”条目是当时状态，发布授权以本条为准。GitHub 发布当时尚未提交扩展商店；用户随后明确授权更新三家商店，结果见下方“0.5.7 商店更新”。
 
 范围：普通／宽屏点播滚动时移除固定光层的逆向镂空，保留实际画面圆角；全屏窄留白保持纯黑，片源已有上下黑边时停止外侧光效，稀疏水印使用独立容错检测，不改变严格去边规则及画面尺寸／裁剪；新增默认关闭的“清晰全屏背景”，仅普通点播铺满窗口、零模糊、整帧替换，最长边 1920px，退出恢复原有光效。权限仍仅 storage，无新增依赖、传输或采样计时循环；中英隐私说明同步实际本地分析范围。
 
@@ -19,7 +19,19 @@ GitHub main 与 v0.5.7 标签已推送，发行代码提交为 392b467001e57c3dc
 - Ambient-light-for-Bilibili-0.5.7-firefox.zip：241858 bytes；SHA-256 0b86bae550ef20b97fcdca27dc8e44240570fe5a5709bfdd4dc8fdddb1fa47b3。
 - Ambient-light-for-Bilibili-0.5.7-source.zip：252706 bytes；SHA-256 1c75699dfdfae54add2143dab9742b6fe28b7c656bac0cc10599193d368427b4。
 
-记录：qa/release-0.5.7-public-download-verification.json。个人版版本号和运行文件已同步 0.5.7，需用户手动重新加载扩展并刷新 B 站后激活；未把文件更新计为运行时加载验证。本次未提交扩展商店，历史 Release 与附件保持。
+记录：qa/release-0.5.7-public-download-verification.json。个人版版本号和运行文件已同步 0.5.7，需用户手动重新加载扩展并刷新 B 站后激活；未把文件更新计为运行时加载验证。GitHub 发布当时尚未提交扩展商店；随后经用户授权完成商店更新，结果见下方。历史 Release 与附件保持。
+
+0.5.7 商店更新 — 2026-10-16（America/New_York）
+
+GitHub 发布后，用户明确授权更新 Chrome、Edge、Firefox 商店。复用同一批已验证并公开发布的 0.5.7 Chromium、Firefox 和匹配源码 ZIP；提交没有改动运行代码、发行标签或 GitHub 附件。三包 SHA-256 与上方发布记录相同。
+
+- Chrome：通过原生 Chrome 后台上传 0.5.7 Chromium ZIP；中文商店描述及 500 字符上限内的测试说明已保存。提交后出现 “Your extension was submitted for review” 成功弹窗，最终状态为 “Status: Pending review”，保留审核通过后自动发布；提交时公开版为 0.5.6。成功弹窗与最终状态分别核对，不将上传完成当成审核通过。
+- Edge：通过 Partner Center 上传同一份 0.5.7 Chromium ZIP；中文描述与 1338 字符审核备注已保存，最终显示 “Version 0.5.7 / In review”，旧版 “0.5.6 / Live”。
+- Firefox：按用户明确指定的原生 Firefox 应用上传专用 ZIP，AMO 版本 6587000、文件 5131130。在线校验为 0 错误、3 项 “Unsafe assignment to innerHTML” 警告。匹配 source ZIP 已附到同版本，2529 字符英文审核／构建备注及中文版本说明已保存，并在新加载的管理页面重新核对。最终 AMO 后台显示 0.5.7 已通过审核，且为上架版本。提交按 America/New_York 当地日期记录为 2026-10-16；Mozilla 文件状态时间显示 Oct. 17, 2026。
+
+提交核验记录：qa/release-0.5.7-store-submission.json。原始界面证据仅保存在本任务 outputs/release-0.5.7/：chrome-submitted.txt/.png、chrome-submitted-confirmation.txt/.png、chrome-package-confirmation.txt、edge-submitted.txt/.png、firefox-upload-validation.txt、firefox-submitted.txt/.png、firefox-approved.txt/.png、firefox-reviewer-notes-submitted.txt 与 firefox-release-notes-submitted.txt；未将原始界面或账户信息纳入公开仓库。
+
+状态边界：Chrome 与 Edge 提交审核不等于 0.5.7 已公开上架。Firefox 的后台审核／上架状态不代表本轮已实测签名包安装、升级或当前代码的真实 B 站注入；前述宿主验证缺口仍保留。GitHub Firefox ZIP 仍为未签名临时体验包，桌面 Firefox 140+，完全退出重启后需重新载入，不将其描述为普通持久安装包。
 
 清晰全屏背景与水印黑边补充 — 2026-10-16（仅本地，未发布）
 

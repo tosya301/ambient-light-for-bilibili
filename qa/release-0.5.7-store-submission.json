@@ -1,0 +1,79 @@
+{
+  "version": "0.5.7",
+  "observed_at_utc": "2026-10-17T02:06:33.849059+00:00",
+  "local_date": "2026-10-16",
+  "authorization": "User explicitly requested updates to Chrome, Edge and Firefox stores after GitHub publication.",
+  "artifacts_reused": [
+    {
+      "name": "Ambient-light-for-Bilibili-0.5.7-chromium.zip",
+      "bytes": 231374,
+      "sha256": "9908634550555483a71a1c937f39b7c787d1d944aef50576c5e8e6bf50b10056"
+    },
+    {
+      "name": "Ambient-light-for-Bilibili-0.5.7-firefox.zip",
+      "bytes": 241858,
+      "sha256": "0b86bae550ef20b97fcdca27dc8e44240570fe5a5709bfdd4dc8fdddb1fa47b3"
+    },
+    {
+      "name": "Ambient-light-for-Bilibili-0.5.7-source.zip",
+      "bytes": 252706,
+      "sha256": "1c75699dfdfae54add2143dab9742b6fe28b7c656bac0cc10599193d368427b4"
+    }
+  ],
+  "chrome": {
+    "store_id": "inmkpmcmgnhbljonlgacogfbffdcckjj",
+    "submitted_version": "0.5.7",
+    "status": "Pending review",
+    "confirmation": "Your extension was submitted for review",
+    "publish_automatically_after_review": true,
+    "previous_published_version": "0.5.6",
+    "uploaded_archive": "Ambient-light-for-Bilibili-0.5.7-chromium.zip",
+    "chinese_description_saved": true,
+    "test_instruction_characters": 440
+  },
+  "edge": {
+    "store_id": "fhdfccdfkecapkgldeifoplbjoccnjak",
+    "product_id": "1308342d-34bf-486e-85ad-bf1f9518ee70",
+    "submitted_version": "0.5.7",
+    "status": "In review",
+    "previous_live_version": "0.5.6",
+    "uploaded_archive": "Ambient-light-for-Bilibili-0.5.7-chromium.zip",
+    "chinese_description_saved": true,
+    "certification_note_characters": 1338
+  },
+  "firefox": {
+    "slug": "ambient-light-for-bilibili",
+    "version_id": 6587000,
+    "file_id": 5131130,
+    "submitted_version": "0.5.7",
+    "status": "Approved",
+    "listed_version": "0.5.7",
+    "minimum_desktop_firefox": "140.0",
+    "validation_errors": 0,
+    "validation_warnings": 3,
+    "validation_warning": "Unsafe assignment to innerHTML",
+    "uploaded_archive": "Ambient-light-for-Bilibili-0.5.7-firefox.zip",
+    "source_archive": "Ambient-light-for-Bilibili-0.5.7-source.zip",
+    "source_attachment_confirmed": true,
+    "chinese_release_notes_saved": true,
+    "reviewer_note_characters": 2529
+  },
+  "runtime_source_changed": false,
+  "github_tag_or_assets_changed": false,
+  "validation_limit": "Store submission/approval status is not signed-installation or upgrade testing; new Firefox/Edge host functionality was not claimed as verified. Chrome/Edge review does not mean0.5.7is live.",
+  "evidence_files": [
+    "chrome-submitted.txt",
+    "chrome-submitted.png",
+    "chrome-submitted-confirmation.txt",
+    "chrome-submitted-confirmation.png",
+    "chrome-package-confirmation.txt",
+    "edge-submitted.txt",
+    "edge-submitted.png",
+    "firefox-upload-validation.txt",
+    "firefox-submitted.txt",
+    "firefox-submitted.png",
+    "firefox-approved.txt",
+    "firefox-approved.png"
+  ],
+  "passed": true
+}
