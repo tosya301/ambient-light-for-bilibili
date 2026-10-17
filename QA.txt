@@ -1,4 +1,50 @@
-0.5.6 — 2026-10-15（GitHub 最新正式版）
+0.5.7 — 2026-10-16（GitHub 发布候选；发布结果见核验记录）
+
+用户授权把已在本地修复与测试的版本更新到 GitHub，并同步个人版版本号；0.5.6 为上一个正式版，本次升为 0.5.7。以下较早的“仅本地／未发布”条目是当时状态，发布授权以本条为准。本轮不向扩展商店提交。
+
+范围：普通／宽屏点播滚动时移除固定光层的逆向镂空，保留实际画面圆角；全屏窄留白保持纯黑，片源已有上下黑边时停止外侧光效，稀疏水印使用独立容错检测，不改变严格去边规则及画面尺寸／裁剪；新增默认关闭的“清晰全屏背景”，仅普通点播铺满窗口、零模糊、整帧替换，最长边 1920px，退出恢复原有光效。权限仍仅 storage，无新增依赖、传输或采样计时循环；中英隐私说明同步实际本地分析范围。
+
+最终 0.5.7 源码 Node 223/223 通过，0 失败、0 跳过。本轮浏览器证据为 Chrome 本地生产脚本：清晰背景 21/21、组合版水印黑边网页全屏 22/22；另有前序阶段的窄留白／片源黑边原生全屏与既有功能回归，详见下方历史记录。不得将前序阶段通过数当作当前原生全屏完整重跑。尝试追加 Firefox 当前源码检查时，应用控制被用户操作打断，未执行完成，不计通过。当前新版本真实 B 站重新注入、Firefox／Edge 宿主、签名安装／升级、Windows／Linux 未验证。
+
+产物独立审计 48/48 通过：ZIP CRC、安全路径、白名单、版本及权限未扩张；独立提取匹配源码可逐字节重建 Chromium、Firefox 与源码三份 ZIP。记录：qa/release-0.5.7-package-verification.json；Chrome 专项证据：qa/release-0.5.7-browser-verification.json。本地个人版数值版本、version_name、设置 UI 均为 0.5.7，运行文件与 Chromium 包一致，保留既有设置；用户手动重载仍待执行。
+
+发行包要求：同版本 Chromium、Firefox 未签名临时体验包及匹配源码包；桌面 Firefox 140+，使用 about:debugging#/runtime/this-firefox 临时载入 manifest.json，完全退出重启需重新载入。产物独立审计与公开下载结果将记入 qa/release-0.5.7-*.json。
+
+清晰全屏背景与水印黑边补充 — 2026-10-16（仅本地，未发布）
+
+新增默认关闭的 clearBackground「清晰全屏背景」，位于光效页扩散范围下方。仅普通点播播放页生效，明确排除小窗；背景保持比例居中覆盖整个窗口，无 CSS 模糊、无时间叠帧。只裁取背景副本，主视频的尺寸、比例、裁剪与控件不变；不改用户保存的扩散、柔化、平滑、强度、饱和度或帧率。关闭及宽屏／播放器全屏／直播／小窗恢复原 256px 光效路径。CSS 合成面固定窗口大小，背景位图受源裁区、显示密度与最长边 1920 约束，主视频画质不变；保留原隐私、后台／离屏待机和读取异常处理。
+
+最终源码 Node 223/223；Chrome 清晰背景 21/21：真实生产设置开关、保存与默认兼容、横竖片源的中心 cover 像素映射、平滑 85 时红→蓝整帧替换无旧帧、暂停重绘、模式恢复、主视频和控件命中、关闭与撤回同意。组合版本水印黑边网页专项 22/22。原生全屏本次被用户手动 Chrome 操作打断，未计为通过；未验证实际 B 站加载本次新脚本后的效果、Firefox／Edge 或其他 OS。
+
+水印漏判根因：旧去边检测每行仅容忍 2.5% 异色，缩采后字形抗锯齿可占单行 20.3125%、整条黑带 8.164%，使水印黑带被判不确定。新增只供全屏外光保护使用的全行检测，单行异色 ≤25%、每条黑带异色 ≤10%，仍要求双边配对、黑色、居中、锐利边界、主体有纹理及连续 3 样本；不进入 crop，原严格去边检测保持。用户截图取源矩形缩至 320×180：旧规则 null、新规则确认 top16/180、bottom15/180；严格检测与旧版 1440 次差分，0 差异。
+
+本地个人版已更新 bars.js／shared.js／bar-effects.js／preview.js／content.js，逐字节匹配测试源码，未改 CSS／player.js／权限或用户已存设置；备份见当前任务 work/personal-before-clear-background。个人版版本与仓库现有基线／UI 对齐为 0.5.6，version_name=0.5.6-personal-clear-background，未发布 GitHub／商店。需重新加载扩展并刷新 B 站；此前自动访问扩展管理页被浏览器安全规则阻止，未绕过。证据：当前任务 outputs/clear-background-browser-checks.json、clear-background-preview.jpg、clear-background-node-tests.txt、watermark-web-checks.json、watermark-strict-diff.json 与 local-install.json。
+
+全屏片源电影黑边保护 — 2026-10-16（仅本地，未发布）
+
+补充用户图2：片源内已有上下黑边，而整幅 16:9 源帧在屏幕上仍有超过 3% 的上下外侧留白，上一条规则不会停光。复用现有保守黑边检测器与连续三样本确认；仅点播全屏、居中 contain、左右贴满且外侧也是上下留白时，明确识别源内上下黑边后停止外侧光效并保留纯黑遮底。观察状态不写入 crop，不受去边／彩边偏好控制，不修改原图、字幕、尺寸、裁剪或缩放；直播、普通、宽屏、小窗及原 3% 规则保留。暗场／字幕不确定样本保留已确认状态；三次明确无黑边样本恢复光效。停光后使用已有每秒生命周期继续低频观察，无新增计时循环；后台、撤回同意和关闭扩展不读像素。初次需要稳定确认，纯黑场或黑边内复杂字幕可能延后识别。
+
+本轮最终 Node 202/202；Chrome 生产脚本合成视频新增网页全屏 18/18、原生全屏 18/18，已有窄留白网页 24/24、原生 22/22，原有圆角阴影／玻璃／小窗／去边圆角 116/116，最终均无失败与跳过。相同 1728×1084 视口、3456×1944 源的 A/B：外侧上下各 56px 从有色变纯黑，源内黑边与 contain、transform:none、无裁剪状态保持。截图外侧带状区域修复后 RGB 全为 0。新观察器另有真实 detector 的稳定性、暂停、模式切换、宿主变换及读取异常单测。
+
+本地个人版 bar-effects.js／player.js／content.js 已更新并逐字节校验，其他脚本／CSS 未改，备份见当前任务 work/personal-before-fullscreen-encoded。version_name=0.5.5-personal-fullscreen-moviebars；未发布。需用户重新加载扩展并刷新 B 站，实际 B 站新版本效果尚未确认；此前自动打开管理页被浏览器安全规则拦截，未绕过。本轮仅 Chrome 本地生产代码合成场景，未验证 Firefox／Edge／Windows／Linux。证据：当前任务 outputs/fullscreen-encoded-*.json、before.jpg／after.jpg、node-tests.txt 与 fix.patch。
+
+全屏窄留白停光 — 2026-10-16（仅本地，未发布）
+
+用户授权将接近铺满屏幕时的细留白保持纯黑。点播的网页／原生全屏，实际画面需居中并铺满一个方向，另一个方向每侧留白不超过该方向尺寸的 3%；符合时暂停光效采样、隐藏光层，将原有不透明全屏底板设为纯黑。保留底板避免底层页面露出；不改变视频尺寸、object-fit、裁剪、圆角或用户设置。较大留白自动恢复原光效，普通／宽屏、直播与小窗不进入此规则。进入／退出及暂停后恢复均有覆盖；保留此前 r1 滚动修复。
+
+最终源码 Node 188/188；Chrome 生产脚本合成视频网页全屏 24/24、实际 requestFullscreen 原生全屏 22/22（无跳过）；原有圆角阴影 26、玻璃控制栏 20、小窗滚动 60、去边与圆角组合 10，共 116/116。1728×1080 同尺寸 A/B 保留相同 3456×2052 源及 contain 完整画面，上下各 27px 的彩色细边变为纯黑。证据：当前任务 outputs/fullscreen-*.json、fullscreen-narrow-before.jpg／after.jpg、fullscreen-node-tests.txt。
+
+本地个人版 player.js／content.js 已更新并校验与测试源码一致，其他脚本和 CSS 未改，修改前备份在当前任务 work/personal-before-fullscreen-narrow。仅个人版 version_name 标识变为 0.5.5-personal-fullscreen-narrow，未做正式版本发布。扩展管理页此前被浏览器安全规则拦截，未绕过；需用户手动重新加载扩展并刷新 B 站。实际 B 站新脚本全屏、Firefox／Edge、Windows／Linux 尚未验证；上述通过记录是 Chrome 本地生产脚本验证。
+
+Wide portrait follow-up — 2026-10-16 (local only)
+
+Real BV1k7WF6PEDE is1080x1920, wide, no bar crop/transform. Existing tab initially retained old inverse mask; refresh confirmed r1 clip:none. User reports disabling only round corners clears residual black backing lag, and later says it currently seems gone. Rounded preference restored true. Fresh original-video wide tab retains actual-picture rounding and r1; captured post-scroll states show no black slab, but transient behavior is not exhaustively measured. A will-change:clip-path r2 candidate was never confirmed loaded and has been reverted. Keep only r1 production change; record currently not reproduced, no definitive second fix. Evidence: current task outputs/real-wide-confirmation.json and real-wide-rounded-scroll-1.png/-2.png.
+
+Local scroll investigation — 2026-10-16 (not published)
+
+Narrow local-only fix removes the fixed light layer's stale inverse cutout in ordinary/theater VOD, preserving mini/live/fullscreen masks and native picture rounding/cropping. Node184/184; Chrome local production frame26, glass20, mini60, crop+rounding10 checks passed. A controlled120px native-document scroll with production layout callbacks deferred reproduces a dark trailing rectangle in0.5.6 at frameShadow=0 and removes it in the candidate. This is synthetic evidence; actual Bilibili with the new installed script, native fullscreen, Firefox and Edge were not verified. Local personal files are updated with backup; extension reload remains unverified because browser URL safety policy blocked chrome://extensions. No GitHub/store publication. Fullscreen narrow colored margins were analyzed only; no fullscreen behavior change was made. Evidence and continuation: /Users/dperenn/Documents/Codex/2026-10-16/hui-d/outputs/investigation.txt and work/task-status.json.
+
+0.5.6 — 2026-10-15（GitHub 历史正式版）
 
 范围：用户补充直播鼠标划过画面／停在底栏后，黑色渐变出现尖角，以及普通与网页模式圆角边缘露出细白线。先在本地个人版修复，用户最终确认“OKOK 修复完成”，授权更新 GitHub。版本递增为 0.5.6，发布同版本 Chromium、Firefox 未签名临时体验包和匹配源码包；保留已发布 0.5.5 原产物。GitHub 发布时尚未提交扩展商店；用户随后授权更新三家商店，结果见下方。
 

@@ -1,0 +1,234 @@
+{
+  "version": "0.5.7",
+  "verified_at_utc": "2026-10-17T01:45:42.319406+00:00",
+  "verification_type": "independent read-only artifact audit using Python ZIP reader; extracted matching source rebuilt in fresh task-work directory",
+  "baseline_tag": "v0.5.6",
+  "checks": [
+    {
+      "name": "chromium: ZIP CRC",
+      "passed": true
+    },
+    {
+      "name": "chromium: unique entry names",
+      "passed": true
+    },
+    {
+      "name": "chromium: safe relative regular paths",
+      "passed": true
+    },
+    {
+      "name": "chromium: exact independent file allowlist",
+      "passed": true
+    },
+    {
+      "name": "chromium: fixed ZIP metadata",
+      "passed": true
+    },
+    {
+      "name": "chromium: build report path/hash/allowlist",
+      "passed": true
+    },
+    {
+      "name": "firefox: ZIP CRC",
+      "passed": true
+    },
+    {
+      "name": "firefox: unique entry names",
+      "passed": true
+    },
+    {
+      "name": "firefox: safe relative regular paths",
+      "passed": true
+    },
+    {
+      "name": "firefox: exact independent file allowlist",
+      "passed": true
+    },
+    {
+      "name": "firefox: fixed ZIP metadata",
+      "passed": true
+    },
+    {
+      "name": "firefox: build report path/hash/allowlist",
+      "passed": true
+    },
+    {
+      "name": "source: ZIP CRC",
+      "passed": true
+    },
+    {
+      "name": "source: unique entry names",
+      "passed": true
+    },
+    {
+      "name": "source: safe relative regular paths",
+      "passed": true
+    },
+    {
+      "name": "source: exact independent file allowlist",
+      "passed": true
+    },
+    {
+      "name": "source: fixed ZIP metadata",
+      "passed": true
+    },
+    {
+      "name": "source: build report path/hash/allowlist",
+      "passed": true
+    },
+    {
+      "name": "versions: all manifests and source package.json",
+      "passed": true
+    },
+    {
+      "name": "versions: source and Chromium version_name",
+      "passed": true
+    },
+    {
+      "name": "versions: settings UI in both browser packages",
+      "passed": true
+    },
+    {
+      "name": "versions: content runtime marker in both browser packages",
+      "passed": true
+    },
+    {
+      "name": "manifest: source exactly equals Chromium",
+      "passed": true
+    },
+    {
+      "name": "manifest: source bytes match repository",
+      "passed": true
+    },
+    {
+      "name": "source: all runtime files match repository byte-for-byte",
+      "passed": true
+    },
+    {
+      "name": "Chromium: all runtime files match source byte-for-byte",
+      "passed": true
+    },
+    {
+      "name": "Firefox: all shared runtime files match source byte-for-byte",
+      "passed": true
+    },
+    {
+      "name": "source: reviewed package script and package.json match repository",
+      "passed": true
+    },
+    {
+      "name": "source: packaging script unchanged from baseline v0.5.6",
+      "passed": true
+    },
+    {
+      "name": "source: build instructions describe offline deterministic three-target packaging",
+      "passed": true
+    },
+    {
+      "name": "license: MIT bytes match repository across all packages",
+      "passed": true
+    },
+    {
+      "name": "Firefox: privacy page matches repository and source",
+      "passed": true
+    },
+    {
+      "name": "Firefox: privacy page loads no script/style/image/font resources",
+      "passed": true
+    },
+    {
+      "name": "Firefox: privacy policy covers current local pixel processing",
+      "passed": true
+    },
+    {
+      "name": "Firefox: fixed Gecko ID/minimum/no-data declaration",
+      "passed": true
+    },
+    {
+      "name": "Firefox: MV3 background and offline privacy resource",
+      "passed": true
+    },
+    {
+      "name": "Firefox: no Chromium-only keys",
+      "passed": true
+    },
+    {
+      "name": "Chromium: MV3 background/minimum",
+      "passed": true
+    },
+    {
+      "name": "both browsers: only storage permission, expected content script domain/order",
+      "passed": true
+    },
+    {
+      "name": "Chromium: entire manifest unchanged from v0.5.6 except version",
+      "passed": true
+    },
+    {
+      "name": "Firefox: entire manifest unchanged from v0.5.6 except version",
+      "passed": true
+    },
+    {
+      "name": "both browsers: no new optional/host permissions",
+      "passed": true
+    },
+    {
+      "name": "rebuild: fresh independent extraction directory",
+      "passed": true
+    },
+    {
+      "name": "rebuild: source packaging script completed offline",
+      "passed": true,
+      "details": {
+        "exit_code": 0,
+        "stderr": ""
+      }
+    },
+    {
+      "name": "rebuild: generated version and expected three files",
+      "passed": true
+    },
+    {
+      "name": "rebuild: chromium ZIP exactly byte-identical",
+      "passed": true
+    },
+    {
+      "name": "rebuild: firefox ZIP exactly byte-identical",
+      "passed": true
+    },
+    {
+      "name": "rebuild: source ZIP exactly byte-identical",
+      "passed": true
+    }
+  ],
+  "check_count": 48,
+  "packages": [
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.7-chromium.zip",
+      "bytes": 231374,
+      "sha256": "9908634550555483a71a1c937f39b7c787d1d944aef50576c5e8e6bf50b10056",
+      "file_count": 18
+    },
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.7-firefox.zip",
+      "bytes": 241858,
+      "sha256": "0b86bae550ef20b97fcdca27dc8e44240570fe5a5709bfdd4dc8fdddb1fa47b3",
+      "file_count": 19
+    },
+    {
+      "filename": "Ambient-light-for-Bilibili-0.5.7-source.zip",
+      "bytes": 252706,
+      "sha256": "1c75699dfdfae54add2143dab9742b6fe28b7c656bac0cc10599193d368427b4",
+      "file_count": 22
+    }
+  ],
+  "rebuild_directory": "task-evidence/work/release-0.5.7-independent-2xryjesn",
+  "runtime_diff_review": {
+    "blocking_findings": [],
+    "conclusion": "Ordinary/theater VOD scrolling removes only the fixed inverse mask. Fullscreen black-bar detection mutes outer light without entering crop geometry; sparse-text tolerance is isolated from the strict crop detector. Clear background is default-off, normal-VOD-only, excludes mini mode, replaces frames, and bounds the sampled bitmap to 1920px.",
+    "limitations": [
+      "This artifact audit does not execute browser hosts. Current Chrome synthetic-production evidence and Node 223/223 results are recorded by the primary task; this audit does not claim current Firefox/Edge or real Bilibili injection validation."
+    ]
+  },
+  "passed": true
+}

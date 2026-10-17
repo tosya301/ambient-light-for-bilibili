@@ -28,7 +28,7 @@
    * its full remaining width. This deliberately favors missing uncertain bars
    * over cropping picture content or subtitles.
    */
-  function detect(image, options = {}) {
+  function detectProfile(image, options = {}, profile = {}) {
     const { data, width: w, height: h } = image || {};
     if (!data || !Number.isInteger(w) || !Number.isInteger(h) || w < 16 || h < 16 || data.length < w * h * 4) return null;
     const enabled = { horizontal: options.horizontal !== false, vertical: options.vertical !== false };
@@ -40,7 +40,7 @@
       return (y * w + x) * 4;
     };
 
-    function line(horizontal, end, depth, start, stop, color) {
+    function line(horizontal, end, depth, start, stop, color, stats) {
       let bad = 0, total = 0, sum = 0;
       for (let along = start; along < stop; along++) {
         const d = distance(data, offset(horizontal, along, depth, end), color);
@@ -48,12 +48,14 @@
         sum += Math.min(d, COLOR_TOLERANCE);
         total++;
       }
-      return total > 0 && bad / total <= MAX_NOISE_FRACTION && sum / total <= 6;
+      if (stats) { stats.bad += bad; stats.total += total; }
+      return total > 0 && bad / total <= (profile.lineNoise ?? MAX_NOISE_FRACTION) && sum / total <= 6;
     }
 
     function edge(horizontal, end) {
       const length = horizontal ? w : h, extent = horizontal ? h : w;
-      const start = Math.ceil(length * 0.25), stop = Math.floor(length * 0.75);
+      const start = profile.fullWidth ? 0 : Math.ceil(length * 0.25);
+      const stop = profile.fullWidth ? length : Math.floor(length * 0.75);
       const channels = [[], [], []];
       for (let depth = 0; depth < MIN_PIXELS; depth++) {
         for (let along = start; along < stop; along++) {
@@ -91,7 +93,7 @@
       return { possible: true, a, b };
     }
 
-    const rows = pair(true), columns = pair(false);
+    const rows = pair(true), columns = profile.fullWidth ? { possible: false } : pair(false);
     const proposed = {
       top: rows.a?.size || 0, bottom: rows.b?.size || 0,
       left: columns.a?.size || 0, right: columns.b?.size || 0
@@ -102,9 +104,11 @@
       const start = horizontal ? proposed.left : proposed.top;
       const stop = horizontal ? w - proposed.right : h - proposed.bottom;
       for (const [end, e] of [[false, pairResult.a], [true, pairResult.b]]) {
+        const stats = profile.bandNoise === undefined ? null : { bad: 0, total: 0 };
         for (let depth = 0; depth < e.size; depth++) {
-          if (!line(horizontal, end, depth, start, stop, e.color)) return false;
+          if (!line(horizontal, end, depth, start, stop, e.color, stats)) return false;
         }
+        if (stats && stats.bad / stats.total > profile.bandNoise) return false;
       }
       return true;
     }
@@ -143,6 +147,16 @@
     };
   }
 
+  // Cropping must reject subtitles and watermarks rather than remove them.
+  // Keep that strict policy unchanged. Fullscreen protection only mutes outer
+  // light: sparse text may occupy <=25% of a row and <=10% of either black band.
+  // Downsampled glyph antialiasing counts toward both limits.
+  function detect(image, options = {}) { return detectProfile(image, options); }
+  function detectFullscreenBars(image) {
+    return detectProfile(image, { horizontal: true, vertical: false, colored: false },
+      { fullWidth: true, lineNoise: 0.25, bandNoise: 0.1 });
+  }
+
   /** At least three consecutive confident samples are required for a change.
    * Inconclusive frames interrupt confirmation but retain the established crop.
    * reset() must be called after a source, mode, or detection-option change.
@@ -173,7 +187,7 @@
     };
   }
 
-  const api = Object.freeze({ detect, createTracker });
+  const api = Object.freeze({ detect, detectFullscreenBars, createTracker });
   root.BiliGlowBars = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(globalThis);

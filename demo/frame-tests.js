@@ -68,7 +68,7 @@
       check(hit===control||control.contains(hit),'播放器控件或弹幕输入框仍可命中');
       const r=live?B.contentRect(video().getBoundingClientRect(),video().videoWidth,video().videoHeight,getComputedStyle(video()).objectFit):frame().getBoundingClientRect(),sr=shadow().getBoundingClientRect();
       check(['left','top','width','height'].every(k=>Math.abs(r[k]-sr[k])<1),'阴影准确贴合画面区，不包住聊天或发送栏');
-      check(getComputedStyle(light()).clipPath!=='none','圆角光效遮罩是浏览器支持的有效路径');
+      check(live?getComputedStyle(light()).clipPath!=='none':getComputedStyle(light()).clipPath==='none'&&getComputedStyle(frame()).borderRadius==='12px','直播保留光效遮罩；点播由原生圆角遮住背光，不产生滚动错位的挖空');
       await B.storage.set({roundedCorners:false});await until(()=>!rounded());
       check(getComputedStyle(frame()).borderRadius===baseRadius&&getComputedStyle(frame()).overflow===baseOverflow&&shadow().style.display==='block','关闭圆角恢复原生圆角与溢出样式，阴影仍独立保留');
       await B.storage.set({roundedCorners:true,strength:0});await until(()=>rounded());

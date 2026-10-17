@@ -11,7 +11,7 @@
 
     const doc=element.ownerDocument,win=doc.defaultView;
     const motion=win.matchMedia('(prefers-reduced-motion: reduce)');
-    let settings={enabled:true,strength:80,spread:100,blur:72,saturation:130,smoothing:65,fps:24};
+    let settings={enabled:true,clearBackground:false,strength:80,spread:100,blur:72,saturation:130,smoothing:65,fps:24};
     let visible=true,inView=true,destroyed=false,frame=0,lastTick=null,phase=0,painted=false;
     const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
     const mix=(a,b,t)=>a.map((value,i)=>Math.round(value+(b[i]-value)*t));
@@ -20,13 +20,15 @@
     function style() {
       const strength=clamp(settings.strength,0,150);
       element.dataset.enabled=String(settings.enabled);
+      element.dataset.background=settings.clearBackground?'clear':'glow';
+      const box=element.getBoundingClientRect?.()||{width:354,height:110};
       const values={
         '--preview-opacity':settings.enabled?Math.min(1,strength/100)*.94:0,
-        '--preview-scale':1.05+(clamp(settings.spread,30,400)-30)/370*1.6,
-        '--preview-blur':`${5+(clamp(settings.blur,20,140)-20)/120*15}px`,
+        '--preview-scale':settings.clearBackground?Math.max(box.width/144,box.height/81):1.05+(clamp(settings.spread,30,400)-30)/370*1.6,
+        '--preview-blur':settings.clearBackground?'0px':`${5+(clamp(settings.blur,20,140)-20)/120*15}px`,
         '--preview-saturation':clamp(settings.saturation,50,200)/100,
         '--preview-brightness':1+strength/150*.3,
-        '--preview-transition':`${motion.matches?0:clamp(settings.smoothing,0,95)*6}ms`
+        '--preview-transition':`${motion.matches||settings.clearBackground?0:clamp(settings.smoothing,0,95)*6}ms`
       };
       Object.entries(values).forEach(([key,value])=>element.style.setProperty(key,String(value)));
     }
@@ -77,7 +79,7 @@
       scene.fillStyle=foreground;scene.fill();
       scene.restore();
 
-      light.globalAlpha=replace||!painted||motion.matches?1:
+      light.globalAlpha=replace||!painted||motion.matches||settings.clearBackground?1:
         globalThis.BiliGlow.blendAlpha(dt,settings.smoothing);
       light.drawImage(video,0,0,glow.width,glow.height);
       light.globalAlpha=1;
@@ -121,8 +123,9 @@
     return {
       update(next) {
         if(destroyed) return;
+        const changed=typeof next.clearBackground==='boolean'&&next.clearBackground!==settings.clearBackground;
         settings={...settings,...next};
-        style();sync();
+        style();if(changed)draw(0,true);sync();
       },
       setVisible(value) {
         if(destroyed) return;

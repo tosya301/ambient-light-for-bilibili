@@ -16,17 +16,17 @@
     <nav aria-label="导航"><a href="#english">English</a><a href="https://github.com/tosya301/ambient-light-for-bilibili">GitHub 源码</a></nav>
   </header>
   <h1>隐私政策</h1>
-  <p class="muted">适用版本：Firefox 桌面版 0.5.3.10–0.5.3.16<br>更新日期：2026 年 10 月 9 日<br>发布者：Deperenn · 联系邮箱：<a href="mailto:txim301@gmail.com">txim301@gmail.com</a></p>
-  <div class="panel"><strong>本地生成光效，不上传观看内容</strong><p>Ambient light for Bilibili 在本机临时处理当前播放的视频画面，生成外围光效，并在你主动开启宽屏去边时分析边框。扩展不将视频帧、页面地址、观看记录或设置传给开发者或第三方。</p></div>
+  <p class="muted">适用版本：Firefox 桌面版 0.5.3.10–0.5.7<br>更新日期：2026 年 10 月 16 日<br>发布者：Deperenn · 联系邮箱：<a href="mailto:txim301@gmail.com">txim301@gmail.com</a></p>
+  <div class="panel"><strong>本地生成光效，不上传观看内容</strong><p>Ambient light for Bilibili 在你同意并开启后，在本机临时处理当前播放的视频画面，生成外围光效；宽屏去边及全屏黑边保护会分析低分辨率边框像素。默认关闭的清晰全屏背景仅在普通点播模式生成最长边最高 1920 像素的背景副本。扩展不将视频帧、页面地址、观看记录或设置传给开发者或第三方。</p></div>
 
   <h2>处理的信息与用途</h2>
   <ul>
-    <li><strong>视频画面：</strong>在本机绘制低分辨率画布以生成氛围光；开启自动去边时读取低分辨率像素以判断稳定边框。</li>
+    <li><strong>视频画面：</strong>在本机绘制画布以生成氛围光；常规光效使用低分辨率画面，主动开启清晰全屏背景时，其背景副本最长边最高 1920 像素。宽屏去边及全屏黑边保护读取低分辨率像素以判断稳定边框，全屏保护只停止外侧光效，不裁切视频。</li>
     <li><strong>当前播放页路径与播放器状态：</strong>用于判断是否在支持的页面、定位播放器、适配播放模式和恢复页面样式，不建立观看历史记录。</li>
-    <li><strong>用户设置与同意状态：</strong>光效开关、预设、显示参数、去边、圆角、阴影、入口显示选项及本地处理的同意状态保存在浏览器的扩展本地存储 <code>storage.local</code> 中，供同一浏览器配置内的扩展入口使用。</li>
+    <li><strong>用户设置与同意状态：</strong>光效开关、预设、显示参数、清晰背景、去边、圆角、阴影、入口显示选项及本地处理的同意状态保存在浏览器的扩展本地存储 <code>storage.local</code> 中，供同一浏览器配置内的扩展入口使用。</li>
   </ul>
   <h2>保存期限与共享</h2>
-  <p>视频画面和边框分析仅用于当前页面功能，不保存为视频文件。暂停时可能在页面内存保留当前光色；关闭页面后不保留该页面的画面缓存。显示参数与同意状态保存在本机；你可重置参数、撤回同意，或通过卸载扩展清除扩展本地存储。本扩展不使用浏览器云同步保存设置，也没有开发者服务器副本。</p>
+  <p>视频画面和边框分析仅用于当前页面功能，不保存为视频文件。暂停时可能在页面内存保留当前光色或背景画面；关闭页面后不保留该页面的画面缓存。显示参数与同意状态保存在本机；你可重置参数、撤回同意，或通过卸载扩展清除扩展本地存储。本扩展不使用浏览器云同步保存设置，也没有开发者服务器副本。</p>
   <p>扩展不读取 Cookie、账号密码或支付信息，不添加遥测、统计、广告或追踪服务，不运行远程代码。不会出售、分享或转交本地处理的观看内容给开发者或第三方。Firefox 安装界面的“无数据收集”声明表示本扩展不向扩展或本地浏览器以外传输数据；上述视频处理仍在本机进行。</p>
   <h2>权限与用户选择</h2>
   <p><code>storage</code> 权限用于保存本地设置。内容脚本范围为 <code>https://www.bilibili.com/*</code> 与 <code>https://live.bilibili.com/*</code>，以支持站内单页跳转。光效针对桌面端 <code>/video/</code>、<code>/bangumi/play/</code>、<code>/list/watchlater/</code> 详情播放页，以及直播站的数字房间路径和 <code>/blanc/数字房间号</code>。</p>
@@ -39,9 +39,9 @@
 
   <section lang="en" id="english">
     <h2>Privacy policy — English</h2>
-    <p class="muted">Applies to Firefox desktop versions 0.5.3.10–0.5.3.16. Updated October 9, 2026.<br>Publisher: Deperenn. Contact: <a href="mailto:txim301@gmail.com">txim301@gmail.com</a>.</p>
-    <p>Ambient light for Bilibili processes the current Bilibili video locally to render ambient light. Optional border removal analyzes low-resolution pixels. The playback route and player state are used to activate and position these features; the extension does not create a viewing history.</p>
-    <p>Preferences and the consent state are saved in browser-local extension storage (<code>storage.local</code>). Video frames and border analysis are transient page-memory data and are not saved as video files. A paused page may retain its current light color in memory; closing the page releases that page's frame cache. Settings remain locally until reset or extension removal. There is no browser cloud sync or developer-side copy.</p>
+    <p class="muted">Applies to Firefox desktop versions 0.5.3.10–0.5.7. Updated October 16, 2026.<br>Publisher: Deperenn. Contact: <a href="mailto:txim301@gmail.com">txim301@gmail.com</a>.</p>
+    <p>Ambient light for Bilibili processes the current Bilibili video locally after you consent and enable it. Regular ambient light uses low-resolution frames. The optional clear fullscreen background, off by default and limited to normal VOD mode, creates a background copy with a longest side of up to 1920 pixels. Border removal and fullscreen black-bar protection analyze low-resolution pixels; fullscreen protection only stops outer lighting and does not crop the video. The playback route and player state are used to activate and position these features; the extension does not create a viewing history.</p>
+    <p>Preferences and the consent state are saved in browser-local extension storage (<code>storage.local</code>). Video frames and border analysis are transient page-memory data and are not saved as video files. A paused page may retain its current light color or background frame in memory; closing the page releases that page's frame cache. Settings remain locally until reset or extension removal. There is no browser cloud sync or developer-side copy.</p>
     <p>No video frames, page addresses, viewing history or preferences are uploaded to the publisher or third parties. There are no analytics, ads, trackers or remote code. The extension does not read cookies, passwords or payment details, and does not sell or share the locally processed content. The Firefox “no data collection” declaration means no data is transmitted outside the extension or local browser; the local processing described above still takes place.</p>
     <p>The <code>storage</code> permission saves local settings. Content scripts run on <code>www.bilibili.com</code> and <code>live.bilibili.com</code> to support same-site navigation. Ambient processing is limited to supported desktop video, bangumi, watch-later detail playback, numeric live-room and <code>/blanc/</code> numeric live-room routes.</p>
     <p>The extension requires an explicit first-use choice before video sampling. You can turn off the light or withdraw consent under the More tab. Withdrawal stops video processing and restores the page while retaining display preferences; enabling the feature again requires consent. Resetting display preferences does not delete all stored data. Uninstalling removes extension-local storage.</p>

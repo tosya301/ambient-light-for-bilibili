@@ -44,6 +44,30 @@
     const container=video?.closest('.bpx-player-container'),screen=container?.getAttribute('data-screen');
     return {stage:screen==='web'?container:null,mode:screen==='web'?'fullscreen':screen==='wide'?'theater':'normal',native:false};
   }
+  // Only centered, almost full-size pictures qualify. Larger letterboxing
+  // and offset layouts retain the existing fullscreen ambient light.
+  function hasNarrowFullscreenGaps(rect,viewport){
+    const valid=box=>box&&['left','top','width','height'].every(key=>Number.isFinite(box[key]))&&box.width>0&&box.height>0;
+    if(!valid(rect)||!valid(viewport))return false;
+    const left=rect.left-viewport.left,top=rect.top-viewport.top;
+    const right=viewport.left+viewport.width-rect.left-rect.width;
+    const bottom=viewport.top+viewport.height-rect.top-rect.height;
+    const epsilon=1e-6;
+    if([left,top,right,bottom].some(gap=>gap< -1-epsilon))return false;
+    const fills=(a,b)=>Math.abs(a)<=1+epsilon&&Math.abs(b)<=1+epsilon;
+    const narrow=(a,b,size)=>Math.abs(a-b)<=2+epsilon&&a<=size*.03+epsilon&&b<=size*.03+epsilon;
+    return fills(left,right)&&narrow(top,bottom,viewport.height)||fills(top,bottom)&&narrow(left,right,viewport.width);
+  }
+  // Source movie bars only protect matching top/bottom contain margins.
+  // Do not mute side lighting, offset pictures, or a host's custom layout.
+  function hasFullscreenLetterboxGaps(rect,viewport){
+    const valid=box=>box&&['left','top','width','height'].every(key=>Number.isFinite(box[key]))&&box.width>0&&box.height>0;
+    if(!valid(rect)||!valid(viewport))return false;
+    const left=rect.left-viewport.left,top=rect.top-viewport.top;
+    const right=viewport.left+viewport.width-rect.left-rect.width;
+    const bottom=viewport.top+viewport.height-rect.top-rect.height;
+    return Math.abs(left)<=1&&Math.abs(right)<=1&&top>1&&bottom>1&&Math.abs(top-bottom)<=2;
+  }
   // Convert viewport rectangles to an element's local border/padding boxes.
   // Computed CSS sizes preserve fractions that offsetWidth/Height round off.
   function localBox(element){
@@ -565,5 +589,5 @@
     // A rounded inverse hole lets light reach the newly exposed corner pixels.
     return `path(evenodd, "M0 0H${viewport.width}V${viewport.height}H0Z M${x+r} ${y}H${x+w-r}A${r} ${r} 0 0 1 ${x+w} ${y+r}V${y+h-r}A${r} ${r} 0 0 1 ${x+w-r} ${y+h}H${x+r}A${r} ${r} 0 0 1 ${x} ${y+h-r}V${y+r}A${r} ${r} 0 0 1 ${x+r} ${y}Z")`;
   }
-  globalThis.BiliGlowPlayer=Object.freeze({pageKind,selectVideo,presentation,createFrame,createLiveBounds,createDanmakuBounds,fitDanmakuTracks,roundedCutout});
+  globalThis.BiliGlowPlayer=Object.freeze({pageKind,selectVideo,presentation,hasNarrowFullscreenGaps,hasFullscreenLetterboxGaps,createFrame,createLiveBounds,createDanmakuBounds,fitDanmakuTracks,roundedCutout});
 })();

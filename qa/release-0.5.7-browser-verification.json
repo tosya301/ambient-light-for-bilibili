@@ -1,0 +1,230 @@
+{
+  "version": "0.5.7",
+  "stage": "combined feature source before release metadata-only changes",
+  "browser": "Chrome on macOS",
+  "scope": "Local synthetic video running production renderer and actual settings panel; not newly injected actual Bilibili runtime",
+  "suites": {
+    "clear_background": {
+      "passed": true,
+      "total": 21,
+      "failed": 0,
+      "skipped": 0,
+      "observations": {
+        "coverMapping": {
+          "source": [
+            1080,
+            1920
+          ],
+          "viewport": [
+            1728,
+            863
+          ],
+          "bitmap": [
+            1080,
+            539
+          ],
+          "safe": 22,
+          "matched": 22
+        },
+        "redBlue": {
+          "red": [
+            255,
+            0,
+            0,
+            255
+          ],
+          "blue": [
+            0,
+            0,
+            255,
+            255
+          ],
+          "smoothing": 85
+        }
+      },
+      "results": [
+        {
+          "passed": true,
+          "label": "新布尔设置默认关闭"
+        },
+        {
+          "passed": true,
+          "label": "默认仍为256px采样画布和原有模糊光效"
+        },
+        {
+          "passed": true,
+          "label": "生产设置面板含可见清晰全屏背景开关"
+        },
+        {
+          "passed": true,
+          "label": "点击实际生产开关保存开启并切换高分辨率清晰画布"
+        },
+        {
+          "passed": true,
+          "label": "横屏背景画布匹配视口、不超采样片源、长边不超过1920"
+        },
+        {
+          "passed": true,
+          "label": "清晰背景无模糊、位图仅为视口尺寸，源像素按原比例居中cover"
+        },
+        {
+          "passed": true,
+          "label": "背景模式不裁剪、缩放或改变前景视频边界"
+        },
+        {
+          "passed": true,
+          "label": "背景不拦截播放器按钮与输入框"
+        },
+        {
+          "passed": true,
+          "label": "开启清晰模式保留原强度、扩散、柔化、饱和度、平滑和帧率设置"
+        },
+        {
+          "passed": true,
+          "label": "平滑85时红→蓝仍整帧替换，画布像素无旧帧残影"
+        },
+        {
+          "passed": true,
+          "label": "暂停时关闭开关立即重绘原有柔光"
+        },
+        {
+          "passed": true,
+          "label": "暂停时开启开关立即重绘清晰背景"
+        },
+        {
+          "passed": true,
+          "label": "竖屏1080×1920按原比例居中cover，位图匹配视口且受1920限制"
+        },
+        {
+          "passed": true,
+          "label": "宽屏恢复原有256px柔光，保留清晰模式偏好"
+        },
+        {
+          "passed": true,
+          "label": "全屏恢复原有256px管线，保留前景画面与设置"
+        },
+        {
+          "passed": true,
+          "label": "小窗模式保持原有256px柔光管线"
+        },
+        {
+          "passed": true,
+          "label": "返回普通模式自动恢复清晰背景"
+        },
+        {
+          "passed": true,
+          "label": "关闭扩展停止采样并隐藏背景"
+        },
+        {
+          "passed": true,
+          "label": "重新开启扩展恢复清晰背景"
+        },
+        {
+          "passed": true,
+          "label": "实际设置面板撤回同意后停止采样并恢复页面"
+        },
+        {
+          "passed": true,
+          "label": "实际面板重新同意并关闭清晰背景后恢复原参数与默认柔光"
+        }
+      ]
+    },
+    "fullscreen_watermark_web": {
+      "suite": "web",
+      "passed": true,
+      "total": 22,
+      "failed": 0,
+      "skipped": 0,
+      "results": [
+        {
+          "passed": true,
+          "label": "外侧上下每边6%留白，超过窄留白门槛"
+        },
+        {
+          "passed": true,
+          "label": "稀疏白水印实测：每行不超过12.5%，全黑带不超过5%"
+        },
+        {
+          "passed": true,
+          "label": "初始水印黑边独立确认，不依赖先前纯黑带"
+        },
+        {
+          "passed": true,
+          "label": "确认后纯黑底板覆盖全屏，视频不裁剪、不缩放，控件可命中"
+        },
+        {
+          "passed": true,
+          "label": "保护期间光效画布停止采样"
+        },
+        {
+          "passed": true,
+          "label": "初始黑带中间60%含稀疏字幕（每行≤15%），独立确认且完整保留字幕"
+        },
+        {
+          "passed": true,
+          "label": "持续确认无黑边后重新动态采样"
+        },
+        {
+          "passed": true,
+          "label": "彩色边不进入黑边纯黑保护"
+        },
+        {
+          "passed": true,
+          "label": "单侧黑带不进入上下黑边保护"
+        },
+        {
+          "passed": true,
+          "label": "初始每行超过25%亮覆盖物不进入保护"
+        },
+        {
+          "passed": true,
+          "label": "初始全黑带超过10%亮覆盖物不进入保护"
+        },
+        {
+          "passed": true,
+          "label": "外侧左右留白与内置上下黑边轴向不匹配时仍发光"
+        },
+        {
+          "passed": true,
+          "label": "暂停重新全屏无需视频帧回调也能确认水印黑边"
+        },
+        {
+          "passed": true,
+          "label": "普通模式保留原有光效、圆角及完整视频"
+        },
+        {
+          "passed": true,
+          "label": "宽屏自动去边仍使用严格检测，水印黑带不被容错裁剪"
+        },
+        {
+          "passed": true,
+          "label": "宽屏纯净黑带仍按原功能检测裁剪"
+        },
+        {
+          "passed": true,
+          "label": "重新全屏释放去边效果，保留水印和原黑带"
+        },
+        {
+          "passed": true,
+          "label": "第三方画面变换时不进行自动黑边保护或裁剪"
+        },
+        {
+          "passed": true,
+          "label": "恢复原始画面布局后能重新确认黑边"
+        },
+        {
+          "passed": true,
+          "label": "关闭扩展释放黑色底板，不残留视频变换"
+        },
+        {
+          "passed": true,
+          "label": "重新开启后确认水印黑边，控件可正常命中"
+        },
+        {
+          "passed": true,
+          "label": "重新开启后无黑边视频仍恢复外侧光效"
+        }
+      ]
+    }
+  }
+}

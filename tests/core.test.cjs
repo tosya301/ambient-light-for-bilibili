@@ -66,6 +66,40 @@ test('increasing spread never shrinks any edge or introduces a jump at 100%',()=
     assert.ok(Math.abs(after.width-before.width)<.01&&Math.abs(after.height-before.height)<.01);
   }
 });
+test('clear background is opt-in, rejects invalid values and preserves existing light parameters',async()=>{
+  const old={privacyAccepted:true,enabled:true,spread:75,blur:95,smoothing:80,strength:103};
+  assert.equal(B.defaults.clearBackground,false);
+  assert.equal(B.sanitize(old).clearBackground,false);
+  for(const value of [undefined,null,'true','false',0,1,[],{},NaN])assert.equal(B.sanitize({...old,clearBackground:value}).clearBackground,false);
+  await B.storage.set(old);await B.storage.set({clearBackground:true});
+  let saved=await B.storage.get();assert.equal(saved.clearBackground,true);
+  for(const [key,value] of Object.entries(old))assert.equal(saved[key],value,key);
+  await B.storage.set(B.presets.soft);assert.equal((await B.storage.get()).clearBackground,true,'presets preserve the separate opt-in');
+  await B.storage.set({clearBackground:false});saved=await B.storage.get();
+  assert.equal(saved.clearBackground,false);assert.equal(saved.blur,B.presets.soft.blur);
+  await B.storage.set(B.defaults);
+});
+test('clear background covers the viewport without distortion and bounds its bitmap by source, display and 1920px',()=>{
+  for(const [sourceWidth,sourceHeight] of [[1920,1080],[3840,2160],[1080,1920],[640,360],[1440,1080],[11520,1080]]){
+    for(const viewport of [{width:1728,height:1117},{width:3440,height:1440},{width:320,height:180}]){
+      for(const dpr of [.75,1,2,3]){
+        const plan=B.clearBackgroundPlan(sourceWidth,sourceHeight,viewport,dpr);
+        assert.equal(plan.left,0);assert.equal(plan.top,0);assert.equal(plan.width,viewport.width);assert.equal(plan.height,viewport.height,'filter surface stays viewport-sized');
+        assert.ok(Math.abs(plan.sw/plan.sh-plan.width/plan.height)<1e-8,'source crop and display preserve aspect ratio');
+        assert.ok(Math.abs(plan.sx*2+plan.sw-sourceWidth)<1e-8&&Math.abs(plan.sy*2+plan.sh-sourceHeight)<1e-8,'background crop is centred');
+        assert.ok(plan.pixelWidth<=plan.sw&&plan.pixelHeight<=plan.sh,'no source crop upscaling');
+        assert.ok(plan.pixelWidth<=plan.width*Math.min(dpr,2)&&plan.pixelHeight<=plan.height*Math.min(dpr,2),'no bitmap larger than the covered display');
+        assert.ok(Math.max(plan.pixelWidth,plan.pixelHeight)<=1920,'bounded sampling work');
+        assert.ok(Math.abs(plan.pixelWidth-plan.sw/plan.sh*plan.pixelHeight)<=1+plan.sw/plan.sh,'integer rounding stays within one source-scaled pixel');
+        assert.equal(plan.blur,0);
+      }
+    }
+  }
+  assert.deepEqual(B.clearBackgroundPlan(1920,1080,{width:1280,height:900}),{left:0,top:0,width:1280,height:900,blur:0,sx:192,sy:0,sw:1536,sh:1080,pixelWidth:1280,pixelHeight:900});
+  assert.equal(B.clearBackgroundPlan(1920,1080,{width:320,height:180},3).pixelWidth,640,'DPR is capped at two');
+  assert.equal(B.clearBackgroundPlan(1920,1080,{width:320,height:180},NaN).pixelWidth,320);
+  for(const args of [[0,1080,{width:1280,height:900}],[1920,Infinity,{width:1280,height:900}],[1920,1080,{width:0,height:900}],[1920,1080,null]])assert.equal(B.clearBackgroundPlan(...args),null);
+});
 test('storage patches preserve unrelated values',async()=>{
   await B.storage.set({strength:50});await B.storage.set({dark:false});
   const stored=await B.storage.get();assert.equal(stored.strength,50);assert.equal(stored.dark,false);

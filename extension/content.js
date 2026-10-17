@@ -5,7 +5,7 @@
   let settings={...B.defaults},settingsReady=false,video=null,cleanVideo=()=>{},frameId=null,timerId=null,layoutId=null;
   let lastFrame=0,nextPaint=0,needsDraw=false,painted=false,visible=false,blocked=false,supported=false,layoutDirty=true,frames=0;
   let status={text:'等待播放器',error:false},ui=null,panel=null,panelHost=null,launcher=null,root=null,canvas=null,ctx=null;
-  let stage=null,backdrop=null,mode='normal',barEffect=null,frameEffect=null,barStatus='宽屏去边已关闭';
+  let stage=null,backdrop=null,mode='normal',barEffect=null,frameEffect=null,barStatus='宽屏去边已关闭',fullscreenLetterbox=false,clearPlan=null;
   const danmakuEffect=P.createDanmakuBounds();
   const liveBoundsEffect=P.createLiveBounds();
   let launcherPosition=null,drag=null,suppressLauncherClick=false;
@@ -106,7 +106,8 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.3.17';
+    root.dataset.version='0.5.7';
+    root.dataset.fullscreenBarsPolicy='overlay-aware';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;
     canvas.style.cssText='position:absolute;pointer-events:none;transform-origin:center;';shadow.append(canvas);
@@ -220,14 +221,21 @@
   function draw(now=performance.now(),force=false){
     if(!allowed()||video.readyState<2||!video.videoWidth)return;
     try{
-      barEffect?.sample(now);
+      barEffect?.sample(now,fullscreenLetterbox);
+      // A newly confirmed source bar changes only the outer-light gate.
+      // Apply it before another canvas paint can expose the grey margin.
+      if(fullscreenLetterbox&&layoutDirty)layout();
+      if(!allowed())return;
       const crop=barEffect?.crop||{top:0,bottom:0,left:0,right:0};
-      const sx=video.videoWidth*crop.left,sy=video.videoHeight*crop.top;
-      const sw=video.videoWidth*(1-crop.left-crop.right),sh=video.videoHeight*(1-crop.top-crop.bottom);
-      const targetHeight=Math.max(32,Math.min(256,Math.round(256*sh/sw)));
+      const sx=clearPlan?.sx??video.videoWidth*crop.left,sy=clearPlan?.sy??video.videoHeight*crop.top;
+      const sw=clearPlan?.sw??video.videoWidth*(1-crop.left-crop.right),sh=clearPlan?.sh??video.videoHeight*(1-crop.top-crop.bottom);
+      const targetWidth=clearPlan?.pixelWidth||256;
+      const targetHeight=clearPlan?.pixelHeight||Math.max(32,Math.min(256,Math.round(256*sh/sw)));
+      if(canvas.width!==targetWidth){canvas.width=targetWidth;painted=false;}
       if(canvas.height!==targetHeight){canvas.height=targetHeight;painted=false;}
       const dt=lastFrame?Math.min(500,now-lastFrame):1000;
-      ctx.globalAlpha=(!painted||force)?1:B.blendAlpha(dt,settings.smoothing);
+      // Clear footage must replace the previous picture, including motion.
+      ctx.globalAlpha=(clearPlan||!painted||force)?1:B.blendAlpha(dt,settings.smoothing);
       ctx.drawImage(video,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
       painted=true;lastFrame=now;frames++;root.dataset.frames=String(frames);
       root.style.display='block';root.style.visibility='visible';updatePlaybackStatus();
@@ -244,13 +252,14 @@
     layoutId=requestAnimationFrame(()=>{layoutId=null;layout();if(allowed()){if(needsDraw||!painted)draw(performance.now(),true);startFrames();}needsDraw=false;});
   }
   function updatePlaybackStatus(){
-    const label=mode==='theater'?'宽屏环绕':mode==='fullscreen'?'全屏环绕':kind==='live'?'直播透光':'背景透光';
+    const label=mode==='theater'?'宽屏环绕':mode==='fullscreen'?'全屏环绕':kind==='live'?'直播透光':clearPlan?'清晰全屏背景':'背景透光';
     setStatus(video.paused?`${label} · 已暂停`:`${label} · 上限 ${settings.fps} fps`);
   }
   function setStage(next){
     if(stage!==next){
       stage?.removeAttribute('data-biliglow-stage');
       stage=next;stage?.setAttribute('data-biliglow-stage','');
+      if(backdrop)backdrop.style.background='#10141d';
     }
     if(stage){
       // The isolated stage paints this opaque base below the glow (z=-1).
@@ -283,6 +292,14 @@
     const nextStage=active?presentation.stage:null;
     setStage(nextStage);
     mode=presentation.mode;
+    const nextClear=active&&settings.clearBackground&&kind==='video'&&mode==='normal'
+      &&video.closest('.bpx-player-container')?.getAttribute('data-screen')!=='mini'
+      ?B.clearBackgroundPlan(video.videoWidth,video.videoHeight,{width:innerWidth,height:innerHeight},globalThis.devicePixelRatio):null;
+    const wasClear=Boolean(clearPlan);
+    if(Boolean(nextClear)!==wasClear||nextClear&&(canvas.width!==nextClear.pixelWidth||canvas.height!==nextClear.pixelHeight))painted=false;
+    clearPlan=nextClear;
+    root.dataset.background=clearPlan?'clear':'glow';
+    if(!clearPlan&&(wasClear||canvas.width!==256)){canvas.width=256;canvas.height=144;painted=false;}
     barEffect?.configure({...settings,enabled:active},mode);
     let croppedRect=barEffect?.layout();
     root.dataset.mode=mode;
@@ -307,6 +324,13 @@
     },presentation);
     const r=video.getBoundingClientRect();
     const rect=croppedRect||B.contentRect({left:r.left,top:r.top,width:r.width,height:r.height},video.videoWidth,video.videoHeight,getComputedStyle(video).objectFit);
+    // Narrow contain margins look like added borders. Leave those black in
+    // VOD fullscreen; keep the opaque stage shield and all picture geometry.
+    const narrowFullscreen=kind==='video'&&mode==='fullscreen'&&Boolean(stage)
+      &&Number.isFinite(video.videoWidth)&&video.videoWidth>0&&Number.isFinite(video.videoHeight)&&video.videoHeight>0
+      &&P.hasNarrowFullscreenGaps(rect,origin);
+    fullscreenLetterbox=kind==='video'&&mode==='fullscreen'&&Boolean(stage)&&!narrowFullscreen
+      &&P.hasFullscreenLetterboxGaps(rect,origin);
     // Independent from rounded/shadow gates: normal/webpage square corners
     // still constrain render layers to the current visible image.
     danmakuEffect.update(video,{...settings,enabled:active},kind,mode,rect);
@@ -314,15 +338,28 @@
     else liveBoundsEffect.clear();
     visible=r.width>=160&&r.height>=90&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth;
     if(!visible){root.style.display='none';cancelFrames();setStatus('播放器离开视野 · 已省电暂停');return;}
+    // Reuse the 1s lifecycle layout while muted (including paused video), so
+    // later unbarred footage can restore light without a new sampling timer.
+    if(fullscreenLetterbox)barEffect?.sample(performance.now(),true);
+    const encodedFullscreen=fullscreenLetterbox&&barEffect?.fullscreenBars;
+    if(stage&&backdrop)backdrop.style.background=narrowFullscreen||encodedFullscreen?'#000':'#10141d';
+    if(narrowFullscreen||encodedFullscreen){
+      visible=false;painted=false;root.style.display='none';cancelFrames();
+      setStatus(encodedFullscreen?'全屏片源黑边 · 保留纯黑':'全屏留白较窄 · 已暂停光效');return;
+    }
     const l=rect.left,t=rect.top,right=l+rect.width,bottom=t+rect.height;
     // Convert viewport coordinates to the layer's containing block (fullscreen can create one).
     const ox=origin.left,oy=origin.top;
-    // Inverse rectangle: light never paints over the actual video image.
-    root.style.clipPath=P.roundedCutout(rect,frame,origin,{width:origin.width,height:origin.height})||`polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,${l-ox}px ${t-oy}px,${right-ox}px ${t-oy}px,${right-ox}px ${bottom-oy}px,${l-ox}px ${bottom-oy}px,${l-ox}px ${t-oy}px)`;
-    const glow=B.glowGeometry(rect,{width:innerWidth,height:innerHeight},settings,mode);
+    // In-flow VOD scrolls in the compositor before this fixed layer's next
+    // layout. A video-shaped hole would expose the dark page at its old
+    // position. The opaque picture already covers the light below it; keep
+    // native picture rounding/cropping, and retain the live/fullscreen mask.
+    const scrollingVideo=kind==='video'&&mode!=='fullscreen'&&video.closest('.bpx-player-container')?.getAttribute('data-screen')!=='mini';
+    root.style.clipPath=scrollingVideo?'none':P.roundedCutout(rect,frame,origin,{width:origin.width,height:origin.height})||`polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,${l-ox}px ${t-oy}px,${right-ox}px ${t-oy}px,${right-ox}px ${bottom-oy}px,${l-ox}px ${bottom-oy}px,${l-ox}px ${t-oy}px)`;
+    const glow=clearPlan||B.glowGeometry(rect,{width:innerWidth,height:innerHeight},settings,mode);
     canvas.style.left=`${glow.left-ox}px`;canvas.style.top=`${glow.top-oy}px`;
     canvas.style.width=`${glow.width}px`;canvas.style.height=`${glow.height}px`;
-    canvas.style.filter=`blur(${glow.blur}px) saturate(${settings.saturation}%) brightness(${Math.max(1,settings.strength/100)})`;
+    canvas.style.filter=`${clearPlan?'':`blur(${glow.blur}px) `}saturate(${settings.saturation}%) brightness(${Math.max(1,settings.strength/100)})`;
     canvas.style.opacity=String(Math.min(1,settings.strength/100));
     // An opaque video that fills the viewport leaves nowhere to project light.
     if(l<=1&&t<=1&&right>=innerWidth-1&&bottom>=innerHeight-1){visible=false;root.style.display='none';cancelFrames();setStatus('画面已铺满屏幕 · 无外侧光效空间');return;}
@@ -333,13 +370,13 @@
   function bind(next){
     if(next===video)return;
     cancelFrames();cleanVideo();barEffect?.dispose();barEffect=null;frameEffect?.clear();danmakuEffect.clear();liveBoundsEffect.clear();resizeObserver.disconnect();modeObserver.disconnect();setStage(null);video=next;painted=false;lastFrame=0;blocked=false;
-    if(canvas){canvas.width=256;root.style.display='none';}
+    if(canvas){canvas.width=256;canvas.height=144;root.style.display='none';}
     if(!next){setStatus('等待播放器');return;}
     if(kind==='live')setBarStatus('直播保留完整画面 · 自动去边仅用于视频宽屏');
     else barEffect=globalThis.BiliGlowVideoBars.create(next,{onChange:()=>{painted=false;invalidate(true);},onStatus:setBarStatus});
     const refresh=()=>{blocked=false;invalidate(true);};
     const pause=()=>{cancelFrames();invalidate(true);};
-    const reset=()=>{barEffect?.reset();painted=false;lastFrame=0;blocked=false;canvas.width=256;root.style.display='none';setStatus('等待视频加载');invalidate();};
+    const reset=()=>{barEffect?.reset();painted=false;lastFrame=0;blocked=false;canvas.width=256;canvas.height=144;root.style.display='none';setStatus('等待视频加载');invalidate();};
     const seek=()=>{barEffect?.reset();refresh();};
     const events={playing:refresh,loadeddata:refresh,loadedmetadata:reset,seeked:seek,pause,ended:pause,emptied:reset,resize:seek,enterpictureinpicture:invalidate,leavepictureinpicture:invalidate};
     for(const [type,fn] of Object.entries(events))next.addEventListener(type,fn);
@@ -364,7 +401,8 @@
       document.documentElement.removeAttribute('data-biliglow-dark');
       document.documentElement.removeAttribute('data-biliglow-live');
       document.documentElement.removeAttribute('data-biliglow-glass-controls');
-      if(root){root.style.display='none';canvas.width=256;painted=false;}
+      clearPlan=null;
+      if(root){root.style.display='none';root.dataset.background='glow';canvas.width=256;canvas.height=144;painted=false;}
       if(ui){if(ui.parentNode!==document.documentElement)document.documentElement.append(ui);ui.style.display=supported?'block':'none';}
       setStatus(settings.privacyAccepted?'氛围光已关闭':'尚未开启 · 请先确认本地处理说明');
       syncCommentSurfaces();return;

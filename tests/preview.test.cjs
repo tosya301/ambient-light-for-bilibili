@@ -83,3 +83,16 @@ test('disabled and zero-strength previews suppress only the light while the land
   f.preview.update({strength:100});assert.ok(Number(f.styles.get('--preview-opacity'))>0);
   f.preview.destroy();
 });
+test('clear preview covers the panel without spatial or temporal blur and restores saved styling when switched off',()=>{
+  const f=fixture();f.intersect(true);f.preview.update({spread:75,blur:95,smoothing:80,fps:24});
+  const originalScale=f.styles.get('--preview-scale'),originalBlur=f.styles.get('--preview-blur');
+  f.frames(20);const blends=f.blends;
+  f.preview.update({clearBackground:true});
+  assert.equal(f.styles.get('--preview-blur'),'0px');assert.equal(f.styles.get('--preview-transition'),'0ms');
+  assert.ok(Number(f.styles.get('--preview-scale'))*144>=354,'clear image covers the panel width');
+  f.frames(30);assert.equal(f.blends,blends,'moving clear preview replaces each frame');
+  f.preview.update({clearBackground:false});
+  assert.equal(f.styles.get('--preview-scale'),originalScale);assert.equal(f.styles.get('--preview-blur'),originalBlur);
+  assert.equal(f.styles.get('--preview-transition'),'480ms');f.frames(20);assert.ok(f.blends>blends);
+  f.preview.destroy();
+});

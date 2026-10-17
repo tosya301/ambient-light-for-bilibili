@@ -96,7 +96,7 @@ test('local and cross-tab revocation notify immediately and discard stale asynch
 });
 
 function contentHarness(initial,delayed=false,live=false,options={}){
-  const counts={videoQueries:0,videoReads:0,draws:0,barCreates:0,barSamples:0,barDisposals:0,cancelled:0};
+  const counts={videoQueries:0,videoReads:0,draws:0,paints:[],barCreates:0,barSamples:0,fullscreenSamples:0,barDisposals:0,cancelled:0};
   const barConfigurations=[];
   const windowEvents=new Map(),documentEvents=new Map(),panelCalls={mounted:0,focused:0};
   const rafs=new Map(),frames=new Map(),intervals=[];let nextId=0,onSettings,resolveInitial,rejectInitial;
@@ -131,7 +131,7 @@ function contentHarness(initial,delayed=false,live=false,options={}){
     }
     querySelector(selector){return selector==='.holder'?this.holder:selector==='.launcher'?this.launcher:null;}
     querySelectorAll(){return [];}
-    getContext(){return this.context2d??={drawImage(){counts.draws++;},globalAlpha:1};}
+    getContext(){const element=this;return this.context2d??={drawImage(...args){counts.draws++;counts.paints.push({args,alpha:this.globalAlpha,width:element.width,height:element.height});},globalAlpha:1};}
     setPointerCapture(id){this.captured.add(id);}
     hasPointerCapture(id){return this.captured.has(id);}
     releasePointerCapture(id){if(this.captured.delete(id))dispatch(this,'lostpointercapture',{pointerId:id});}
@@ -146,8 +146,8 @@ function contentHarness(initial,delayed=false,live=false,options={}){
   function createVideo(){
     const video=new Element('video');
     const videoValues={paused:false,ended:false,readyState:4,videoWidth:1920,videoHeight:1080};
-    for(const [key,value] of Object.entries(videoValues))Object.defineProperty(video,key,{get(){counts.videoReads++;return value;}});
-    video.getBoundingClientRect=()=>{counts.videoReads++;return {left:100,top:100,right:1060,bottom:640,width:960,height:540};};
+    for(const [key,value] of Object.entries(videoValues))Object.defineProperty(video,key,{get(){counts.videoReads++;return Object.hasOwn(options,key)?options[key]:value;}});
+    video.getBoundingClientRect=()=>{counts.videoReads++;const box={left:100,top:100,width:960,height:540,...options.videoRect};return {...box,right:box.left+box.width,bottom:box.top+box.height};};
     video.closest=selector=>selector==='.bpx-player-container'?container:null;
     video.parentElement=container;if(container)container.append(video);
     video.requestVideoFrameCallback=fn=>{const id=++nextId;frames.set(id,fn);return id;};
@@ -186,8 +186,8 @@ function contentHarness(initial,delayed=false,live=false,options={}){
     setTimeout(fn){const id=++nextId;rafs.set(id,fn);return id;},clearTimeout(id){rafs.delete(id);},
     setInterval(fn){intervals.push(fn);},
     ResizeObserver:class{observe(){}disconnect(){}},MutationObserver:class{observe(){}disconnect(){}},
-    BiliGlowVideoBars:{create(boundVideo){counts.barCreates++;return {crop:{top:0,bottom:0,left:0,right:0},configure(settings,mode){barConfigurations.push({video:boundVideo,settings,mode});},layout(){return null;},
-      sample(){counts.barSamples++;},reset(){},dispose(){counts.barDisposals++;}};}}
+    BiliGlowVideoBars:{create(boundVideo,callbacks){counts.barCreates++;return {crop:{top:0,bottom:0,left:0,right:0},configure(settings,mode){barConfigurations.push({video:boundVideo,settings,mode});},layout(){return null;},
+      sample(now,eligible){counts.barSamples++;if(eligible)counts.fullscreenSamples++;options.onBarSample?.(eligible,callbacks);},get fullscreenBars(){return options.fullscreenBars;},reset(){},dispose(){counts.barDisposals++;}};}}
   });
   vm.runInContext(source('player.js'),context);
   vm.runInContext(source('content.js'),context);
@@ -209,6 +209,169 @@ function contentHarness(initial,delayed=false,live=false,options={}){
     replaceVideo(){currentVideo.isConnected=false;currentVideo=createVideo();return currentVideo;}
   };
 }
+
+test('clear normal VOD uses a detailed cover bitmap and replaces moving frames, then restores the saved glow',async()=>{
+  const settings={privacyAccepted:true,enabled:true,clearBackground:true,spread:75,blur:95,smoothing:80,saturation:123,strength:60};
+  const options={screen:'normal'},h=contentHarness(settings,false,false,options);await h.ready();h.flush();
+  const root=h.body.children.find(el=>'biliglowRoot' in el.dataset),canvas=root.shadowRoot.children[0];
+  assert.equal(root.dataset.background,'clear');assert.equal(root.style.clipPath,'none');
+  assert.equal(canvas.width,1280);assert.equal(canvas.height,900);
+  assert.equal(canvas.style.left,'0px');assert.equal(canvas.style.top,'0px');
+  assert.equal(canvas.style.width,'1280px');assert.equal(canvas.style.height,'900px');
+  assert.equal(canvas.style.filter,'saturate(123%) brightness(1)');assert.equal(canvas.style.opacity,'0.6');
+  const firstPaint=h.counts.paints.at(-1);
+  assert.deepEqual(firstPaint.args.slice(1),[192,0,1536,1080,0,0,1280,900],'only the background copy uses the centred cover crop');
+  assert.equal(h.video.style.transform,undefined,'main video sizing is untouched');
+  h.frame(1000);h.frame(2000);
+  assert.ok(h.counts.paints.length>=3);assert.ok(h.counts.paints.every(paint=>paint.alpha===1),'clear footage never blends old frames');
+  assert.ok(h.barConfigurations.every(item=>item.settings.spread===75&&item.settings.blur===95&&item.settings.smoothing===80),'render override never rewrites saved light parameters');
+  const draws=h.counts.draws;options.paused=true;h.change({...settings,clearBackground:false});h.flush();
+  assert.equal(root.dataset.background,'glow');assert.equal(canvas.width,256);assert.equal(canvas.height,144);
+  assert.match(canvas.style.filter,/^blur\(95px\)/);assert.ok(h.counts.draws>draws,'a paused toggle repaints the restored low-resolution bitmap');
+  assert.equal(canvas.style.width,'1110px','original 75% geometry is restored');
+  options.paused=false;h.reconcile();h.frame(3000);
+  assert.ok(h.counts.paints.at(-1).alpha>0&&h.counts.paints.at(-1).alpha<1,'original temporal smoothing resumes');
+  options.paused=true;h.change(settings);h.flush();
+  assert.equal(canvas.width,1280);assert.equal(h.counts.paints.at(-1).alpha,1,'paused enabling immediately replaces the old glow');
+  h.resize(640,480);h.flush();
+  assert.equal(canvas.width,640);assert.equal(canvas.height,480);assert.equal(canvas.style.top,'0px');
+  h.context.devicePixelRatio=2;h.resize(1280,900);h.flush();
+  assert.equal(canvas.width,1536);assert.equal(canvas.height,1080,'DPR sampling stops at the available source crop');
+});
+test('clear backdrop is confined to normal VOD and releases the detailed bitmap across modes and source changes',async()=>{
+  const settings={privacyAccepted:true,enabled:true,clearBackground:true},h=contentHarness(settings,false,false,{screen:'normal'});await h.ready();h.flush();
+  const root=h.body.children.find(el=>'biliglowRoot' in el.dataset),canvas=root.shadowRoot.children[0];
+  for(const screen of ['wide','mini','web','normal']){
+    h.container.setAttribute('data-screen',screen);h.reconcile();h.flush();
+    assert.equal(root.dataset.background,screen==='normal'?'clear':'glow',screen);
+    assert.equal(canvas.width,screen==='normal'?1280:256,screen);
+    assert.equal(canvas.style.filter.includes('blur('),screen!=='normal',screen);
+  }
+  h.context.document.fullscreenElement=h.container;h.documentEvent('fullscreenchange');h.flush();
+  assert.equal(root.dataset.background,'glow');assert.equal(canvas.width,256,'native fullscreen preserves the original pipeline');
+  h.context.document.fullscreenElement=null;h.documentEvent('fullscreenchange');h.flush();
+  assert.equal(root.dataset.background,'clear');assert.equal(canvas.width,1280);
+  h.replaceVideo();h.reconcile();h.flush();assert.equal(canvas.width,1280,'replacement video receives its own clear sample');
+  const live=contentHarness(settings,false,true,{screen:'normal'});await live.ready();live.flush();
+  const liveRoot=live.body.children.find(el=>'biliglowRoot' in el.dataset);
+  assert.equal(liveRoot.dataset.background,'glow');assert.equal(liveRoot.shadowRoot.children[0].width,256);
+});
+test('clear backdrop obeys consent, disabled, hidden and offscreen gates without retaining its large bitmap after revocation',async()=>{
+  const active={privacyAccepted:true,enabled:true,clearBackground:true};
+  const h=contentHarness({...active,privacyAccepted:false},false,false,{screen:'normal'});await h.ready();h.flush();
+  assert.equal(h.counts.videoQueries,0);assert.equal(h.counts.draws,0);
+  h.change(active);h.flush();const root=h.body.children.find(el=>'biliglowRoot' in el.dataset),canvas=root.shadowRoot.children[0];
+  assert.equal(canvas.width,1280);
+  h.context.document.hidden=true;h.documentEvent('visibilitychange');const hiddenDraws=h.counts.draws;h.frame(2000);h.flush();
+  assert.equal(root.style.display,'none');assert.equal(h.counts.draws,hiddenDraws);
+  h.context.document.hidden=false;h.documentEvent('visibilitychange');h.flush();
+  h.change({...active,enabled:false});h.flush();assert.equal(canvas.width,256);assert.equal(canvas.height,144);assert.equal(h.frames.size,0);
+  h.change(active);h.flush();const lateFrame=[...h.frames.values()][0];
+  h.change({...active,privacyAccepted:false});const revokedDraws=h.counts.draws;lateFrame?.(3000);h.flush();
+  assert.equal(root.style.display,'none');assert.equal(canvas.width,256);assert.equal(canvas.height,144);assert.equal(h.counts.draws,revokedDraws);
+  const offscreen=contentHarness(active,false,false,{screen:'normal',videoRect:{top:-800}});await offscreen.ready();offscreen.flush();
+  assert.equal(offscreen.counts.draws,0);assert.equal(offscreen.frames.size,0);
+});
+test('scrolling VOD has no viewport cutout even before its queued scroll layout runs',async()=>{
+  for(const screen of ['normal','wide'])for(const roundedCorners of [false,true])for(const frameShadow of [0,70]){
+    const h=contentHarness({privacyAccepted:true,enabled:true,roundedCorners,frameShadow},false,false,{screen});
+    await h.ready();h.flush();
+    const root=h.body.children.find(element=>'biliglowRoot' in element.dataset);
+    assert.equal(root.style.clipPath,'none',`${screen}, rounded=${roundedCorners}, shadow=${frameShadow}`);
+    h.windowEvent('scroll');
+    assert.equal(root.style.clipPath,'none','compositor scroll cannot expose an old video-shaped hole while layout is pending');
+    h.flush();assert.equal(root.style.clipPath,'none');
+  }
+});
+
+test('mini and webpage fullscreen retain their cutout across ordinary VOD transitions',async()=>{
+  const h=contentHarness({privacyAccepted:true,enabled:true},false,false,{screen:'normal'});
+  await h.ready();h.flush();
+  const root=h.body.children.find(element=>'biliglowRoot' in element.dataset);
+  for(const screen of ['mini','normal','web','wide','mini','normal']){
+    h.container.setAttribute('data-screen',screen);h.reconcile();h.flush();
+    assert.equal(root.style.clipPath==='none',screen==='normal'||screen==='wide',screen);
+  }
+});
+
+test('live retains the inverse light mask when page scrolling is queued',async()=>{
+  const h=contentHarness({privacyAccepted:true,enabled:true,frameShadow:0},false,true);
+  await h.ready();h.flush();
+  const root=h.body.children.find(element=>'biliglowRoot' in element.dataset),clip=root.style.clipPath;
+  assert.match(clip,/^(polygon|path)\(/);
+  h.windowEvent('scroll');assert.equal(root.style.clipPath,clip);
+  h.flush();assert.equal(root.style.clipPath,clip);
+});
+
+test('narrow VOD web fullscreen stops sampling, keeps black shielding and redraws after a paused resize',async()=>{
+  const settings={privacyAccepted:true,enabled:true},options={screen:'web',videoWidth:1280,videoHeight:855,videoRect:{left:0,top:0,width:1280,height:900}};
+  const h=contentHarness(settings,false,false,options);await h.ready();h.flush();
+  const backdrop=h.container.children.find(el=>'biliglowBackdrop' in el.dataset),root=h.container.children.find(el=>'biliglowRoot' in el.dataset);
+  assert.equal(backdrop.style.background,'#000');assert.equal(root.style.display,'none');
+  assert.equal(h.frames.size,0);assert.equal(h.counts.draws,0);assert.equal(h.container.hasAttribute('data-biliglow-stage'),true);
+  options.videoHeight=720;h.reconcile();h.flush();
+  assert.equal(backdrop.style.background,'#10141d');assert.equal(root.style.display,'block');assert.ok(h.counts.draws>0);assert.equal(h.frames.size,1);
+  options.videoHeight=855;h.reconcile();h.flush();const before=h.counts.draws;
+  assert.equal(backdrop.style.background,'#000');assert.equal(h.frames.size,0);
+  h.frame(9000);assert.equal(h.counts.draws,before,'a canceled callback cannot expose light over black narrow gaps');
+  options.paused=true;options.videoHeight=720;h.reconcile();h.flush();
+  assert.ok(h.counts.draws>before,'resuming large margins while paused samples the current video frame');
+  assert.equal(backdrop.style.background,'#10141d');assert.equal(h.frames.size,0);
+  for(const screen of ['normal','wide']){
+    h.container.setAttribute('data-screen',screen);h.reconcile();h.flush();
+    assert.equal(backdrop.parentNode,null);assert.equal(root.style.clipPath,'none','prior scroll fix remains active');
+  }
+  h.container.setAttribute('data-screen','web');options.videoHeight=855;h.reconcile();h.flush();assert.equal(backdrop.style.background,'#000');
+  h.change({...settings,enabled:false});h.flush();assert.equal(backdrop.parentNode,null);
+  h.change(settings);h.flush();assert.equal(backdrop.style.background,'#000');
+  h.change({...settings,privacyAccepted:false});h.flush();assert.equal(backdrop.parentNode,null);
+});
+
+test('narrow-gap suppression is VOD-only, requires metadata and applies to native container fullscreen',async()=>{
+  const settings={privacyAccepted:true,enabled:true};
+  for(const screen of ['normal','wide','mini']){
+    const h=contentHarness(settings,false,false,{screen,videoWidth:1280,videoHeight:855,videoRect:{left:0,top:0,width:1280,height:900}});await h.ready();h.flush();
+    assert.ok(h.counts.draws>0,screen);
+  }
+  const live=contentHarness(settings,false,true,{liveWeb:true,videoWidth:1280,videoHeight:855,videoRect:{left:0,top:0,width:1280,height:900}});await live.ready();live.flush();
+  assert.ok(live.counts.draws>0);assert.equal(live.container.children.find(el=>'biliglowBackdrop' in el.dataset).style.background,'#10141d');
+  const unknown=contentHarness(settings,false,false,{screen:'web',videoWidth:0,videoHeight:0,videoRect:{left:0,top:0,width:1280,height:900}});await unknown.ready();unknown.flush();
+  assert.equal(unknown.container.children.find(el=>'biliglowBackdrop' in el.dataset).style.background,'#10141d');
+  const h=contentHarness(settings,false,false,{screen:'normal',videoWidth:1280,videoHeight:855,videoRect:{left:0,top:0,width:1280,height:900}});await h.ready();h.flush();
+  h.context.document.fullscreenElement=h.container;h.documentEvent('fullscreenchange');h.flush();
+  const backdrop=h.container.children.find(el=>'biliglowBackdrop' in el.dataset);
+  assert.equal(backdrop.style.background,'#000');assert.equal(h.frames.size,0);
+  h.context.document.fullscreenElement=null;h.documentEvent('fullscreenchange');h.flush();assert.equal(backdrop.parentNode,null);assert.ok(h.frames.size>0);
+});
+
+test('source movie black bars mute only matching fullscreen light and keep lifecycle observation alive',async()=>{
+  const settings={privacyAccepted:true,enabled:true},options={screen:'web',videoRect:{left:0,top:0,width:1280,height:900}};
+  const h=contentHarness(settings,false,false,options);await h.ready();h.flush();
+  const root=h.container.children.find(el=>'biliglowRoot' in el.dataset),backdrop=h.container.children.find(el=>'biliglowBackdrop' in el.dataset);
+  assert.equal(root.style.display,'block');assert.ok(h.counts.fullscreenSamples>0);
+  options.fullscreenBars=true;h.reconcile();h.flush();
+  assert.equal(backdrop.style.background,'#000');assert.equal(root.style.display,'none');assert.equal(h.frames.size,0);
+  const draws=h.counts.draws,samples=h.counts.fullscreenSamples;h.reconcile();h.flush();
+  assert.ok(h.counts.fullscreenSamples>samples,'existing lifecycle still observes while frame rendering is stopped');
+  assert.equal(h.counts.draws,draws);
+  h.context.document.hidden=true;h.reconcile();h.flush();assert.equal(h.counts.fullscreenSamples,samples+1,'background does not observe video pixels');
+  h.context.document.hidden=false;options.paused=true;options.fullscreenBars=false;h.reconcile();h.flush();
+  assert.equal(backdrop.style.background,'#10141d');assert.equal(root.style.display,'block');assert.ok(h.counts.draws>draws,'recovery refreshes paused picture');
+  options.fullscreenBars=true;options.videoWidth=540;options.videoHeight=960;h.reconcile();h.flush();
+  assert.equal(root.style.display,'block');assert.equal(backdrop.style.background,'#10141d','horizontal source bars never mute side lighting');
+  h.change({...settings,privacyAccepted:false});h.flush();const afterRevoke=h.counts.fullscreenSamples;h.reconcile();h.flush();
+  assert.equal(backdrop.parentNode,null);assert.equal(h.counts.fullscreenSamples,afterRevoke);
+});
+
+test('new source-bar confirmation gates the same draw before it can show outer light',async()=>{
+  const options={screen:'web',videoRect:{left:0,top:0,width:1280,height:900}};
+  const h=contentHarness({privacyAccepted:true,enabled:true},false,false,options);await h.ready();h.flush();
+  options.onBarSample=(eligible,callbacks)=>{if(eligible&&!options.fullscreenBars){options.fullscreenBars=true;callbacks.onChange();}};
+  const before=h.counts.draws;h.frame(5000);h.flush();
+  assert.equal(h.counts.draws,before);assert.equal(h.frames.size,0);
+  assert.equal(h.container.children.find(el=>'biliglowRoot' in el.dataset).style.display,'none');
+  assert.equal(h.container.children.find(el=>'biliglowBackdrop' in el.dataset).style.background,'#000');
+});
 
 test('content script never queries a player until consent, and revocation stops queued work immediately',async()=>{
   const h=contentHarness({enabled:true,spread:310});

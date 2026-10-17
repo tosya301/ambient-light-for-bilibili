@@ -6,6 +6,42 @@ const body={};
 const context=vm.createContext({document:{body},innerWidth:1280,innerHeight:800,getComputedStyle:e=>({display:'block',visibility:'visible',opacity:'1',position:'static',...e.style})});
 vm.runInContext(fs.readFileSync(__dirname+'/../extension/player.js','utf8'),context);
 const P=context.BiliGlowPlayer;
+test('fullscreen narrow gaps require a centered picture filling one complete axis',()=>{
+  const viewport={left:0,top:0,width:1728,height:1080};
+  const horizontal=gap=>({left:0,top:gap,width:1728,height:1080-2*gap});
+  const vertical=gap=>({left:gap,top:0,width:1728-2*gap,height:1080});
+  for(const gap of [0,.5,24,27,32.4])assert.equal(P.hasNarrowFullscreenGaps(horizontal(gap),viewport),true,`top/bottom ${gap}`);
+  for(const gap of [32.41,54,140])assert.equal(P.hasNarrowFullscreenGaps(horizontal(gap),viewport),false,`top/bottom ${gap}`);
+  for(const gap of [27,51.84])assert.equal(P.hasNarrowFullscreenGaps(vertical(gap),viewport),true,`sides ${gap}`);
+  assert.equal(P.hasNarrowFullscreenGaps(vertical(51.85),viewport),false);
+  for(const rect of [
+    {left:0,top:0,width:1728,height:1026},
+    {left:20,top:20,width:1688,height:1040},
+    {left:-2,top:27,width:1732,height:1026},
+    {left:560,top:0,width:608,height:1080}
+  ])assert.equal(P.hasNarrowFullscreenGaps(rect,viewport),false,JSON.stringify(rect));
+  const offset={left:37.25,top:52.5,width:1728,height:1080};
+  assert.equal(P.hasNarrowFullscreenGaps({left:37.25,top:79.5,width:1728,height:1026},offset),true,'stage offset is measured locally');
+});
+test('fullscreen narrow gap geometry rejects incomplete or invalid boxes',()=>{
+  const box={left:0,top:0,width:1728,height:1080};
+  for(const bad of [null,{}, {...box,width:0},{...box,height:-1},{...box,left:NaN},{...box,top:Infinity},{...box,width:'1728'}]){
+    assert.equal(P.hasNarrowFullscreenGaps(bad,box),false);
+    assert.equal(P.hasNarrowFullscreenGaps(box,bad),false);
+  }
+});
+test('source movie bars only protect centered top/bottom fullscreen margins',()=>{
+  const screen={left:17,top:23,width:1728,height:1080};
+  assert.equal(P.hasFullscreenLetterboxGaps({left:17,top:77,width:1728,height:972},screen),true);
+  for(const rect of [
+    {left:17,top:23,width:1728,height:1080},
+    {left:71,top:23,width:1620,height:1080},
+    {left:17,top:23,width:1728,height:972},
+    {left:27,top:77,width:1708,height:972},
+    {left:17,top:75,width:1728,height:972},
+    {left:17,top:77,width:NaN,height:972},null
+  ])assert.equal(P.hasFullscreenLetterboxGaps(rect,screen),false,JSON.stringify(rect));
+});
 test('only desktop room URLs and existing playback routes are enabled',()=>{
   for(const url of ['https://live.bilibili.com/25034104','https://live.bilibili.com/1/?broadcast_type=0'])assert.equal(P.pageKind(new URL(url)),'live');
   for(const path of ['/','/p/eden/area-tags','/blackboard/activity','/25034104/extra','/0'])assert.equal(P.pageKind({hostname:'live.bilibili.com',pathname:path}),null);
