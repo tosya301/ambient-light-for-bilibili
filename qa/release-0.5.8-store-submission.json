@@ -1,0 +1,76 @@
+{
+  "version": "0.5.8",
+  "date": "2026-10-24",
+  "timezone": "America/New_York",
+  "recordedAtUtc": "2026-10-24T18:14:05.711485+00:00",
+  "releaseUrl": "https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.8",
+  "releaseCommit": "0afdf2ffc0b7f73a19a07b2c201f6d393822e620",
+  "packages": "Reused the verified Chromium, Firefox, and matching source ZIP files. Public downloads were byte-identical; see release-0.5.8-public-download-verification.json.",
+  "chrome": {
+    "submitted": true,
+    "version": "0.5.8",
+    "status": "Pending review",
+    "publishAutomaticallyAfterReview": true,
+    "previousPublishedVersion": "0.5.7",
+    "descriptionAndTestInstructionsSaved": true,
+    "storeUrl": "https://chromewebstore.google.com/detail/inmkpmcmgnhbljonlgacogfbffdcckjj",
+    "evidence": [
+      "chrome-package-confirmation.txt",
+      "chrome-submitted-confirmation.txt",
+      "chrome-submitted.txt",
+      "chrome-submitted.png"
+    ]
+  },
+  "edge": {
+    "submitted": true,
+    "version": "0.5.8",
+    "status": "In review",
+    "previousLiveVersion": "0.5.7",
+    "descriptionAndCertificationNotesSaved": true,
+    "storeUrl": "https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak",
+    "evidence": [
+      "edge-package-confirmation.txt",
+      "edge-submitted.txt",
+      "edge-submitted.png"
+    ]
+  },
+  "firefox": {
+    "submitted": true,
+    "version": "0.5.8",
+    "status": "Approved and publicly listed",
+    "previousListedVersion": "0.5.7",
+    "versionId": 6617530,
+    "fileId": 5161644,
+    "matchingSourceAttached": true,
+    "releaseAndReviewerNotesSaved": true,
+    "validationErrors": 0,
+    "validationWarnings": 3,
+    "warningType": "Unsafe assignment to innerHTML",
+    "minimumFirefoxVersion": "140.0",
+    "platform": "desktop",
+    "storeUrl": "https://addons.mozilla.org/zh-CN/firefox/addon/ambient-light-for-bilibili/",
+    "evidence": [
+      "firefox-upload-validation.txt",
+      "firefox-submitted.txt",
+      "firefox-submitted.png",
+      "firefox-details.png",
+      "firefox-public.txt"
+    ],
+    "listedVersion": "0.5.8",
+    "publicListingVerified": true,
+    "publicDownloadUrl": "https://addons.mozilla.org/firefox/downloads/file/5161644/ambient_light_for_bilibili-0.5.8.xpi",
+    "descriptionSaved": true
+  },
+  "issue": {
+    "url": "https://github.com/tosya301/ambient-light-for-bilibili/issues/3",
+    "state": "closed",
+    "reason": "completed",
+    "commentUrl": "https://github.com/tosya301/ambient-light-for-bilibili/issues/3#issuecomment-6387714985"
+  },
+  "evidenceLocation": "Private account screenshots and UI text are retained in this task output directory; they are not committed to the public repository.",
+  "limits": [
+    "Chrome and Edge submissions are still awaiting review; Firefox public listing does not establish signed installation/upgrade testing.",
+    "The GitHub Firefox ZIP is an unsigned temporary-load package; full Firefox exit/restart requires loading it again.",
+    "No original-reporter environment/video reproduction, Edge-host, Windows/Linux, installed-extension reload, or signed install/upgrade testing is claimed."
+  ]
+}
