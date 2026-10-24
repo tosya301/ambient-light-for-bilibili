@@ -469,29 +469,66 @@
     }
     return {update,clear};
   }
-  // Fit cached pixel tracks without cropping whole lines or collapsing several
-  // bottom tracks into one. Messages on the same native track stay together;
-  // rolling/fixed tracks keep their independent native allocation.
+  // Native allocation already accounts for horizontal position and lifetime:
+  // different Y coordinates do not imply mutually exclusive full-width rows.
+  // Preserve safe/active tracks and fit only out-of-bounds cached edge rows.
   function fitDanmakuTracks(tracks,height,gap){
-    const positions=tracks.map(track=>Math.max(gap,Math.min(track.top,height-gap-track.height)));
+    const clamp=track=>Math.max(gap,Math.min(track.top,height-gap-track.height));
+    const positions=tracks.map(track=>Number.isFinite(track.fixed)?track.fixed:clamp(track));
     for(const type of new Set(tracks.map(track=>track.type))){
       const ordered=tracks.map((track,index)=>({...track,index})).filter(track=>track.type===type).sort((a,b)=>a.top-b.top);
-      const groups=[];
+      const anchors=ordered.filter(track=>Number.isFinite(track.fixed));
+      for(const track of ordered)if(!Number.isFinite(track.fixed)){
+        const lane=anchors.find(anchor=>Math.abs(anchor.top-track.top)<1);
+        if(lane){track.fixed=clamp({...track,top:lane.fixed});positions[track.index]=track.fixed;}
+      }
+      const nativeGroups=[];
       for(const track of ordered){
+        let group=nativeGroups[nativeGroups.length-1];
+        if(!group||track.top-group.native>=1){group={native:track.top,height:0,members:[]};nativeGroups.push(group);}
+        group.height=Math.max(group.height,track.height);group.members.push(track);
+      }
+      const sparse=nativeGroups.every((group,index)=>!index||group.native>=nativeGroups[index-1].native+nativeGroups[index-1].height)&&
+        nativeGroups.reduce((sum,group)=>sum+group.height,Math.max(0,nativeGroups.length-1))<=height-2*gap;
+      if(sparse&&!ordered.some(track=>Number.isFinite(track.fixed))){
+        // A sparse initial stage can retain the complete, separate edge rows.
+        // Never apply this full-stage packing to overlapping native tracks or
+        // to active rows already assigned a stable position.
+        for(let i=0;i<nativeGroups.length;i++){
+          const group=nativeGroups[i],previous=nativeGroups[i-1];
+          group.top=Math.max(gap,Math.min(group.native,height-gap-group.height),previous?previous.top+previous.height+1:gap);
+        }
+        for(let i=nativeGroups.length-1;i>=0;i--){
+          const group=nativeGroups[i],next=nativeGroups[i+1];
+          group.top=Math.min(group.top,next?next.top-group.height-1:height-gap-group.height);
+          for(const track of group.members)positions[track.index]=group.top;
+        }
+        continue;
+      }
+      const settled=ordered.filter(track=>Number.isFinite(track.fixed)||track.top===clamp(track));
+      const pending=ordered.filter(track=>!settled.includes(track)),groups=[];
+      for(const track of pending){
         let group=groups[groups.length-1];
-        if(!group||track.top-group.native>=1){group={native:track.top,height:track.height,members:[]};groups.push(group);}
-        group.height=Math.max(group.height,track.height);group.members.push(track.index);
+        if(!group||track.top-group.native>=1){group={native:track.top,height:0,members:[]};groups.push(group);}
+        group.height=Math.max(group.height,track.height);group.members.push(track);
       }
-      for(let i=0;i<groups.length;i++){
-        const group=groups[i],previous=groups[i-1];
-        group.top=Math.max(gap,Math.min(group.native,height-gap-group.height),previous?previous.top+previous.height+1:gap);
-      }
-      for(let i=groups.length-1;i>=0;i--){
-        const group=groups[i],next=groups[i+1];
-        group.top=Math.min(group.top,next?next.top-group.height-1:height-gap-group.height);
-        // A transient overfull cached stage cannot fit every full-size track.
-        // Keep each complete line inside; native allocation resolves on resize.
-        for(const index of group.members)positions[index]=Math.max(gap,Math.min(group.top,height-gap-tracks[index].height));
+      // Top rows fit downwards, bottom rows upwards. Never push a safe native
+      // row to make space; dense tracks may intentionally overlap vertically.
+      const edgeOrder=[...groups.filter(group=>group.native<gap),...groups.filter(group=>group.native>=gap).reverse()];
+      for(const group of edgeOrder){
+        let low=gap,high=height-gap-group.height;
+        const same=settled.find(track=>Math.abs(track.top-group.native)<1);
+        for(const track of settled){
+          if(track.top<group.native-1)low=Math.max(low,positions[track.index]+track.height+1);
+          else if(track.top>=group.native+1)high=Math.min(high,positions[track.index]-group.height-1);
+        }
+        const top=same?positions[same.index]:low<=high?Math.max(low,Math.min(group.native,high)):null;
+        // When there is no room, apply only each item's boundary correction.
+        // Repacking an overfull stage collapses dozens of native lanes at top.
+        for(const track of group.members){
+          if(top!==null)positions[track.index]=Math.max(gap,Math.min(top,height-gap-track.height));
+          settled.push(track);
+        }
       }
     }
     return positions;
@@ -502,8 +539,19 @@
   // but give portrait media the same horizontal stage as landscape playback.
   function createDanmakuBounds(){
     let layers=new Set(),tracks=new Set();
-    const stages=new Map(),trackProperty='--biliglow-danmaku-track-top';
-    const observer=typeof MutationObserver==='function'?new MutationObserver(syncTracks):null;
+    const stages=new Map(),trackStates=new Map(),trackProperty='--biliglow-danmaku-track-top';
+    const observer=typeof MutationObserver==='function'?new MutationObserver(records=>{
+      // Pools may remove/reinsert or hide/show the same DOM node in one batch.
+      // Its final coordinates can be identical, but this is a new lifetime.
+      for(const record of records){
+        if(record.type==='childList')for(const removed of record.removedNodes||[]){
+          for(const node of trackStates.keys())if(removed===node||removed.contains?.(node))trackStates.delete(node);
+        }
+        if(record.type==='attributes'&&record.attributeName==='class'&&record.oldValue!=null&&
+          !record.oldValue.split(/\s+/).includes('bili-danmaku-x-show'))trackStates.delete(record.target);
+      }
+      syncTracks();
+    }):null;
     const properties=['left','top','width','height','radius','track-height'];
     function syncTracks(){
       const next=new Set();
@@ -515,22 +563,26 @@
           if(!type)continue;
           const top=parseFloat(node.style.getPropertyValue(type==='roll'?'--top':'--translateY'));
           const style=getComputedStyle(node),height=parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.125;
-          if(Number.isFinite(top)&&Number.isFinite(height)&&height>0&&height+stage.gap*2<=stage.height)entries.push({node,type,top,height});
+          if(Number.isFinite(top)&&Number.isFinite(height)&&height>0&&height+stage.gap*2<=stage.height){
+            const key=[type,top,height,stage.height,stage.gap].join(':'),cached=trackStates.get(node);
+            entries.push({node,type,top,height,key,fixed:cached?.key===key&&cached.layer===layer?cached.top:null});
+          }
         }
         const positions=fitDanmakuTracks(entries,stage.height,stage.gap);
         entries.forEach((entry,index)=>{
           const value=`${positions[index]}px`;next.add(entry.node);
+          trackStates.set(entry.node,{key:entry.key,layer,top:positions[index]});
           if(entry.node.style.getPropertyValue(trackProperty)!==value)entry.node.style.setProperty(trackProperty,value);
         });
       }
-      for(const node of tracks)if(!next.has(node))node.style.removeProperty(trackProperty);
+      for(const node of tracks)if(!next.has(node)){node.style.removeProperty(trackProperty);trackStates.delete(node);}
       tracks=next;
     }
     function restore(layer){
       layer.removeAttribute('data-biliglow-danmaku-bounds');
       for(const property of properties)layer.style.removeProperty(`--biliglow-danmaku-${property}`);
     }
-    function clear(){observer?.disconnect();for(const layer of layers)restore(layer);layers.clear();stages.clear();for(const node of tracks)node.style.removeProperty(trackProperty);tracks.clear();}
+    function clear(){observer?.disconnect();for(const layer of layers)restore(layer);layers.clear();stages.clear();for(const node of tracks)node.style.removeProperty(trackProperty);tracks.clear();trackStates.clear();}
     function update(video,settings,kind,mode,rect){
       const area=settings.enabled&&kind==='video'&&video?.isConnected&&video.videoWidth>0&&video.videoHeight>0
         ?video.closest('.bpx-player-video-area'):null;
@@ -540,7 +592,7 @@
       for(const layer of layers)if(!next.has(layer)){restore(layer);stages.delete(layer);changed=true;}
       for(const layer of next)if(!layers.has(layer))changed=true;
       layers=next;
-      if(changed){observer?.disconnect();for(const layer of layers)observer?.observe(layer,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style']});}
+      if(changed){observer?.disconnect();for(const layer of layers)observer?.observe(layer,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style'],attributeOldValue:true});}
       if(!layers.size){syncTracks();return null;}
       const box=area.getBoundingClientRect();
       if(box.width<=0||box.height<=0){clear();return null;}

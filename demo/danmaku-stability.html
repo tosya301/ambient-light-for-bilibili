@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>密集弹幕稳定性 · issue #3</title>
+<link rel="stylesheet" href="../extension/page.css">
+<style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#10141d;color:#e4edf4;font:15px/1.5 system-ui}h1{font-size:24px}button{padding:8px 16px;margin-bottom:16px;font:inherit}.bpx-player-video-area{position:relative;width:960px;max-width:95vw;height:540px;background:#182833;overflow:hidden}.bpx-player-video-wrap,video{width:100%;height:100%;object-fit:contain}.bpx-player-render-dm-wrap{position:static;height:0}.bpx-player-row-dm-wrap{position:absolute;inset:0}.bili-danmaku-x-dm{position:absolute;white-space:nowrap;font-size:25px;line-height:1.125;color:#fff;text-shadow:1px 1px #000}.bili-danmaku-x-roll{left:100%;top:var(--top);animation:roll 7s linear infinite}.bili-danmaku-x-center{left:50%;top:0;transform:translate(-50%,var(--translateY));color:#ffc979}.bpx-player-control-wrap{position:absolute;left:0;right:0;bottom:0;height:55px;background:#10141d99;z-index:80;padding:14px}pre{white-space:pre-wrap;font:13px/1.5 monospace}@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-1800px)}}
+</style>
+<h1>密集弹幕稳定性 · issue #3</h1>
+<p>生产边界适配器；逐帧加入／移除滚动与固定弹幕，记录已有弹幕的垂直位移。</p>
+<button id="run">运行动态回归</button> <span id="status">准备中</span>
+<div class="bpx-player-video-area">
+  <div class="bpx-player-video-wrap"><video src="test-colors.mp4" autoplay muted loop playsinline></video></div>
+  <div class="bpx-player-render-dm-wrap"><div class="bpx-player-row-dm-wrap"></div></div>
+  <div class="bpx-player-control-wrap">原生控制条</div>
+</div>
+<pre id="result"></pre><script id="report" type="application/json">{}</script>
+<script src="../extension/shared.js"></script><script src="../extension/player.js"></script>
+<script src="danmaku-stability-tests.js"></script>
+</html>

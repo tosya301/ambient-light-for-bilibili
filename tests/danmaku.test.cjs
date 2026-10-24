@@ -163,13 +163,13 @@ test('top tracks with different line heights retain their complete line boxes',(
 test('same native track stays together while rolling and fixed tracks remain independent',()=>{
   assert.deepEqual(fitTracks([{top:4,height:20,type:'roll'},{top:4.5,height:30,type:'roll'},
     {top:4,height:25,type:'center'},{top:70,height:20,type:'roll'}],150,12),[12,12,12,70]);
-  assert.deepEqual(fitTracks([{top:1,height:20,type:'roll'},{top:0,height:20,type:'roll'}],100,12),[33,12],
-    'a full pixel difference starts a distinct track and preserves returned input order');
+  assert.deepEqual(fitTracks([{top:1,height:20,type:'roll'},{top:0,height:20,type:'roll'}],100,12),[12,12],
+    'nearby native positions are not expanded into artificial full-width rows');
 });
 
 test('physically overfull cached tracks stay complete at the existing font size',()=>{
   const tracks=[{top:0,height:20,type:'roll'},{top:21,height:20,type:'roll'},{top:42,height:20,type:'roll'}];
-  const positions=fitTracks(tracks,50,12);assert.deepEqual(positions,[12,12,18]);
+  const positions=fitTracks(tracks,50,12);assert.deepEqual(positions,[12,18,18]);
   positions.forEach((top,index)=>{assert.ok(top>=12);assert.ok(top+tracks[index].height<=38);});
   assert.equal(tracks[0].height,20,'fitting does not shrink font or line dimensions');
 });
@@ -619,4 +619,80 @@ test('a collapsed video area clears bounds and can recover after it becomes meas
   const h=fixture();h.update();h.box(100,50,0,540);
   assert.equal(h.update({picture:rect(310,50,540,540)}),null);assertCleared(h.root);
   h.box(100,50,960,540);h.update();assertBounds(h.root,{left:210,top:0,width:540,height:540,radius:12});
+});
+
+test('dense native lanes keep their own positions instead of accumulating at the top (issue #3)',()=>{
+  for(const type of ['roll','center']){
+    const tracks=Array.from({length:65},(_,i)=>({top:i*7,height:28.125,type}));
+    const positions=fitTracks(tracks,540,12);
+    assert.equal(positions.filter(top=>top===12).length,2,'only two native edge lanes need the top inset');
+    tracks.forEach((track,index)=>assert.equal(positions[index],Math.max(12,track.top)));
+  }
+});
+
+test('native vertical overlap is preserved even when the whole set could fit as separate rows',()=>{
+  assert.deepEqual(fitTracks([{top:12,height:28.125,type:'center'},{top:35,height:60,type:'center'},
+    {top:42,height:28.125,type:'center'}],540,12),[12,35,42]);
+});
+
+test('active rolling and fixed lines do not move when dense neighbours enter and leave',()=>{
+  const h=fixture(),retained=['roll','center'].flatMap(type=>[h.makeTrack(type,100),h.makeTrack(type,200)]);
+  h.update();const before=retained.map(node=>node.style.getPropertyValue(trackProperty));
+  for(let cycle=0;cycle<5;cycle++){
+    const crowd=['roll','center'].flatMap(type=>Array.from({length:65},(_,i)=>h.makeTrack(type,i*7)));
+    h.mutations([{type:'childList',target:h.root}]);h.update();
+    assert.deepEqual(retained.map(node=>node.style.getPropertyValue(trackProperty)),before);
+    crowd.forEach(node=>node.remove());h.mutations([{type:'childList',target:h.root}]);h.update();
+    assert.deepEqual(retained.map(node=>node.style.getPropertyValue(trackProperty)),before);
+    crowd.forEach(node=>assert.equal(node.style.getPropertyValue(trackProperty),''));
+  }
+});
+
+test('fitted edge lanes stay anchored when their sparse neighbour disappears',()=>{
+  const h=fixture(),first=h.makeTrack('center',600),last=h.makeTrack('center',640);
+  h.update();assertTrack(first,470.75);assertTrack(last,499.875);
+  last.remove();h.mutations([{type:'childList',target:h.root}]);h.update();assertTrack(first,470.75);
+  first.classList.remove('bili-danmaku-x-show');h.mutations([{type:'attributes',attributeName:'class',target:first}]);
+  assert.equal(first.style.getPropertyValue(trackProperty),'');
+  first.classList.add('bili-danmaku-x-show');h.mutations([{type:'attributes',attributeName:'class',target:first}]);
+  assertTrack(first,499.875); // New display lifetime has a fresh allocation.
+});
+
+test('own coordinate, line height and stage changes invalidate only the relevant cached fit',()=>{
+  const h=fixture(),first=h.makeTrack('center',600),last=h.makeTrack('center',640);h.update();
+  const firstPosition=first.style.getPropertyValue(trackProperty);
+  last.style.setProperty('--translateY','300px');h.mutations([{type:'attributes',attributeName:'style',target:last}]);
+  assertTrack(last,300);assert.equal(first.style.getPropertyValue(trackProperty),firstPosition);
+  first.computedStyles.lineHeight='60px';h.update();assertTrack(first,468);
+  h.update({mode:'fullscreen'});assertTrack(first,478);assertTrack(last,300);
+  h.box(100,50,960,640);h.update();assertTrack(first,568);
+});
+
+test('same-batch pool reuse starts a fresh lifetime even at identical native coordinates',()=>{
+  for(const method of ['remove','hide']){
+    const h=fixture(),first=h.makeTrack('center',490),last=h.makeTrack('center',520),row=first.parentElement;
+    h.update();assertTrack(first,470.75);last.remove();
+    if(method==='remove'){
+      first.remove();row.append(first);
+      h.mutations([{type:'childList',target:row,removedNodes:[first,last],addedNodes:[first]}]);
+    }else{
+      first.classList.remove('bili-danmaku-x-show');const hidden=first.className;
+      first.classList.add('bili-danmaku-x-show');
+      h.mutations([{type:'attributes',attributeName:'class',target:first,oldValue:hidden}]);
+    }
+    assertTrack(first,490);
+  }
+});
+
+test('new comments join an active fitted native lane without moving existing comments',()=>{
+  const h=fixture(),first=h.makeTrack('roll',490),last=h.makeTrack('roll',520);h.update();
+  assertTrack(first,470.75);assertTrack(last,499.875);
+  const joining=h.makeTrack('roll',490);h.mutations([{type:'childList',target:joining.parentElement}]);
+  assertTrack(joining,470.75);assertTrack(first,470.75);assertTrack(last,499.875);
+});
+
+test('moving a cached node into a new renderer starts a fresh allocation',()=>{
+  const h=fixture(),first=h.makeTrack('center',490),last=h.makeTrack('center',520);h.update();assertTrack(first,470.75);
+  const replacement=h.makeRoot();h.root.remove();h.area.append(replacement);replacement.querySelector('.bpx-player-row-dm-wrap').append(first);
+  h.update();assertTrack(first,490);assert.equal(last.style.getPropertyValue(trackProperty),'');
 });

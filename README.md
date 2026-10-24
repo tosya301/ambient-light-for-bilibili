@@ -1,5 +1,8 @@
 # Ambient light for Bilibili
 
+> 本地修复分支 0.5.8：修复点播密集弹幕顶行堆叠与跳位（issue #3），尚未发布。公开版本与下载链接仍指向 0.5.7。验证范围见 [QA.txt](QA.txt)，新增 [密集弹幕动态测试](demo/danmaku-stability.html)；[完整播放器测试](demo/danmaku.html) 提供模式／影院预设与原生全屏入口。
+
+
 为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.7（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)

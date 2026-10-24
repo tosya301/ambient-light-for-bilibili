@@ -34,6 +34,7 @@
     .bpx-player-control-wrap button{padding:2px 7px}.bpx-player-sending-area{flex:0 0 56px;width:100%;height:56px;position:relative;z-index:100;background:#243042;padding:10px;display:flex;gap:10px;align-items:center}.bpx-player-sending-area input{flex:1;min-width:0;color:#dceaf2;background:#182638;border:1px solid #59728b;border-radius:4px;padding:5px 8px}
     #arc_toolbar_report{max-width:1080px;margin:12px auto 0;border:1px solid #536175;padding:12px;display:flex;align-items:center;justify-content:space-between}.caption{color:#b7c8d7;font-size:13px}
     #player[data-screen="web"]{position:fixed;inset:0;width:100vw;height:100vh;z-index:600;background:#10141d}#player[data-screen="mini"]{position:fixed;right:28px;bottom:92px;width:360px;height:203px;z-index:600}#player[data-screen="mini"] .bpx-player-sending-area{display:none}
+    #player:fullscreen{width:100vw;height:100vh;background:#10141d}#player:fullscreen .bpx-player-video-area{min-height:0}
     body[data-lab-mode="web"]{overflow:hidden}#leave-web{display:none;position:fixed;right:16px;top:12px;z-index:800}body[data-lab-mode="web"] #leave-web{display:block}
     .testing-probes .bpx-player-control-wrap{pointer-events:none!important}.testing-probes .bpx-player-control-wrap button{pointer-events:none!important}
     #danmaku-results{display:block;box-sizing:border-box;height:360px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.8 ui-monospace,SFMono-Regular,monospace;max-width:1080px;margin:20px auto;padding:15px;border:1px solid #405169;border-radius:8px;color:#c9dbe7}
@@ -47,6 +48,8 @@
     <p class="note">真实生产脚本与静态零高度弹幕根。普通和固定弹幕各有一条顶部、两条底部越界原生轨道，整行应移回画面内，同类型轨道保持间距；高级轨迹、BAS 网格仍按边界裁切。控制栏和发送框仍可操作。此页只使用本地合成视频，并自动开启本地测试设置。</p>
     <div class="lab-tools">
       <button id="danmaku-run" type="button">运行弹幕边界自检</button>
+      <button id="mode-matrix" type="button">模式与影院预设自检</button>
+      <button id="mode-native" type="button">原生全屏弹幕自检</button>
       <button id="danmaku-preview" type="button">预览弹幕</button>
       <label>模式 <select id="mode-select"><option value="normal">普通</option><option value="wide">宽屏</option><option value="web">网页全屏</option><option value="mini">小窗</option></select></label>
       <label>视频比例 <select id="ratio-select"><option value="standard">16:9</option><option value="four-three">4:3</option><option value="square">方形 1:1</option><option value="portrait">竖向 3:4</option><option value="mac">Mac 1670:1080</option></select></label>
@@ -73,6 +76,7 @@
       </div>
       <div id="arc_toolbar_report"><span class="caption">页面操作区 · 播放器下方自然流布局</span><button id="toolbar-button" type="button">操作区命中测试</button></div>
     </section>
+    <output id="mode-results" aria-live="polite"></output><script id="mode-report" type="application/json">{}</script>
     <output id="danmaku-results" aria-live="polite" data-state="initializing">等待运行</output>
     <section id="scroll-fixture">评论区滚动测试：小窗显示时，这一段页面长度应保持稳定。</section>
   </main>
@@ -85,5 +89,6 @@
   <script src="../extension/bar-effects.js"></script>
   <script src="../extension/content.js"></script>
   <script src="danmaku-tests.js"></script>
+  <script src="danmaku-modes-tests.js"></script>
 </body>
 </html>
