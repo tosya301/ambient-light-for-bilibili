@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "total": 27,
+  "sha256": {
+    "Ambient-light-for-Bilibili-0.5.8-chromium.zip": "4cb14a7655a4d26646c0f0d93b4216a4457d5c33a7b3b43756614ac6f3bf3560",
+    "Ambient-light-for-Bilibili-0.5.8-firefox.zip": "caf7f3d670580473e2ef4d0c873ba9f9dfe0df3157a9d9689e5ca7f90ade70fa",
+    "Ambient-light-for-Bilibili-0.5.8-source.zip": "033b7ab86f0ca0a100b16163bd01904f6cad26a87dc577fdf8b8e0531d437cd7"
+  },
+  "checks": [
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-chromium.zip CRC"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-chromium.zip safe paths"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-firefox.zip CRC"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-firefox.zip safe paths"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-source.zip CRC"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-source.zip safe paths"
+    },
+    {
+      "passed": true,
+      "check": "chromium version"
+    },
+    {
+      "passed": true,
+      "check": "chromium permissions unchanged"
+    },
+    {
+      "passed": true,
+      "check": "chromium player.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "chromium page.css matches source"
+    },
+    {
+      "passed": true,
+      "check": "chromium content.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "chromium shared.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "chromium bars.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "chromium bar-effects.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "chromium preview.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox version"
+    },
+    {
+      "passed": true,
+      "check": "firefox permissions unchanged"
+    },
+    {
+      "passed": true,
+      "check": "firefox player.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox page.css matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox content.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox shared.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox bars.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox bar-effects.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "firefox preview.js matches source"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-chromium.zip independent source rebuild"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-firefox.zip independent source rebuild"
+    },
+    {
+      "passed": true,
+      "check": "Ambient-light-for-Bilibili-0.5.8-source.zip independent source rebuild"
+    }
+  ],
+  "version": "0.5.8",
+  "independent_rebuild": "byte-identical",
+  "artifact_sizes": {
+    "Ambient-light-for-Bilibili-0.5.8-chromium.zip": 234802,
+    "Ambient-light-for-Bilibili-0.5.8-firefox.zip": 245286,
+    "Ambient-light-for-Bilibili-0.5.8-source.zip": 256134
+  }
+}

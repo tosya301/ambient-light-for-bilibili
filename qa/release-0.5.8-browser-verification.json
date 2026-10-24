@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-24",
+  "issue": "https://github.com/tosya301/ambient-light-for-bilibili/issues/3",
+  "version": "0.5.8",
+  "base": "d679d6d",
+  "rootCause": [
+    "Whole-stage packing treats distinct native Y positions as non-overlapping rows, ignoring horizontal/time allocation.",
+    "Every visible-set change repacks active nodes; overflow clamps many lanes to the top inset."
+  ],
+  "node": {
+    "passed": 231,
+    "failed": 0,
+    "danmakuTests": 58,
+    "baselineRegressions": 7
+  },
+  "chromiumDense": {
+    "passed": 20,
+    "frames": 480,
+    "maxVerticalDrift": 0
+  },
+  "firefoxDense": {
+    "passed": 20,
+    "frames": 480,
+    "evidence": "firefox-dense-ax.txt"
+  },
+  "chromiumBounds": {
+    "passed": 328
+  },
+  "packages": {
+    "passed": 27,
+    "independentRebuild": "byte-identical"
+  },
+  "limitations": [
+    "Tests use local synthetic media and production code; reporter environment and video are unknown.",
+    "No independent reproduction in the reporter environment; selected live Bilibili page had no active danmaku sample.",
+    "Edge host, Windows/Linux, signed installation/upgrade and installed-extension reload were not verified."
+  ],
+  "chromeModeMatrix": {
+    "passed": 31,
+    "frames": 600,
+    "layouts": [
+      "normal",
+      "wide",
+      "web"
+    ],
+    "presets": [
+      "soft",
+      "cinema"
+    ],
+    "maxVerticalDrift": 0
+  },
+  "nativeFullscreen": {
+    "Chrome": 11,
+    "Firefox": 11,
+    "presets": [
+      "soft",
+      "cinema"
+    ],
+    "maxVerticalDrift": 0,
+    "enteredViaActualUI": true
+  },
+  "firefoxModeMatrix": {
+    "passed": 31,
+    "frames": 600,
+    "layouts": [
+      "normal",
+      "wide",
+      "web"
+    ],
+    "presets": [
+      "soft",
+      "cinema"
+    ],
+    "evidence": "firefox-mode-matrix-ax.txt"
+  },
+  "commit": "3f51785e4fd53d669ea79219558678dc4ad0f4c1"
+}

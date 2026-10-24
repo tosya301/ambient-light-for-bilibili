@@ -1,13 +1,24 @@
 # Ambient light for Bilibili
 
-> 本地修复分支 0.5.8：修复点播密集弹幕顶行堆叠与跳位（issue #3），尚未发布。公开版本与下载链接仍指向 0.5.7。验证范围见 [QA.txt](QA.txt)，新增 [密集弹幕动态测试](demo/danmaku-stability.html)；[完整播放器测试](demo/danmaku.html) 提供模式／影院预设与原生全屏入口。
-
-
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.7（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.8（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.7：清晰全屏背景与全屏黑边保护（正式版）
+## 0.5.8：密集点播弹幕稳定性修复（正式版）
+
+修复密集点播弹幕被压到顶部，以及已有弹幕随其他弹幕进出而上下跳位的问题（[issue #3](https://github.com/tosya301/ambient-light-for-bilibili/issues/3)）。旧逻辑将原生弹幕的不同纵向位置当成互不重叠的整行反复挤排，密集时会将多条弹幕挤向顶边。0.5.8 保留原生密集轨道并固定活动弹幕的位置，只在需要时进行上下边界保护；继续保留原生字号、横向动画、圆角和底部控制栏避让。
+
+2026-10-24：[GitHub 0.5.8](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.8) 提供：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.8/Ambient-light-for-Bilibili-0.5.8-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.8/Ambient-light-for-Bilibili-0.5.8-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.8/Ambient-light-for-Bilibili-0.5.8-source.zip)。Chrome / Edge 包解压后，在扩展管理页开启开发者模式，选择「加载已解压的扩展」，再刷新 B 站播放页面；Firefox 须按下方临时加载步骤使用。
+
+- 231/231 项 Node 测试通过，包括 58 项点播弹幕检查；同一回归集在 0.5.7 中有 7 项失败。
+- Chrome 与 Firefox 使用本地合成媒体和生产代码，各通过 20 项密集弹幕动态检查、31 项普通／宽屏／网页全屏与柔和／影院预设组合检查，以及 11 项原生全屏与退出恢复检查。原生全屏通过真实界面进入，已有弹幕最大纵向漂移均为 0px。“影院”在这里指光效预设，与宽屏布局分别验证。
+- Chrome 另通过 328 项画面比例、弹幕边界、去边、小窗及清理回归。三包通过 27 项校验，匹配源码独立重建三份 ZIP 的结果逐字节一致；不增加权限、依赖或网络传输。
+- 报告者的浏览器、系统、扩展版本和视频仍未知，尚未在其原环境独立复现；本次真实 B 站页面未取得活动弹幕样本。未验证 Edge 宿主、Windows／Linux，以及签名扩展的安装或升级。
+- Chrome、Edge、Firefox 商店更新正在提交，状态以各商店为准。GitHub 发布、提交审核与商店公开上架是不同状态。
+
+详细证据和范围见 [QA.txt](QA.txt)。本地检查入口：[密集弹幕动态测试](demo/danmaku-stability.html) · [完整播放器与模式测试](demo/danmaku.html)。
+
+## 0.5.7：清晰全屏背景与全屏黑边保护（历史正式版）
 
 新增默认关闭的「光效」→「清晰全屏背景」：普通点播模式下，将当前画面的背景副本按比例居中铺满窗口，无空间模糊、无旧帧叠加；背景采样最长边最高 1920 像素。主视频不裁切、不放大，已保存的扩散、柔化和平滑参数保留，关闭选项或切到宽屏、全屏、直播、小窗后恢复原光效。
 
@@ -17,7 +28,7 @@
 - 最终功能源码通过 223/223 项 Node 测试。新功能及相关回归已在 Chrome 中使用生产脚本、本地合成视频检查；窄留白和片源黑边专项包含网页与原生全屏。后续水印与清晰背景组合检查未完成原生全屏重测，不将早期结果作为最终组合的全屏证明。详细证据与范围见 [QA.txt](QA.txt)。
 - 三包通过 [48 项独立检查](qa/release-0.5.7-package-verification.json)，匹配源码独立重建的三份 ZIP 与发行包逐字节一致，权限未扩张。
 - 三份附件的匿名公开下载均为 HTTP 200，大小、SHA-256、完整内容与 ZIP CRC 核对通过；见[公开下载核验记录](qa/release-0.5.7-public-download-verification.json)。
-- 当前组合未验证真实 B 站重新加载扩展后的效果、Firefox／Edge 宿主、签名安装／升级或 Windows／Linux。黑边初次识别需连续确认；复杂字幕、暗场或像素读取限制可能延后识别并保留光效。
+- 0.5.7 的该功能组合当时未验证真实 B 站重新加载扩展后的效果、Firefox／Edge 宿主、签名安装／升级或 Windows／Linux。黑边初次识别需连续确认；复杂字幕、暗场或像素读取限制可能延后识别并保留光效。
 - 不增加权限、依赖或网络传输。GitHub 发布时尚未提交商店；用户随后授权更新三家商店，均复用已验证的同版发行包。
 - 2026-10-16 商店更新：Chrome 0.5.7 已提交审核，状态 **Pending review**，保留审核通过后自动发布，提交时公开版为 0.5.6；Edge 0.5.7 为 **In review**，旧版 0.5.6 仍为 Live；Firefox 的 AMO 后台显示 0.5.7 **已通过审核且为上架版本**。Chrome 与 Edge 提交审核不代表新版已公开上架，Firefox 审核及上架状态也不代表已实测签名安装／升级；见[商店提交记录](qa/release-0.5.7-store-submission.json)。
 
@@ -105,9 +116,9 @@
 
 同时包含 0.5.3.11 的吸底评论栏修复：保留完整的不透明底板，避免后方评论文字和配图透进头像、输入框与工具栏；普通内联评论继续透光。验证范围见 [QA.txt](QA.txt)。
 
-## Firefox 商店记录（2026-10-16）
+## Firefox 商店历史记录（2026-10-16）
 
-**Mozilla Add-ons 后台显示 0.5.7 已通过审核，且为上架版本。** 同一份已验证的 Firefox ZIP 与匹配源码包已上传，中文版本说明和英文审核构建备注已保存并在新加载页面核对；在线校验为 0 错误、3 项 `Unsafe assignment to innerHTML` 警告。提交按 America/New_York 当地日期记为 2026-10-16，Mozilla 后台时间显示 Oct. 17。此次为商店后台提交与状态核对，未实测签名安装或升级；GitHub ZIP 仍为桌面 Firefox 140+ 未签名临时体验包，重启后需要重新载入。详见[商店提交记录](qa/release-0.5.7-store-submission.json)。
+**历史记录（2026-10-16）：Mozilla Add-ons 后台显示 0.5.7 已通过审核，且为当时的上架版本。** 同一份已验证的 Firefox ZIP 与匹配源码包已上传，中文版本说明和英文审核构建备注已保存并在新加载页面核对；在线校验为 0 错误、3 项 `Unsafe assignment to innerHTML` 警告。提交按 America/New_York 当地日期记为 2026-10-16，Mozilla 后台时间显示 Oct. 17。此次为商店后台提交与状态核对，未实测签名安装或升级；GitHub ZIP 仍为桌面 Firefox 140+ 未签名临时体验包，重启后需要重新载入。详见[商店提交记录](qa/release-0.5.7-store-submission.json)。
 
 ## Firefox 商店历史记录（2026-10-15）
 
@@ -125,9 +136,9 @@
 
 ## Firefox 提前体验
 
-使用 **Firefox 桌面版 140 或更高版本**。下载 [Firefox 0.5.7 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.7/Ambient-light-for-Bilibili-0.5.7-firefox.zip)，包含清晰全屏背景、滚动黑底修复及全屏黑边保护，并保留此前直播与弹幕修复，无需自行构建。0.5.7 新功能目前使用 Chrome 本地生产脚本验证，未完成 Firefox 宿主、真实 B 站页面或签名安装／升级验证；0.5.6 的 Firefox 检查属于历史版本记录。
+使用 **Firefox 桌面版 140 或更高版本**。下载 [Firefox 0.5.8 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.8/Ambient-light-for-Bilibili-0.5.8-firefox.zip)，包含本次密集点播弹幕修复，并保留清晰全屏背景、全屏黑边保护等此前功能，无需自行构建。本次弹幕修复已在 Chrome 与 Firefox 中使用本地合成媒体和生产代码验证；报告者原环境、真实 B 站活动弹幕及签名安装／升级仍未验证。
 
-1. 解压 `Ambient-light-for-Bilibili-0.5.7-firefox.zip`。
+1. 解压 `Ambient-light-for-Bilibili-0.5.8-firefox.zip`。
 2. 在 Firefox 地址栏打开 `about:debugging#/runtime/this-firefox`。
 3. 点击「临时载入附加组件」，选择解压目录内的 `manifest.json`。
 4. 刷新 Bilibili 播放页面，从小电视按钮或工具栏扩展图标打开设置并开启氛围光。
