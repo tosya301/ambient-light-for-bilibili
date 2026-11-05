@@ -13,7 +13,9 @@
 - 关闭氛围光或撤回同意后恢复站点原样；不改变表情菜单、回复高亮及点击行为。
 - 231 项 Node 测试、Chrome／Firefox 各 37 项评论回归通过；三个包通过 82 项校验，从匹配源码重建逐字节一致。本地 0.5.9 已在真实 Chrome B 站页面重载核验，用户确认修复。详见 [QA.txt](QA.txt)。
 - 三个附件的匿名公开下载均返回 HTTP 200，完整字节、SHA-256 和 ZIP CRC 与本地包一致；见[公开下载记录](qa/release-0.5.9-public-download-verification.json)。
-- manifest、设置面板及运行时版本统一为 0.5.9；不增加权限、依赖或数据传输。本次先更新 GitHub，三个扩展商店尚未提交 0.5.9。
+- manifest、设置面板及运行时版本统一为 0.5.9；不增加权限、依赖或数据传输。商店提交结果见下方。
+
+- 2026-11-05 商店更新：Chrome 0.5.9 已提交审核（Pending review），审核通过后自动发布；Edge 0.5.9 为 In review；Firefox 0.5.9 为 Awaiting Review，匹配源码、中文版本说明和审核备注已保存。提交时三个商店的公开版均为 0.5.8。提交审核不代表新版已经公开上架。见[商店提交记录](qa/release-0.5.9-store-submission.json)。
 
 ## 0.5.8：密集点播弹幕稳定性修复（历史正式版）
 
@@ -148,9 +150,9 @@
 
 ## Firefox 提前体验
 
-使用 **Firefox 桌面版 140 或更高版本**。下载 [Firefox 0.5.8 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.8/Ambient-light-for-Bilibili-0.5.8-firefox.zip)，包含本次密集点播弹幕修复，并保留清晰全屏背景、全屏黑边保护等此前功能，无需自行构建。本次弹幕修复已在 Chrome 与 Firefox 中使用本地合成媒体和生产代码验证；报告者原环境、真实 B 站活动弹幕及签名安装／升级仍未验证。
+使用 **Firefox 桌面版 140 或更高版本**。下载 [Firefox 0.5.9 专用体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-firefox.zip)，包含评论区透明与标签显示修复，并保留此前弹幕稳定性、清晰全屏背景等功能，无需自行构建。评论回归已在 Chrome 与 Firefox 中通过；Firefox 真实站点及签名安装／升级未单独实测。
 
-1. 解压 `Ambient-light-for-Bilibili-0.5.8-firefox.zip`。
+1. 解压 `Ambient-light-for-Bilibili-0.5.9-firefox.zip`。
 2. 在 Firefox 地址栏打开 `about:debugging#/runtime/this-firefox`。
 3. 点击「临时载入附加组件」，选择解压目录内的 `manifest.json`。
 4. 刷新 Bilibili 播放页面，从小电视按钮或工具栏扩展图标打开设置并开启氛围光。
@@ -248,7 +250,7 @@
 
 ## 安装与使用
 
-下载 [GitHub 0.5.7](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.7) 的 `Ambient-light-for-Bilibili-0.5.7-chromium.zip`，解压后本地加载，包含清晰全屏背景、滚动黑底修复及全屏黑边保护，保留点播、稍后再看、普通与 `/blanc/` 直播间、直播底栏及弹幕修复和原有外观设置。0.5.7 商店提交结果见上方；可通过 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj) 或 [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 查看各渠道当前可用版本。
+下载 [GitHub 0.5.9](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.9) 的 `Ambient-light-for-Bilibili-0.5.9-chromium.zip`，解压后本地加载，包含本次评论区修复并保留既有光效、弹幕、播放模式和外观设置。各商店的当前可用版本见 [Chrome Web Store](https://chromewebstore.google.com/detail/ambient-light-for-bilibil/inmkpmcmgnhbljonlgacogfbffdcckjj)、[Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fhdfccdfkecapkgldeifoplbjoccnjak) 和上方的商店状态记录。
 
 Chromium 本地安装：下载本仓库，在浏览器扩展管理页打开开发者模式，选择“加载已解压的扩展”，加载 **extension** 文件夹，然后刷新 Bilibili 播放页面。Firefox 请下载上方的专用体验包，按「Firefox 提前体验」步骤临时加载。
 

@@ -11,9 +11,15 @@
 
 边界：折叠黑条反馈者的原始浏览器环境未独立复现，使用不透明主题场景覆盖；本次真实 Chrome 页面验证标签透明和交互，未把它作为反馈者原环境重现。未验证 Edge 宿主、Windows／Linux、Firefox 真实 B 站或签名商店安装／升级。浏览器记录见 qa/release-0.5.9-browser-verification.json。
 
-发行：同版本 Chromium 包、Firefox 未签名临时体验包、匹配源码包。Firefox 桌面 140+ 使用 about:debugging#/runtime/this-firefox 临时加载，完全退出并重启后需要重新载入。此次先更新 GitHub；Chrome、Edge、Firefox 商店尚未提交 0.5.9。
+发行：同版本 Chromium 包、Firefox 未签名临时体验包、匹配源码包。Firefox 桌面 140+ 使用 about:debugging#/runtime/this-firefox 临时加载，完全退出并重启后需要重新载入。GitHub 先发布，同日随后提交三个扩展商店，详见下方。
 
-0.5.9 发布核验：GitHub main 已更新，v0.5.9 标签指向发行提交 9a6813593dad72b4b34a7b2a35b6795512561464。Release 为最新正式版，draft=false、prerelease=false：https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.9 。三份附件匿名公开下载均为 HTTP 200，大小、SHA-256、完整字节和 ZIP CRC 与验证过的本地包一致。GitHub Pages 项目页已从同一提交构建成功。见 qa/release-0.5.9-public-download-verification.json。按用户最新要求，本次先完成 GitHub，三家商店尚未提交 0.5.9。
+0.5.9 发布核验：GitHub main 已更新，v0.5.9 标签指向发行提交 9a6813593dad72b4b34a7b2a35b6795512561464。Release 为最新正式版，draft=false、prerelease=false：https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.9 。三份附件匿名公开下载均为 HTTP 200，大小、SHA-256、完整字节和 ZIP CRC 与验证过的本地包一致。GitHub Pages 项目页已从同一提交构建成功。见 qa/release-0.5.9-public-download-verification.json。随后按用户授权提交三个扩展商店。
+
+0.5.9 商店提交 — 2026-11-05
+
+2026-11-05 商店更新：Chrome 0.5.9 已提交审核（Pending review），审核通过后自动发布；Edge 0.5.9 为 In review；Firefox 0.5.9 为 Awaiting Review，匹配源码、中文版本说明和审核备注已保存。提交时三个商店的公开版均为 0.5.8。提交审核不代表新版已经公开上架。
+Chrome 更新说明与 475 字符测试步骤已保存；Edge 更新说明与 1147 字符审核备注已保存；Firefox 版本 6669117 / 文件 5213211 在线校验 0 错误、3 项既有 Unsafe assignment to innerHTML 警告，源码附件和中文说明已保存并重新加载核对。继续复用原发行包，未修改运行代码。
+完整记录：qa/release-0.5.9-store-submission.json。原生账户截图仅存本地，不提交到公共仓库。商店状态不替代签名安装／升级实测。
 
 0.5.8 — 2026-10-24（GitHub 正式版）
 
