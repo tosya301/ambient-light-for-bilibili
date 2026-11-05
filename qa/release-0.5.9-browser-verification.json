@@ -1,0 +1,46 @@
+{
+  "version": "0.5.9",
+  "date": "2026-11-05",
+  "content_sha256": "1df9944bb41c6e0d3a16cac4bf5a646a2efaf8e578b1a9d21ae08f63318f6cf0",
+  "node": {
+    "passed": 231,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fixture": "demo/comment-replies.html",
+  "chromium": {
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0
+  },
+  "firefox": {
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0
+  },
+  "coverage": [
+    "Collapsed footer and click-to-view transparency",
+    "Tag transparency and date-matching color, font and alignment in dark/light modes",
+    "Empty placeholders, populated and cleared tag transitions",
+    "First expansion, pagination and failed loading",
+    "Overlay geometry, pointer blocking and keyboard focus",
+    "Disable, revoke consent and re-enable restoration",
+    "Host/container replacement, observer cleanup and style deduplication",
+    "Reply highlights, emoji menu background and reply editor preservation"
+  ],
+  "live_verification": {
+    "url": "https://www.bilibili.com/video/BV1yiar6rEDB/",
+    "browser": "Chrome on macOS",
+    "runtime_version": "0.5.9",
+    "tag_hosts_checked": 11,
+    "tag_background": "transparent",
+    "date_color_and_font_matched": true,
+    "empty_placeholders_transparent": true,
+    "user_confirmed": true
+  },
+  "limitations": [
+    "The original reporter environment of the collapsed black bar was not independently reproduced; an opaque theme fixture tests that case.",
+    "Browser regression uses synthetic local media and production extension scripts.",
+    "No Edge host, Windows/Linux, Firefox live-site, or signed store installation/upgrade verification."
+  ]
+}

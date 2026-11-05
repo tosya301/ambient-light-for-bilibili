@@ -1,0 +1,353 @@
+{
+  "version": "0.5.9",
+  "date": "2026-11-05",
+  "passed": true,
+  "total": 82,
+  "checks": [
+    {
+      "name": "package.json, manifest and version_name all match 0.5.9",
+      "pass": true
+    },
+    {
+      "name": "settings panel version matches manifest",
+      "pass": true
+    },
+    {
+      "name": "runtime version matches manifest",
+      "pass": true
+    },
+    {
+      "name": "approved local content script is preserved byte for byte",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: popup.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: background.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: bar-effects.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: preview.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: player.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: content.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: shared.js",
+      "pass": true
+    },
+    {
+      "name": "approved local runtime matches: bars.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: CRC",
+      "pass": true
+    },
+    {
+      "name": "chromium: unique safe paths",
+      "pass": true
+    },
+    {
+      "name": "chromium: version",
+      "pass": true
+    },
+    {
+      "name": "chromium: storage-only permission",
+      "pass": true
+    },
+    {
+      "name": "chromium: content script scope retained",
+      "pass": true
+    },
+    {
+      "name": "chromium: public brand retained",
+      "pass": true
+    },
+    {
+      "name": "chromium: source manifest unchanged",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file _locales/zh_CN/messages.json",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file background.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file bar-effects.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file bars.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file content.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file icons/128.png",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file icons/16.png",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file icons/32.png",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file icons/48.png",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file page.css",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file player.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file popup.css",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file popup.html",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file popup.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file preview.js",
+      "pass": true
+    },
+    {
+      "name": "chromium: runtime file shared.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: CRC",
+      "pass": true
+    },
+    {
+      "name": "firefox: unique safe paths",
+      "pass": true
+    },
+    {
+      "name": "firefox: version",
+      "pass": true
+    },
+    {
+      "name": "firefox: storage-only permission",
+      "pass": true
+    },
+    {
+      "name": "firefox: content script scope retained",
+      "pass": true
+    },
+    {
+      "name": "firefox: public brand retained",
+      "pass": true
+    },
+    {
+      "name": "firefox: stable ID and minimum version",
+      "pass": true
+    },
+    {
+      "name": "firefox: background script manifest",
+      "pass": true
+    },
+    {
+      "name": "firefox: bundled privacy document",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file _locales/zh_CN/messages.json",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file background.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file bar-effects.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file bars.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file content.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file icons/128.png",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file icons/16.png",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file icons/32.png",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file icons/48.png",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file page.css",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file player.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file popup.css",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file popup.html",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file popup.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file preview.js",
+      "pass": true
+    },
+    {
+      "name": "firefox: runtime file shared.js",
+      "pass": true
+    },
+    {
+      "name": "source: CRC",
+      "pass": true
+    },
+    {
+      "name": "source: unique safe paths",
+      "pass": true
+    },
+    {
+      "name": "source: popup.js",
+      "pass": true
+    },
+    {
+      "name": "source: background.js",
+      "pass": true
+    },
+    {
+      "name": "source: popup.html",
+      "pass": true
+    },
+    {
+      "name": "source: bar-effects.js",
+      "pass": true
+    },
+    {
+      "name": "source: preview.js",
+      "pass": true
+    },
+    {
+      "name": "source: page.css",
+      "pass": true
+    },
+    {
+      "name": "source: manifest.json",
+      "pass": true
+    },
+    {
+      "name": "source: player.js",
+      "pass": true
+    },
+    {
+      "name": "source: popup.css",
+      "pass": true
+    },
+    {
+      "name": "source: content.js",
+      "pass": true
+    },
+    {
+      "name": "source: shared.js",
+      "pass": true
+    },
+    {
+      "name": "source: bars.js",
+      "pass": true
+    },
+    {
+      "name": "source: icons/48.png",
+      "pass": true
+    },
+    {
+      "name": "source: icons/128.png",
+      "pass": true
+    },
+    {
+      "name": "source: icons/16.png",
+      "pass": true
+    },
+    {
+      "name": "source: icons/32.png",
+      "pass": true
+    },
+    {
+      "name": "source: _locales/zh_CN/messages.json",
+      "pass": true
+    },
+    {
+      "name": "chromium: source rebuild byte-identical",
+      "pass": true
+    },
+    {
+      "name": "firefox: source rebuild byte-identical",
+      "pass": true
+    },
+    {
+      "name": "source: source rebuild byte-identical",
+      "pass": true
+    }
+  ],
+  "archives": {
+    "chromium": {
+      "file": "Ambient-light-for-Bilibili-0.5.9-chromium.zip",
+      "size": 236918,
+      "sha256": "be272d55046fea813df5d5f00a9053268d7da9a1b7155f02fdfd6bdf84eddb54"
+    },
+    "firefox": {
+      "file": "Ambient-light-for-Bilibili-0.5.9-firefox.zip",
+      "size": 247402,
+      "sha256": "cf77bd8153abe1a16917b2c9d5497479288dee37fd3a2e5415d50c639d358b38"
+    },
+    "source": {
+      "file": "Ambient-light-for-Bilibili-0.5.9-source.zip",
+      "size": 258250,
+      "sha256": "77000ff38a6324f2cdbadfd6f6dad70760b89cde6a5ce2429bd6d8b90773f119"
+    }
+  }
+}

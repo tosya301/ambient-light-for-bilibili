@@ -1,10 +1,20 @@
 # Ambient light for Bilibili
 
-为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.8（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
+为 Bilibili 桌面播放页添加随视频变化的氛围光。当前源码版本 **0.5.9（GitHub 最新正式版）**。GitHub 下载与商店审核状态见下方；商店安装版本受各渠道审核进度影响。Manifest V3，原生 JavaScript，无第三方构建或运行时依赖。
 
 ![扩展图标](extension/icons/128.png)
 
-## 0.5.8：密集点播弹幕稳定性修复（正式版）
+## 0.5.9：评论区透明与标签显示修复（正式版）
+
+修复折叠回复“共 N 条回复，点击查看”的不透明底条。“UP主觉得很赞”等评论标签改为透明背景，文字颜色、字号和对齐与日期一致，避免在绚彩背景上出现突兀的色块；空标签占位保持不可见。展开楼中楼或翻页时，加载遮罩保持透明，并暂时隐藏旧回复以避免文字重叠。
+
+2026-11-05：[GitHub 0.5.9](https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.9) 提供：[Chromium 包（Chrome / Edge）](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-chromium.zip) · [Firefox 临时体验包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-firefox.zip) · [匹配源码包](https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-source.zip)。Chrome / Edge 解压后通过扩展管理页加载；Firefox 桌面 140+ 请在 `about:debugging#/runtime/this-firefox` 临时载入，完全退出并重启后需要重新载入。
+
+- 关闭氛围光或撤回同意后恢复站点原样；不改变表情菜单、回复高亮及点击行为。
+- 231 项 Node 测试、Chrome／Firefox 各 37 项评论回归通过；三个包通过 82 项校验，从匹配源码重建逐字节一致。本地 0.5.9 已在真实 Chrome B 站页面重载核验，用户确认修复。详见 [QA.txt](QA.txt)。
+- manifest、设置面板及运行时版本统一为 0.5.9；不增加权限、依赖或数据传输。本次先更新 GitHub，三个扩展商店尚未提交 0.5.9。
+
+## 0.5.8：密集点播弹幕稳定性修复（历史正式版）
 
 修复密集点播弹幕被压到顶部，以及已有弹幕随其他弹幕进出而上下跳位的问题（[issue #3](https://github.com/tosya301/ambient-light-for-bilibili/issues/3)）。旧逻辑将原生弹幕的不同纵向位置当成互不重叠的整行反复挤排，密集时会将多条弹幕挤向顶边。0.5.8 保留原生密集轨道并固定活动弹幕的位置，只在需要时进行上下边界保护；继续保留原生字号、横向动画、圆角和底部控制栏避让。
 

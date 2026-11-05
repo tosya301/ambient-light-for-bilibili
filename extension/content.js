@@ -15,12 +15,32 @@
   // Bilibili comments live in open shadow roots. Page CSS cannot reach the
   // editor or the fixed bottom wrapper; changing inherited --bg1/--bg3 would
   // also erase emoji menus and dialogs. Only patch these observed surfaces.
-  const commentStyles=new Map();
+  const commentStyles=new Map(),commentLoadingObservers=new Map();
   const commentHosts='bili-comments,bili-comments-header-renderer,bili-comment-thread-renderer,bili-comment-renderer,bili-comment-replies-renderer,bili-comment-reply-renderer,bili-comment-box';
   const commentCSS={
     'bili-comment-thread-renderer':`
       /* Match the video tag/toolbar divider without changing other comment surfaces. */
       :host([data-biliglow-comments-active]) #div { border-bottom-color:var(--line_regular)!important; }
+    `,
+    'bili-comment-renderer':`
+      /* Render informational tags like the adjacent date, without a badge
+         surface over the ambient image. Leave empty placeholders untouched. */
+      :host([data-biliglow-comments-active]) #tags > .tag[style*="--bili-comment-tag-bg-dark"]:not(:empty) {
+        background:transparent!important;
+        color:var(--text3)!important;
+        padding:0!important;
+        font-size:13px!important;
+        line-height:1.5!important;
+      }
+    `,
+    'bili-comment-replies-renderer':`
+      /* The collapsed "click to view" row can paint a separate theme surface.
+         Clear only that footer and row, leaving reply highlights and menus intact. */
+      :host([data-biliglow-comments-active]) :is(#expander-footer, #view-more) { background:transparent!important; }
+      /* Expanding replies and changing pages reuse this loading overlay.
+         Keep its hit area and the old list's height, without overlapping text. */
+      :host([data-biliglow-comments-active]) #expander-contents > #spinner { background:transparent!important; }
+      :host([data-biliglow-comments-active][data-biliglow-replies-loading]) #expander-contents > :not(#spinner) { visibility:hidden!important; }
     `,
     'bili-comments-header-renderer':`
       /* Style the full pinned row, including the avatar and tools. Keep the
@@ -67,6 +87,8 @@
     for(const [host,style] of commentStyles){
       if(!active||kind==='live'||!host.isConnected){
         host.removeAttribute('data-biliglow-comments-active');host.removeAttribute('data-biliglow-comments-dark');
+        commentLoadingObservers.get(host)?.disconnect();commentLoadingObservers.delete(host);
+        host.removeAttribute('data-biliglow-replies-loading');
         style.remove();commentStyles.delete(host);
       }
     }
@@ -87,6 +109,15 @@
             commentStyles.set(host,style);
           }
           if(style.parentNode!==shadow)shadow.append(style);
+          if(host.localName==='bili-comment-replies-renderer'&&!commentLoadingObservers.has(host)){
+            // Firefox can miss dynamic :has() invalidation below :host().
+            // Watch only this reply root; update before paint, even for a fast
+            // request or replacement of the expander inside the same root.
+            const syncLoading=()=>host.toggleAttribute('data-biliglow-replies-loading',Boolean(shadow.querySelector('#expander-contents > #spinner')));
+            const observer=new MutationObserver(syncLoading);
+            observer.observe(shadow,{childList:true,subtree:true});
+            commentLoadingObservers.set(host,observer);syncLoading();
+          }
         }
         visit(shadow);
       }
@@ -106,7 +137,7 @@
     root.setAttribute('aria-hidden','true');
     // A negative child of the isolated body paints AFTER its background but BEFORE page content.
     root.style.cssText='position:fixed;inset:0;pointer-events:none!important;z-index:-1;overflow:hidden;contain:strict;display:none;';
-    root.dataset.version='0.5.7';
+    root.dataset.version='0.5.9';
     root.dataset.fullscreenBarsPolicy='overlay-aware';
     const shadow=root.attachShadow({mode:'open'});
     canvas=document.createElement('canvas');canvas.width=256;canvas.height=144;

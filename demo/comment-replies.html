@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>楼中楼加载透明回归</title>
+<link rel="stylesheet" href="../extension/page.css">
+<style>
+  body{margin:32px;font:15px/1.6 system-ui;color:var(--text1,#18191c);--bg1_rgb:255,255,255;--bg1:#fff;--text3:#9499a0}
+  main{max-width:1000px;margin:auto}h1{font-size:24px}p{max-width:780px}
+  .bpx-player-container{width:240px;margin-bottom:20px}video{width:240px;display:block}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}button{font:inherit;cursor:pointer}
+  #fixture{padding:24px;background:linear-gradient(115deg,#00445b55,#34317c66,#14536155);border:1px solid #879aad55;border-radius:16px}
+  output{display:block;white-space:pre-wrap;margin-top:24px;font-size:13px}
+</style>
+<main>
+  <h1>楼中楼 · 展开与翻页加载</h1>
+  <p>本地回归场景，使用扩展生产脚本。组件层级与加载遮罩样式取自 B 站评论组件；加载可保持，便于观察透明、文字和布局。</p>
+  <div class="bpx-player-container" data-screen="normal"><video muted autoplay loop playsinline src="test-colors.mp4" aria-label="本地测试视频"></video></div>
+  <div class="controls">
+    <button id="run">运行楼中楼回归</button><button id="load">保持翻页加载</button>
+    <button id="finish">完成加载</button><button id="fail">模拟加载失败</button>
+    <button id="enabled">切换光效</button><button id="dark">切换深浅色</button>
+  </div>
+  <section id="fixture"><bili-comments></bili-comments></section>
+  <output id="results" aria-live="polite">等待运行</output>
+</main>
+<script src="../extension/shared.js"></script><script src="../extension/player.js"></script>
+<script src="../extension/preview.js"></script><script src="../extension/bars.js"></script>
+<script src="../extension/bar-effects.js"></script><script src="comment-replies.js"></script>
+<script src="../extension/content.js"></script>
+</html>
