@@ -13,6 +13,8 @@
 
 发行：同版本 Chromium 包、Firefox 未签名临时体验包、匹配源码包。Firefox 桌面 140+ 使用 about:debugging#/runtime/this-firefox 临时加载，完全退出并重启后需要重新载入。此次先更新 GitHub；Chrome、Edge、Firefox 商店尚未提交 0.5.9。
 
+0.5.9 发布核验：GitHub main 已更新，v0.5.9 标签指向发行提交 9a6813593dad72b4b34a7b2a35b6795512561464。Release 为最新正式版，draft=false、prerelease=false：https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.9 。三份附件匿名公开下载均为 HTTP 200，大小、SHA-256、完整字节和 ZIP CRC 与验证过的本地包一致。GitHub Pages 项目页已从同一提交构建成功。见 qa/release-0.5.9-public-download-verification.json。按用户最新要求，本次先完成 GitHub，三家商店尚未提交 0.5.9。
+
 0.5.8 — 2026-10-24（GitHub 正式版）
 
 问题：GitHub issue #3 报告非直播视频在密集弹幕时顶行堆叠、上下跳动，置顶弹幕随其他弹幕消失而位移。报告缺少浏览器、系统、版本、视频地址；未声称在报告者原环境复现。

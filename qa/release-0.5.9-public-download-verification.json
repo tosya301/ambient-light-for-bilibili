@@ -1,0 +1,39 @@
+{
+  "version": "0.5.9",
+  "date": "2026-11-05",
+  "release_url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/tag/v0.5.9",
+  "commit": "9a6813593dad72b4b34a7b2a35b6795512561464",
+  "passed": true,
+  "files": [
+    {
+      "file": "Ambient-light-for-Bilibili-0.5.9-chromium.zip",
+      "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-chromium.zip",
+      "http_status": 200,
+      "size": 236918,
+      "sha256": "be272d55046fea813df5d5f00a9053268d7da9a1b7155f02fdfd6bdf84eddb54",
+      "byte_identical": true,
+      "zip_crc_ok": true,
+      "anonymous": true
+    },
+    {
+      "file": "Ambient-light-for-Bilibili-0.5.9-firefox.zip",
+      "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-firefox.zip",
+      "http_status": 200,
+      "size": 247402,
+      "sha256": "cf77bd8153abe1a16917b2c9d5497479288dee37fd3a2e5415d50c639d358b38",
+      "byte_identical": true,
+      "zip_crc_ok": true,
+      "anonymous": true
+    },
+    {
+      "file": "Ambient-light-for-Bilibili-0.5.9-source.zip",
+      "url": "https://github.com/tosya301/ambient-light-for-bilibili/releases/download/v0.5.9/Ambient-light-for-Bilibili-0.5.9-source.zip",
+      "http_status": 200,
+      "size": 258250,
+      "sha256": "77000ff38a6324f2cdbadfd6f6dad70760b89cde6a5ce2429bd6d8b90773f119",
+      "byte_identical": true,
+      "zip_crc_ok": true,
+      "anonymous": true
+    }
+  ]
+}
